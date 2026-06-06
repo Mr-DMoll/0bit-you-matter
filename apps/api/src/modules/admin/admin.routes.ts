@@ -1,7 +1,15 @@
 import { Router } from "express";
 import {
-  adminDashboard, listUsers, inviteUser, updateUserStatus, updateUserRole,
-  inviteManager, listManagers, adminActivity,
+  adminDashboard,
+  adminActivity,
+  listStaff,
+  listLearners,
+  inviteStaffMember,
+  updateUserStatus,
+  updateUserRole,
+  // legacy
+  inviteManager,
+  listManagers,
 } from "./admin.controller.js";
 import { protect }   from "../../middleware/auth.middleware.js";
 import { authorize } from "../../middleware/role.middleware.js";
@@ -11,17 +19,27 @@ const router = Router();
 router.use(protect);
 router.use(authorize([Role.ADMIN, Role.SUPER_ADMIN]));
 
-router.get("/dashboard",          adminDashboard);
-router.get("/activity",           adminActivity);
+// ── Dashboard & activity ───────────────────────────────────────────────────────
+router.get("/dashboard", adminDashboard);
+router.get("/activity",  adminActivity);
 
-// Users
-router.get("/users",              listUsers);
-router.post("/users/invite",      inviteUser);
+// ── Staff (all invitable roles) ────────────────────────────────────────────────
+// GET  /admin/staff?role=MANAGER|CONTENT_MANAGER|REVIEWER|DATA_VERIFIER&status=ACTIVE
+// POST /admin/staff/invite  { email, firstName, lastName, role }
+router.get("/staff",         listStaff);
+router.post("/staff/invite", inviteStaffMember);
+
+// ── Learners ───────────────────────────────────────────────────────────────────
+router.get("/learners", listLearners);
+
+// ── Per-user actions ───────────────────────────────────────────────────────────
 router.patch("/users/:id/status", updateUserStatus);
 router.patch("/users/:id/role",   updateUserRole);
 
-// Managers
-router.get("/managers",           listManagers);
-router.post("/managers/invite",   inviteManager);
+// ── Legacy routes (kept for backwards compat) ──────────────────────────────────
+router.get("/users",            listStaff);
+router.post("/users/invite",    inviteStaffMember);
+router.get("/managers",         listManagers);
+router.post("/managers/invite", inviteManager);
 
 export default router;

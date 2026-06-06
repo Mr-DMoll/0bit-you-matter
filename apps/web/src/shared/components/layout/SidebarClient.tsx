@@ -54,7 +54,7 @@ export default function SidebarClient({ isOpen, onToggle }: Props) {
   const { user } = useAuth();
 
   const role     = (user?.role ?? "") as keyof typeof NAV_CONFIG;
-  const navItems = NAV_CONFIG[role] ?? [];
+  const sections = NAV_CONFIG[role] ?? [];
 
   const w = isOpen ? "var(--sidebar-expanded)" : "var(--sidebar-collapsed)";
 
@@ -116,72 +116,94 @@ export default function SidebarClient({ isOpen, onToggle }: Props) {
         )}
       </div>
 
-      {/* ── Nav items ────────────────────────────────────────────────────────── */}
+      {/* ── Nav sections ─────────────────────────────────────────────────────── */}
       <nav style={{
         flex:          1,
         padding:       "12px 8px",
         display:       "flex",
         flexDirection: "column",
-        gap:           "2px",
+        gap:           "4px",
         overflowY:     "auto",
         overflowX:     "hidden",
       }}>
-        {navItems.map((item) => {
-          const Icon = ICON_MAP[item.icon];
-          const isActive =
-            pathname === item.href ||
-            (item.href.split("/").length > 2 && pathname.startsWith(item.href + "/"));
+        {sections.map((section, sIdx) => (
+          <div key={sIdx}>
+            {/* Section header — only shown when sidebar is expanded and section has a title */}
+            {isOpen && section.title && (
+              <div style={{
+                padding:       sIdx === 0 ? "4px 10px 6px" : "12px 10px 6px",
+                fontSize:      "10px",
+                fontWeight:    700,
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                color:         "var(--color-sidebar-text)",
+                opacity:       0.45,
+                whiteSpace:    "nowrap",
+              }}>
+                {section.title}
+              </div>
+            )}
+            {/* Divider between sections (collapsed mode) */}
+            {!isOpen && sIdx > 0 && (
+              <div style={{
+                height:     "1px",
+                margin:     "6px 8px",
+                background: "var(--color-sidebar-border)",
+                opacity:    0.5,
+              }} />
+            )}
+            {section.items.map((item) => {
+              const Icon = ICON_MAP[item.icon];
+              const isActive =
+                pathname === item.href ||
+                (item.href.split("/").length > 2 && pathname.startsWith(item.href + "/"));
 
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              title={!isOpen ? item.label : undefined}
-              style={{
-                display:        "flex",
-                alignItems:     "center",
-                gap:            "10px",
-                padding:        "9px 10px",
-                borderRadius:   "var(--radius-md)",
-                fontSize:       "13.5px",
-                fontWeight:     isActive ? 600 : 400,
-                color:          isActive
-                  ? "var(--color-sidebar-text-active)"
-                  : "var(--color-sidebar-text)",
-                background:     isActive
-                  ? "var(--color-sidebar-item-active-bg)"
-                  : "transparent",
-                textDecoration: "none",
-                whiteSpace:     "nowrap",
-                overflow:       "hidden",
-                justifyContent: isOpen ? "flex-start" : "center",
-                position:       "relative",
-                transition:     "background var(--transition-fast), color var(--transition-fast)",
-              }}
-              className={`sidebar-nav-link${isActive ? " active" : ""}`}
-            >
-              {/* Active indicator bar */}
-              {isActive && (
-                <span style={{
-                  position:     "absolute",
-                  left:         0,
-                  top:          "20%",
-                  bottom:       "20%",
-                  width:        "3px",
-                  borderRadius: "0 3px 3px 0",
-                  background:   "var(--color-sidebar-indicator)",
-                }} />
-              )}
-              {Icon && (
-                <Icon
-                  size={17}
-                  strokeWidth={isActive ? 2.2 : 1.8}
-                />
-              )}
-              {isOpen && <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{item.label}</span>}
-            </Link>
-          );
-        })}
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  title={!isOpen ? item.label : undefined}
+                  style={{
+                    display:        "flex",
+                    alignItems:     "center",
+                    gap:            "10px",
+                    padding:        "9px 10px",
+                    borderRadius:   "var(--radius-md)",
+                    fontSize:       "13.5px",
+                    fontWeight:     isActive ? 600 : 400,
+                    color:          isActive
+                      ? "var(--color-sidebar-text-active)"
+                      : "var(--color-sidebar-text)",
+                    background:     isActive
+                      ? "var(--color-sidebar-item-active-bg)"
+                      : "transparent",
+                    textDecoration: "none",
+                    whiteSpace:     "nowrap",
+                    overflow:       "hidden",
+                    justifyContent: isOpen ? "flex-start" : "center",
+                    position:       "relative",
+                    transition:     "background var(--transition-fast), color var(--transition-fast)",
+                  }}
+                  className={`sidebar-nav-link${isActive ? " active" : ""}`}
+                >
+                  {isActive && (
+                    <span style={{
+                      position:     "absolute",
+                      left:         0,
+                      top:          "20%",
+                      bottom:       "20%",
+                      width:        "3px",
+                      borderRadius: "0 3px 3px 0",
+                      background:   "var(--color-sidebar-indicator)",
+                    }} />
+                  )}
+                  {Icon && <Icon size={17} strokeWidth={isActive ? 2.2 : 1.8} />}
+                  {isOpen && <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{item.label}</span>}
+                </Link>
+              );
+            })}
+          </div>
+        ))}
       </nav>
 
       {/* ── Toggle button ────────────────────────────────────────────────────── */}

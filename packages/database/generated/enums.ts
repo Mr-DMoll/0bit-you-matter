@@ -13,7 +13,10 @@ export const Role = {
   SUPER_ADMIN: 'SUPER_ADMIN',
   ADMIN: 'ADMIN',
   MANAGER: 'MANAGER',
-  USER: 'USER'
+  CONTENT_MANAGER: 'CONTENT_MANAGER',
+  REVIEWER: 'REVIEWER',
+  DATA_VERIFIER: 'DATA_VERIFIER',
+  LEARNER: 'LEARNER'
 } as const
 
 export type Role = (typeof Role)[keyof typeof Role]
@@ -36,3 +39,74 @@ export const RegistrationMode = {
 } as const
 
 export type RegistrationMode = (typeof RegistrationMode)[keyof typeof RegistrationMode]
+
+
+export const ContentStatus = {
+  AI_GENERATED: 'AI_GENERATED',
+  IN_REVIEW: 'IN_REVIEW',
+  APPROVED: 'APPROVED',
+  VERIFIED: 'VERIFIED',
+  REJECTED: 'REJECTED',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type ContentStatus = (typeof ContentStatus)[keyof typeof ContentStatus]
+
+
+export const AssessmentType = {
+  INTEREST: 'INTEREST',
+  APTITUDE: 'APTITUDE',
+  PERSONALITY: 'PERSONALITY',
+  VALUES: 'VALUES'
+} as const
+
+export type AssessmentType = (typeof AssessmentType)[keyof typeof AssessmentType]
+
+
+export const AssessmentStatus = {
+  NOT_STARTED: 'NOT_STARTED',
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETED: 'COMPLETED'
+} as const
+
+export type AssessmentStatus = (typeof AssessmentStatus)[keyof typeof AssessmentStatus]
+
+
+export const ContentType = {
+  CAREER: 'CAREER',
+  UNIVERSITY_PROGRAMME: 'UNIVERSITY_PROGRAMME',
+  BURSARY: 'BURSARY',
+  ASSESSMENT_QUESTION: 'ASSESSMENT_QUESTION'
+} as const
+
+export type ContentType = (typeof ContentType)[keyof typeof ContentType]
+
+
+export const GenerationJobStatus = {
+  QUEUED: 'QUEUED',
+  PROCESSING: 'PROCESSING',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED'
+} as const
+
+export type GenerationJobStatus = (typeof GenerationJobStatus)[keyof typeof GenerationJobStatus]
+
+
+export const ReviewStatus = {
+  PENDING: 'PENDING',
+  IN_PROGRESS: 'IN_PROGRESS',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+} as const
+
+export type ReviewStatus = (typeof ReviewStatus)[keyof typeof ReviewStatus]
+
+
+export const VerificationStatus = {
+  PENDING: 'PENDING',
+  IN_PROGRESS: 'IN_PROGRESS',
+  VERIFIED: 'VERIFIED',
+  FLAGGED: 'FLAGGED'
+} as const
+
+export type VerificationStatus = (typeof VerificationStatus)[keyof typeof VerificationStatus]

@@ -37,3 +37,88 @@ export type Notification = Prisma.NotificationModel
  * 
  */
 export type SystemSetting = Prisma.SystemSettingModel
+/**
+ * Model CareerCluster
+ * 
+ */
+export type CareerCluster = Prisma.CareerClusterModel
+/**
+ * Model Career
+ * 
+ */
+export type Career = Prisma.CareerModel
+/**
+ * Model University
+ * 
+ */
+export type University = Prisma.UniversityModel
+/**
+ * Model Programme
+ * 
+ */
+export type Programme = Prisma.ProgrammeModel
+/**
+ * Model Bursary
+ * 
+ */
+export type Bursary = Prisma.BursaryModel
+/**
+ * Model AssessmentQuestion
+ * 
+ */
+export type AssessmentQuestion = Prisma.AssessmentQuestionModel
+/**
+ * Model LearnerAssessmentSession
+ * 
+ */
+export type LearnerAssessmentSession = Prisma.LearnerAssessmentSessionModel
+/**
+ * Model LearnerAnswer
+ * 
+ */
+export type LearnerAnswer = Prisma.LearnerAnswerModel
+/**
+ * Model LearnerProfile
+ * 
+ */
+export type LearnerProfile = Prisma.LearnerProfileModel
+/**
+ * Model LearnerCareerMatch
+ * 
+ */
+export type LearnerCareerMatch = Prisma.LearnerCareerMatchModel
+/**
+ * Model LearnerSavedCareer
+ * 
+ */
+export type LearnerSavedCareer = Prisma.LearnerSavedCareerModel
+/**
+ * Model LearnerRoadmap
+ * 
+ */
+export type LearnerRoadmap = Prisma.LearnerRoadmapModel
+/**
+ * Model ContentReview
+ * 
+ */
+export type ContentReview = Prisma.ContentReviewModel
+/**
+ * Model DataVerification
+ * 
+ */
+export type DataVerification = Prisma.DataVerificationModel
+/**
+ * Model PromptTemplate
+ * 
+ */
+export type PromptTemplate = Prisma.PromptTemplateModel
+/**
+ * Model GenerationJob
+ * 
+ */
+export type GenerationJob = Prisma.GenerationJobModel
+/**
+ * Model Source
+ * 
+ */
+export type Source = Prisma.SourceModel

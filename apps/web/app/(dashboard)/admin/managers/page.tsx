@@ -1,4 +1,24 @@
-import { PlaceholderPage } from "@/shared/components/ui/PlaceholderPage";
-export default function Page() {
-  return <PlaceholderPage title="Managers" description="Manage manager accounts - create, assign to schools or programmes, view activity." />;
+"use client";
+import { StaffPage } from "@/features/admin/components/StaffPage";
+
+export default function ManagersPage() {
+  return (
+    <StaffPage
+      title="Managers & Content Managers"
+      description="Invite and manage learner-facing managers and content pipeline managers."
+      roles={["MANAGER", "CONTENT_MANAGER"]}
+      inviteConfigs={[
+        {
+          role:        "MANAGER",
+          label:       "Manager",
+          placeholder: "manager@example.com",
+        },
+        {
+          role:        "CONTENT_MANAGER",
+          label:       "Content Manager",
+          placeholder: "content@example.com",
+        },
+      ]}
+    />
+  );
 }

@@ -1,4 +1,19 @@
-import { PlaceholderPage } from "@/shared/components/ui/PlaceholderPage";
-export default function Page() {
-  return <PlaceholderPage title="Reviewers" description="Manage professional reviewer accounts - specialisation, workload and approval rate." />;
+"use client";
+import { StaffPage } from "@/features/admin/components/StaffPage";
+
+export default function ReviewersPage() {
+  return (
+    <StaffPage
+      title="Professional Reviewers"
+      description="Invite and manage subject matter experts who validate AI-generated content."
+      roles={["REVIEWER"]}
+      inviteConfigs={[
+        {
+          role:        "REVIEWER",
+          label:       "Professional Reviewer",
+          placeholder: "reviewer@example.com",
+        },
+      ]}
+    />
+  );
 }

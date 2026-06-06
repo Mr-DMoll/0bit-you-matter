@@ -40,9 +40,17 @@ export const endpoints = {
   // Admin
   admin: {
     dashboard:    "/admin/dashboard",
-    users:        "/admin/users",
+    activity:     "/admin/activity",
+    // Staff (all invitable roles)
+    staff:        "/admin/staff",
+    staffInvite:  "/admin/staff/invite",
+    // Learners
+    learners:     "/admin/learners",
+    // Per-user
     userStatus:   (id: string) => `/admin/users/${id}/status`,
     userRole:     (id: string) => `/admin/users/${id}/role`,
+    // Legacy — kept for compatibility
+    users:        "/admin/users",
     userInvite:    "/admin/users/invite",
     managers:      "/admin/managers",
     managerInvite: "/admin/managers/invite",

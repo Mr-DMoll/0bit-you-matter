@@ -20,8 +20,18 @@ export type UserModel = runtime.Types.Result.DefaultSelection<Prisma.$UserPayloa
 
 export type AggregateUser = {
   _count: UserCountAggregateOutputType | null
+  _avg: UserAvgAggregateOutputType | null
+  _sum: UserSumAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
+}
+
+export type UserAvgAggregateOutputType = {
+  grade: number | null
+}
+
+export type UserSumAggregateOutputType = {
+  grade: number | null
 }
 
 export type UserMinAggregateOutputType = {
@@ -46,7 +56,11 @@ export type UserMinAggregateOutputType = {
   dateOfBirth: Date | null
   googleId: string | null
   googleRefreshToken: string | null
+  grade: number | null
+  province: string | null
+  school: string | null
   invitedById: string | null
+  managerId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -73,7 +87,11 @@ export type UserMaxAggregateOutputType = {
   dateOfBirth: Date | null
   googleId: string | null
   googleRefreshToken: string | null
+  grade: number | null
+  province: string | null
+  school: string | null
   invitedById: string | null
+  managerId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -100,12 +118,24 @@ export type UserCountAggregateOutputType = {
   dateOfBirth: number
   googleId: number
   googleRefreshToken: number
+  grade: number
+  province: number
+  school: number
   invitedById: number
+  managerId: number
   createdAt: number
   updatedAt: number
   _all: number
 }
 
+
+export type UserAvgAggregateInputType = {
+  grade?: true
+}
+
+export type UserSumAggregateInputType = {
+  grade?: true
+}
 
 export type UserMinAggregateInputType = {
   id?: true
@@ -129,7 +159,11 @@ export type UserMinAggregateInputType = {
   dateOfBirth?: true
   googleId?: true
   googleRefreshToken?: true
+  grade?: true
+  province?: true
+  school?: true
   invitedById?: true
+  managerId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -156,7 +190,11 @@ export type UserMaxAggregateInputType = {
   dateOfBirth?: true
   googleId?: true
   googleRefreshToken?: true
+  grade?: true
+  province?: true
+  school?: true
   invitedById?: true
+  managerId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -183,7 +221,11 @@ export type UserCountAggregateInputType = {
   dateOfBirth?: true
   googleId?: true
   googleRefreshToken?: true
+  grade?: true
+  province?: true
+  school?: true
   invitedById?: true
+  managerId?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -227,6 +269,18 @@ export type UserAggregateArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: UserAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: UserSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: UserMinAggregateInputType
@@ -257,6 +311,8 @@ export type UserGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   take?: number
   skip?: number
   _count?: UserCountAggregateInputType | true
+  _avg?: UserAvgAggregateInputType
+  _sum?: UserSumAggregateInputType
   _min?: UserMinAggregateInputType
   _max?: UserMaxAggregateInputType
 }
@@ -264,7 +320,7 @@ export type UserGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 export type UserGroupByOutputType = {
   id: string
   email: string
-  password: string
+  password: string | null
   role: $Enums.Role
   accountStatus: $Enums.AccountStatus
   firstName: string | null
@@ -283,10 +339,16 @@ export type UserGroupByOutputType = {
   dateOfBirth: Date | null
   googleId: string | null
   googleRefreshToken: string | null
+  grade: number | null
+  province: string | null
+  school: string | null
   invitedById: string | null
+  managerId: string | null
   createdAt: Date
   updatedAt: Date
   _count: UserCountAggregateOutputType | null
+  _avg: UserAvgAggregateOutputType | null
+  _sum: UserSumAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
 }
@@ -312,7 +374,7 @@ export type UserWhereInput = {
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   id?: Prisma.StringFilter<"User"> | string
   email?: Prisma.StringFilter<"User"> | string
-  password?: Prisma.StringFilter<"User"> | string
+  password?: Prisma.StringNullableFilter<"User"> | string | null
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
   accountStatus?: Prisma.EnumAccountStatusFilter<"User"> | $Enums.AccountStatus
   firstName?: Prisma.StringNullableFilter<"User"> | string | null
@@ -331,19 +393,30 @@ export type UserWhereInput = {
   dateOfBirth?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   googleId?: Prisma.StringNullableFilter<"User"> | string | null
   googleRefreshToken?: Prisma.StringNullableFilter<"User"> | string | null
+  grade?: Prisma.IntNullableFilter<"User"> | number | null
+  province?: Prisma.StringNullableFilter<"User"> | string | null
+  school?: Prisma.StringNullableFilter<"User"> | string | null
   invitedById?: Prisma.StringNullableFilter<"User"> | string | null
+  managerId?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   invitedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   invitees?: Prisma.UserListRelationFilter
+  manager?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  managedLearners?: Prisma.UserListRelationFilter
   auditLogs?: Prisma.AuditLogListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
+  learnerProfile?: Prisma.XOR<Prisma.LearnerProfileNullableScalarRelationFilter, Prisma.LearnerProfileWhereInput> | null
+  assessmentSessions?: Prisma.LearnerAssessmentSessionListRelationFilter
+  reviewAssignments?: Prisma.ContentReviewListRelationFilter
+  verificationItems?: Prisma.DataVerificationListRelationFilter
+  generationJobs?: Prisma.GenerationJobListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
-  password?: Prisma.SortOrder
+  password?: Prisma.SortOrderInput | Prisma.SortOrder
   role?: Prisma.SortOrder
   accountStatus?: Prisma.SortOrder
   firstName?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -362,13 +435,24 @@ export type UserOrderByWithRelationInput = {
   dateOfBirth?: Prisma.SortOrderInput | Prisma.SortOrder
   googleId?: Prisma.SortOrderInput | Prisma.SortOrder
   googleRefreshToken?: Prisma.SortOrderInput | Prisma.SortOrder
+  grade?: Prisma.SortOrderInput | Prisma.SortOrder
+  province?: Prisma.SortOrderInput | Prisma.SortOrder
+  school?: Prisma.SortOrderInput | Prisma.SortOrder
   invitedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  managerId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   invitedBy?: Prisma.UserOrderByWithRelationInput
   invitees?: Prisma.UserOrderByRelationAggregateInput
+  manager?: Prisma.UserOrderByWithRelationInput
+  managedLearners?: Prisma.UserOrderByRelationAggregateInput
   auditLogs?: Prisma.AuditLogOrderByRelationAggregateInput
   notifications?: Prisma.NotificationOrderByRelationAggregateInput
+  learnerProfile?: Prisma.LearnerProfileOrderByWithRelationInput
+  assessmentSessions?: Prisma.LearnerAssessmentSessionOrderByRelationAggregateInput
+  reviewAssignments?: Prisma.ContentReviewOrderByRelationAggregateInput
+  verificationItems?: Prisma.DataVerificationOrderByRelationAggregateInput
+  generationJobs?: Prisma.GenerationJobOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -378,7 +462,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
-  password?: Prisma.StringFilter<"User"> | string
+  password?: Prisma.StringNullableFilter<"User"> | string | null
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
   accountStatus?: Prisma.EnumAccountStatusFilter<"User"> | $Enums.AccountStatus
   firstName?: Prisma.StringNullableFilter<"User"> | string | null
@@ -396,19 +480,30 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   language?: Prisma.StringNullableFilter<"User"> | string | null
   dateOfBirth?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   googleRefreshToken?: Prisma.StringNullableFilter<"User"> | string | null
+  grade?: Prisma.IntNullableFilter<"User"> | number | null
+  province?: Prisma.StringNullableFilter<"User"> | string | null
+  school?: Prisma.StringNullableFilter<"User"> | string | null
   invitedById?: Prisma.StringNullableFilter<"User"> | string | null
+  managerId?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   invitedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   invitees?: Prisma.UserListRelationFilter
+  manager?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  managedLearners?: Prisma.UserListRelationFilter
   auditLogs?: Prisma.AuditLogListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
+  learnerProfile?: Prisma.XOR<Prisma.LearnerProfileNullableScalarRelationFilter, Prisma.LearnerProfileWhereInput> | null
+  assessmentSessions?: Prisma.LearnerAssessmentSessionListRelationFilter
+  reviewAssignments?: Prisma.ContentReviewListRelationFilter
+  verificationItems?: Prisma.DataVerificationListRelationFilter
+  generationJobs?: Prisma.GenerationJobListRelationFilter
 }, "id" | "email" | "googleId">
 
 export type UserOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
-  password?: Prisma.SortOrder
+  password?: Prisma.SortOrderInput | Prisma.SortOrder
   role?: Prisma.SortOrder
   accountStatus?: Prisma.SortOrder
   firstName?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -427,12 +522,18 @@ export type UserOrderByWithAggregationInput = {
   dateOfBirth?: Prisma.SortOrderInput | Prisma.SortOrder
   googleId?: Prisma.SortOrderInput | Prisma.SortOrder
   googleRefreshToken?: Prisma.SortOrderInput | Prisma.SortOrder
+  grade?: Prisma.SortOrderInput | Prisma.SortOrder
+  province?: Prisma.SortOrderInput | Prisma.SortOrder
+  school?: Prisma.SortOrderInput | Prisma.SortOrder
   invitedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  managerId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
+  _avg?: Prisma.UserAvgOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
   _min?: Prisma.UserMinOrderByAggregateInput
+  _sum?: Prisma.UserSumOrderByAggregateInput
 }
 
 export type UserScalarWhereWithAggregatesInput = {
@@ -441,7 +542,7 @@ export type UserScalarWhereWithAggregatesInput = {
   NOT?: Prisma.UserScalarWhereWithAggregatesInput | Prisma.UserScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"User"> | string
   email?: Prisma.StringWithAggregatesFilter<"User"> | string
-  password?: Prisma.StringWithAggregatesFilter<"User"> | string
+  password?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   role?: Prisma.EnumRoleWithAggregatesFilter<"User"> | $Enums.Role
   accountStatus?: Prisma.EnumAccountStatusWithAggregatesFilter<"User"> | $Enums.AccountStatus
   firstName?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
@@ -460,7 +561,11 @@ export type UserScalarWhereWithAggregatesInput = {
   dateOfBirth?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   googleId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   googleRefreshToken?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  grade?: Prisma.IntNullableWithAggregatesFilter<"User"> | number | null
+  province?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  school?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   invitedById?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  managerId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
 }
@@ -468,7 +573,7 @@ export type UserScalarWhereWithAggregatesInput = {
 export type UserCreateInput = {
   id?: string
   email: string
-  password: string
+  password?: string | null
   role?: $Enums.Role
   accountStatus?: $Enums.AccountStatus
   firstName?: string | null
@@ -487,18 +592,28 @@ export type UserCreateInput = {
   dateOfBirth?: Date | string | null
   googleId?: string | null
   googleRefreshToken?: string | null
+  grade?: number | null
+  province?: string | null
+  school?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   invitedBy?: Prisma.UserCreateNestedOneWithoutInviteesInput
   invitees?: Prisma.UserCreateNestedManyWithoutInvitedByInput
+  manager?: Prisma.UserCreateNestedOneWithoutManagedLearnersInput
+  managedLearners?: Prisma.UserCreateNestedManyWithoutManagerInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  learnerProfile?: Prisma.LearnerProfileCreateNestedOneWithoutLearnerInput
+  assessmentSessions?: Prisma.LearnerAssessmentSessionCreateNestedManyWithoutLearnerInput
+  reviewAssignments?: Prisma.ContentReviewCreateNestedManyWithoutReviewerInput
+  verificationItems?: Prisma.DataVerificationCreateNestedManyWithoutVerifierInput
+  generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutRequestedByInput
 }
 
 export type UserUncheckedCreateInput = {
   id?: string
   email: string
-  password: string
+  password?: string | null
   role?: $Enums.Role
   accountStatus?: $Enums.AccountStatus
   firstName?: string | null
@@ -517,18 +632,28 @@ export type UserUncheckedCreateInput = {
   dateOfBirth?: Date | string | null
   googleId?: string | null
   googleRefreshToken?: string | null
+  grade?: number | null
+  province?: string | null
+  school?: string | null
   invitedById?: string | null
+  managerId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   invitees?: Prisma.UserUncheckedCreateNestedManyWithoutInvitedByInput
+  managedLearners?: Prisma.UserUncheckedCreateNestedManyWithoutManagerInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  learnerProfile?: Prisma.LearnerProfileUncheckedCreateNestedOneWithoutLearnerInput
+  assessmentSessions?: Prisma.LearnerAssessmentSessionUncheckedCreateNestedManyWithoutLearnerInput
+  reviewAssignments?: Prisma.ContentReviewUncheckedCreateNestedManyWithoutReviewerInput
+  verificationItems?: Prisma.DataVerificationUncheckedCreateNestedManyWithoutVerifierInput
+  generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutRequestedByInput
 }
 
 export type UserUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -547,18 +672,28 @@ export type UserUpdateInput = {
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   invitedBy?: Prisma.UserUpdateOneWithoutInviteesNestedInput
   invitees?: Prisma.UserUpdateManyWithoutInvitedByNestedInput
+  manager?: Prisma.UserUpdateOneWithoutManagedLearnersNestedInput
+  managedLearners?: Prisma.UserUpdateManyWithoutManagerNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  learnerProfile?: Prisma.LearnerProfileUpdateOneWithoutLearnerNestedInput
+  assessmentSessions?: Prisma.LearnerAssessmentSessionUpdateManyWithoutLearnerNestedInput
+  reviewAssignments?: Prisma.ContentReviewUpdateManyWithoutReviewerNestedInput
+  verificationItems?: Prisma.DataVerificationUpdateManyWithoutVerifierNestedInput
+  generationJobs?: Prisma.GenerationJobUpdateManyWithoutRequestedByNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -577,18 +712,28 @@ export type UserUncheckedUpdateInput = {
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   invitedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  managerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   invitees?: Prisma.UserUncheckedUpdateManyWithoutInvitedByNestedInput
+  managedLearners?: Prisma.UserUncheckedUpdateManyWithoutManagerNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  learnerProfile?: Prisma.LearnerProfileUncheckedUpdateOneWithoutLearnerNestedInput
+  assessmentSessions?: Prisma.LearnerAssessmentSessionUncheckedUpdateManyWithoutLearnerNestedInput
+  reviewAssignments?: Prisma.ContentReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  verificationItems?: Prisma.DataVerificationUncheckedUpdateManyWithoutVerifierNestedInput
+  generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutRequestedByNestedInput
 }
 
 export type UserCreateManyInput = {
   id?: string
   email: string
-  password: string
+  password?: string | null
   role?: $Enums.Role
   accountStatus?: $Enums.AccountStatus
   firstName?: string | null
@@ -607,7 +752,11 @@ export type UserCreateManyInput = {
   dateOfBirth?: Date | string | null
   googleId?: string | null
   googleRefreshToken?: string | null
+  grade?: number | null
+  province?: string | null
+  school?: string | null
   invitedById?: string | null
+  managerId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -615,7 +764,7 @@ export type UserCreateManyInput = {
 export type UserUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -634,6 +783,9 @@ export type UserUpdateManyMutationInput = {
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -641,7 +793,7 @@ export type UserUpdateManyMutationInput = {
 export type UserUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -660,7 +812,11 @@ export type UserUncheckedUpdateManyInput = {
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   invitedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  managerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -702,9 +858,17 @@ export type UserCountOrderByAggregateInput = {
   dateOfBirth?: Prisma.SortOrder
   googleId?: Prisma.SortOrder
   googleRefreshToken?: Prisma.SortOrder
+  grade?: Prisma.SortOrder
+  province?: Prisma.SortOrder
+  school?: Prisma.SortOrder
   invitedById?: Prisma.SortOrder
+  managerId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type UserAvgOrderByAggregateInput = {
+  grade?: Prisma.SortOrder
 }
 
 export type UserMaxOrderByAggregateInput = {
@@ -729,7 +893,11 @@ export type UserMaxOrderByAggregateInput = {
   dateOfBirth?: Prisma.SortOrder
   googleId?: Prisma.SortOrder
   googleRefreshToken?: Prisma.SortOrder
+  grade?: Prisma.SortOrder
+  province?: Prisma.SortOrder
+  school?: Prisma.SortOrder
   invitedById?: Prisma.SortOrder
+  managerId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -756,9 +924,17 @@ export type UserMinOrderByAggregateInput = {
   dateOfBirth?: Prisma.SortOrder
   googleId?: Prisma.SortOrder
   googleRefreshToken?: Prisma.SortOrder
+  grade?: Prisma.SortOrder
+  province?: Prisma.SortOrder
+  school?: Prisma.SortOrder
   invitedById?: Prisma.SortOrder
+  managerId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type UserSumOrderByAggregateInput = {
+  grade?: Prisma.SortOrder
 }
 
 export type UserScalarRelationFilter = {
@@ -779,6 +955,19 @@ export type UserCreateNestedManyWithoutInvitedByInput = {
   connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
 }
 
+export type UserCreateNestedOneWithoutManagedLearnersInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutManagedLearnersInput, Prisma.UserUncheckedCreateWithoutManagedLearnersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutManagedLearnersInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedManyWithoutManagerInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutManagerInput, Prisma.UserUncheckedCreateWithoutManagerInput> | Prisma.UserCreateWithoutManagerInput[] | Prisma.UserUncheckedCreateWithoutManagerInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutManagerInput | Prisma.UserCreateOrConnectWithoutManagerInput[]
+  createMany?: Prisma.UserCreateManyManagerInputEnvelope
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+}
+
 export type UserUncheckedCreateNestedManyWithoutInvitedByInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutInvitedByInput, Prisma.UserUncheckedCreateWithoutInvitedByInput> | Prisma.UserCreateWithoutInvitedByInput[] | Prisma.UserUncheckedCreateWithoutInvitedByInput[]
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutInvitedByInput | Prisma.UserCreateOrConnectWithoutInvitedByInput[]
@@ -786,8 +975,19 @@ export type UserUncheckedCreateNestedManyWithoutInvitedByInput = {
   connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
 }
 
+export type UserUncheckedCreateNestedManyWithoutManagerInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutManagerInput, Prisma.UserUncheckedCreateWithoutManagerInput> | Prisma.UserCreateWithoutManagerInput[] | Prisma.UserUncheckedCreateWithoutManagerInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutManagerInput | Prisma.UserCreateOrConnectWithoutManagerInput[]
+  createMany?: Prisma.UserCreateManyManagerInputEnvelope
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+}
+
 export type StringFieldUpdateOperationsInput = {
   set?: string
+}
+
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
 }
 
 export type EnumRoleFieldUpdateOperationsInput = {
@@ -798,12 +998,16 @@ export type EnumAccountStatusFieldUpdateOperationsInput = {
   set?: $Enums.AccountStatus
 }
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
-}
-
 export type NullableDateTimeFieldUpdateOperationsInput = {
   set?: Date | string | null
+}
+
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
 }
 
 export type DateTimeFieldUpdateOperationsInput = {
@@ -834,6 +1038,30 @@ export type UserUpdateManyWithoutInvitedByNestedInput = {
   deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
 }
 
+export type UserUpdateOneWithoutManagedLearnersNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutManagedLearnersInput, Prisma.UserUncheckedCreateWithoutManagedLearnersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutManagedLearnersInput
+  upsert?: Prisma.UserUpsertWithoutManagedLearnersInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutManagedLearnersInput, Prisma.UserUpdateWithoutManagedLearnersInput>, Prisma.UserUncheckedUpdateWithoutManagedLearnersInput>
+}
+
+export type UserUpdateManyWithoutManagerNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutManagerInput, Prisma.UserUncheckedCreateWithoutManagerInput> | Prisma.UserCreateWithoutManagerInput[] | Prisma.UserUncheckedCreateWithoutManagerInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutManagerInput | Prisma.UserCreateOrConnectWithoutManagerInput[]
+  upsert?: Prisma.UserUpsertWithWhereUniqueWithoutManagerInput | Prisma.UserUpsertWithWhereUniqueWithoutManagerInput[]
+  createMany?: Prisma.UserCreateManyManagerInputEnvelope
+  set?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  disconnect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  delete?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  update?: Prisma.UserUpdateWithWhereUniqueWithoutManagerInput | Prisma.UserUpdateWithWhereUniqueWithoutManagerInput[]
+  updateMany?: Prisma.UserUpdateManyWithWhereWithoutManagerInput | Prisma.UserUpdateManyWithWhereWithoutManagerInput[]
+  deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+}
+
 export type UserUncheckedUpdateManyWithoutInvitedByNestedInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutInvitedByInput, Prisma.UserUncheckedCreateWithoutInvitedByInput> | Prisma.UserCreateWithoutInvitedByInput[] | Prisma.UserUncheckedCreateWithoutInvitedByInput[]
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutInvitedByInput | Prisma.UserCreateOrConnectWithoutInvitedByInput[]
@@ -845,6 +1073,20 @@ export type UserUncheckedUpdateManyWithoutInvitedByNestedInput = {
   connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
   update?: Prisma.UserUpdateWithWhereUniqueWithoutInvitedByInput | Prisma.UserUpdateWithWhereUniqueWithoutInvitedByInput[]
   updateMany?: Prisma.UserUpdateManyWithWhereWithoutInvitedByInput | Prisma.UserUpdateManyWithWhereWithoutInvitedByInput[]
+  deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+}
+
+export type UserUncheckedUpdateManyWithoutManagerNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutManagerInput, Prisma.UserUncheckedCreateWithoutManagerInput> | Prisma.UserCreateWithoutManagerInput[] | Prisma.UserUncheckedCreateWithoutManagerInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutManagerInput | Prisma.UserCreateOrConnectWithoutManagerInput[]
+  upsert?: Prisma.UserUpsertWithWhereUniqueWithoutManagerInput | Prisma.UserUpsertWithWhereUniqueWithoutManagerInput[]
+  createMany?: Prisma.UserCreateManyManagerInputEnvelope
+  set?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  disconnect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  delete?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  update?: Prisma.UserUpdateWithWhereUniqueWithoutManagerInput | Prisma.UserUpdateWithWhereUniqueWithoutManagerInput[]
+  updateMany?: Prisma.UserUpdateManyWithWhereWithoutManagerInput | Prisma.UserUpdateManyWithWhereWithoutManagerInput[]
   deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
 }
 
@@ -876,10 +1118,80 @@ export type UserUpdateOneRequiredWithoutNotificationsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutNotificationsInput, Prisma.UserUpdateWithoutNotificationsInput>, Prisma.UserUncheckedUpdateWithoutNotificationsInput>
 }
 
+export type UserCreateNestedOneWithoutAssessmentSessionsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAssessmentSessionsInput, Prisma.UserUncheckedCreateWithoutAssessmentSessionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAssessmentSessionsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutAssessmentSessionsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAssessmentSessionsInput, Prisma.UserUncheckedCreateWithoutAssessmentSessionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAssessmentSessionsInput
+  upsert?: Prisma.UserUpsertWithoutAssessmentSessionsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAssessmentSessionsInput, Prisma.UserUpdateWithoutAssessmentSessionsInput>, Prisma.UserUncheckedUpdateWithoutAssessmentSessionsInput>
+}
+
+export type UserCreateNestedOneWithoutLearnerProfileInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutLearnerProfileInput, Prisma.UserUncheckedCreateWithoutLearnerProfileInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutLearnerProfileInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutLearnerProfileNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutLearnerProfileInput, Prisma.UserUncheckedCreateWithoutLearnerProfileInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutLearnerProfileInput
+  upsert?: Prisma.UserUpsertWithoutLearnerProfileInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutLearnerProfileInput, Prisma.UserUpdateWithoutLearnerProfileInput>, Prisma.UserUncheckedUpdateWithoutLearnerProfileInput>
+}
+
+export type UserCreateNestedOneWithoutReviewAssignmentsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutReviewAssignmentsInput, Prisma.UserUncheckedCreateWithoutReviewAssignmentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReviewAssignmentsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutReviewAssignmentsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutReviewAssignmentsInput, Prisma.UserUncheckedCreateWithoutReviewAssignmentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReviewAssignmentsInput
+  upsert?: Prisma.UserUpsertWithoutReviewAssignmentsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutReviewAssignmentsInput, Prisma.UserUpdateWithoutReviewAssignmentsInput>, Prisma.UserUncheckedUpdateWithoutReviewAssignmentsInput>
+}
+
+export type UserCreateNestedOneWithoutVerificationItemsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutVerificationItemsInput, Prisma.UserUncheckedCreateWithoutVerificationItemsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutVerificationItemsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutVerificationItemsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutVerificationItemsInput, Prisma.UserUncheckedCreateWithoutVerificationItemsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutVerificationItemsInput
+  upsert?: Prisma.UserUpsertWithoutVerificationItemsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutVerificationItemsInput, Prisma.UserUpdateWithoutVerificationItemsInput>, Prisma.UserUncheckedUpdateWithoutVerificationItemsInput>
+}
+
+export type UserCreateNestedOneWithoutGenerationJobsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutGenerationJobsInput, Prisma.UserUncheckedCreateWithoutGenerationJobsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutGenerationJobsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutGenerationJobsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutGenerationJobsInput, Prisma.UserUncheckedCreateWithoutGenerationJobsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutGenerationJobsInput
+  upsert?: Prisma.UserUpsertWithoutGenerationJobsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutGenerationJobsInput, Prisma.UserUpdateWithoutGenerationJobsInput>, Prisma.UserUncheckedUpdateWithoutGenerationJobsInput>
+}
+
 export type UserCreateWithoutInviteesInput = {
   id?: string
   email: string
-  password: string
+  password?: string | null
   role?: $Enums.Role
   accountStatus?: $Enums.AccountStatus
   firstName?: string | null
@@ -898,17 +1210,27 @@ export type UserCreateWithoutInviteesInput = {
   dateOfBirth?: Date | string | null
   googleId?: string | null
   googleRefreshToken?: string | null
+  grade?: number | null
+  province?: string | null
+  school?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   invitedBy?: Prisma.UserCreateNestedOneWithoutInviteesInput
+  manager?: Prisma.UserCreateNestedOneWithoutManagedLearnersInput
+  managedLearners?: Prisma.UserCreateNestedManyWithoutManagerInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  learnerProfile?: Prisma.LearnerProfileCreateNestedOneWithoutLearnerInput
+  assessmentSessions?: Prisma.LearnerAssessmentSessionCreateNestedManyWithoutLearnerInput
+  reviewAssignments?: Prisma.ContentReviewCreateNestedManyWithoutReviewerInput
+  verificationItems?: Prisma.DataVerificationCreateNestedManyWithoutVerifierInput
+  generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutRequestedByInput
 }
 
 export type UserUncheckedCreateWithoutInviteesInput = {
   id?: string
   email: string
-  password: string
+  password?: string | null
   role?: $Enums.Role
   accountStatus?: $Enums.AccountStatus
   firstName?: string | null
@@ -927,11 +1249,21 @@ export type UserUncheckedCreateWithoutInviteesInput = {
   dateOfBirth?: Date | string | null
   googleId?: string | null
   googleRefreshToken?: string | null
+  grade?: number | null
+  province?: string | null
+  school?: string | null
   invitedById?: string | null
+  managerId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  managedLearners?: Prisma.UserUncheckedCreateNestedManyWithoutManagerInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  learnerProfile?: Prisma.LearnerProfileUncheckedCreateNestedOneWithoutLearnerInput
+  assessmentSessions?: Prisma.LearnerAssessmentSessionUncheckedCreateNestedManyWithoutLearnerInput
+  reviewAssignments?: Prisma.ContentReviewUncheckedCreateNestedManyWithoutReviewerInput
+  verificationItems?: Prisma.DataVerificationUncheckedCreateNestedManyWithoutVerifierInput
+  generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutRequestedByInput
 }
 
 export type UserCreateOrConnectWithoutInviteesInput = {
@@ -942,7 +1274,7 @@ export type UserCreateOrConnectWithoutInviteesInput = {
 export type UserCreateWithoutInvitedByInput = {
   id?: string
   email: string
-  password: string
+  password?: string | null
   role?: $Enums.Role
   accountStatus?: $Enums.AccountStatus
   firstName?: string | null
@@ -961,17 +1293,27 @@ export type UserCreateWithoutInvitedByInput = {
   dateOfBirth?: Date | string | null
   googleId?: string | null
   googleRefreshToken?: string | null
+  grade?: number | null
+  province?: string | null
+  school?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   invitees?: Prisma.UserCreateNestedManyWithoutInvitedByInput
+  manager?: Prisma.UserCreateNestedOneWithoutManagedLearnersInput
+  managedLearners?: Prisma.UserCreateNestedManyWithoutManagerInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  learnerProfile?: Prisma.LearnerProfileCreateNestedOneWithoutLearnerInput
+  assessmentSessions?: Prisma.LearnerAssessmentSessionCreateNestedManyWithoutLearnerInput
+  reviewAssignments?: Prisma.ContentReviewCreateNestedManyWithoutReviewerInput
+  verificationItems?: Prisma.DataVerificationCreateNestedManyWithoutVerifierInput
+  generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutRequestedByInput
 }
 
 export type UserUncheckedCreateWithoutInvitedByInput = {
   id?: string
   email: string
-  password: string
+  password?: string | null
   role?: $Enums.Role
   accountStatus?: $Enums.AccountStatus
   firstName?: string | null
@@ -990,11 +1332,21 @@ export type UserUncheckedCreateWithoutInvitedByInput = {
   dateOfBirth?: Date | string | null
   googleId?: string | null
   googleRefreshToken?: string | null
+  grade?: number | null
+  province?: string | null
+  school?: string | null
+  managerId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   invitees?: Prisma.UserUncheckedCreateNestedManyWithoutInvitedByInput
+  managedLearners?: Prisma.UserUncheckedCreateNestedManyWithoutManagerInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  learnerProfile?: Prisma.LearnerProfileUncheckedCreateNestedOneWithoutLearnerInput
+  assessmentSessions?: Prisma.LearnerAssessmentSessionUncheckedCreateNestedManyWithoutLearnerInput
+  reviewAssignments?: Prisma.ContentReviewUncheckedCreateNestedManyWithoutReviewerInput
+  verificationItems?: Prisma.DataVerificationUncheckedCreateNestedManyWithoutVerifierInput
+  generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutRequestedByInput
 }
 
 export type UserCreateOrConnectWithoutInvitedByInput = {
@@ -1004,6 +1356,177 @@ export type UserCreateOrConnectWithoutInvitedByInput = {
 
 export type UserCreateManyInvitedByInputEnvelope = {
   data: Prisma.UserCreateManyInvitedByInput | Prisma.UserCreateManyInvitedByInput[]
+  skipDuplicates?: boolean
+}
+
+export type UserCreateWithoutManagedLearnersInput = {
+  id?: string
+  email: string
+  password?: string | null
+  role?: $Enums.Role
+  accountStatus?: $Enums.AccountStatus
+  firstName?: string | null
+  lastName?: string | null
+  displayName?: string | null
+  avatarUrl?: string | null
+  phone?: string | null
+  verificationCode?: string | null
+  verificationExpires?: Date | string | null
+  passwordResetToken?: string | null
+  passwordResetExpires?: Date | string | null
+  lastActiveAt?: Date | string | null
+  city?: string | null
+  country?: string | null
+  language?: string | null
+  dateOfBirth?: Date | string | null
+  googleId?: string | null
+  googleRefreshToken?: string | null
+  grade?: number | null
+  province?: string | null
+  school?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  invitedBy?: Prisma.UserCreateNestedOneWithoutInviteesInput
+  invitees?: Prisma.UserCreateNestedManyWithoutInvitedByInput
+  manager?: Prisma.UserCreateNestedOneWithoutManagedLearnersInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  learnerProfile?: Prisma.LearnerProfileCreateNestedOneWithoutLearnerInput
+  assessmentSessions?: Prisma.LearnerAssessmentSessionCreateNestedManyWithoutLearnerInput
+  reviewAssignments?: Prisma.ContentReviewCreateNestedManyWithoutReviewerInput
+  verificationItems?: Prisma.DataVerificationCreateNestedManyWithoutVerifierInput
+  generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutRequestedByInput
+}
+
+export type UserUncheckedCreateWithoutManagedLearnersInput = {
+  id?: string
+  email: string
+  password?: string | null
+  role?: $Enums.Role
+  accountStatus?: $Enums.AccountStatus
+  firstName?: string | null
+  lastName?: string | null
+  displayName?: string | null
+  avatarUrl?: string | null
+  phone?: string | null
+  verificationCode?: string | null
+  verificationExpires?: Date | string | null
+  passwordResetToken?: string | null
+  passwordResetExpires?: Date | string | null
+  lastActiveAt?: Date | string | null
+  city?: string | null
+  country?: string | null
+  language?: string | null
+  dateOfBirth?: Date | string | null
+  googleId?: string | null
+  googleRefreshToken?: string | null
+  grade?: number | null
+  province?: string | null
+  school?: string | null
+  invitedById?: string | null
+  managerId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  invitees?: Prisma.UserUncheckedCreateNestedManyWithoutInvitedByInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  learnerProfile?: Prisma.LearnerProfileUncheckedCreateNestedOneWithoutLearnerInput
+  assessmentSessions?: Prisma.LearnerAssessmentSessionUncheckedCreateNestedManyWithoutLearnerInput
+  reviewAssignments?: Prisma.ContentReviewUncheckedCreateNestedManyWithoutReviewerInput
+  verificationItems?: Prisma.DataVerificationUncheckedCreateNestedManyWithoutVerifierInput
+  generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutRequestedByInput
+}
+
+export type UserCreateOrConnectWithoutManagedLearnersInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutManagedLearnersInput, Prisma.UserUncheckedCreateWithoutManagedLearnersInput>
+}
+
+export type UserCreateWithoutManagerInput = {
+  id?: string
+  email: string
+  password?: string | null
+  role?: $Enums.Role
+  accountStatus?: $Enums.AccountStatus
+  firstName?: string | null
+  lastName?: string | null
+  displayName?: string | null
+  avatarUrl?: string | null
+  phone?: string | null
+  verificationCode?: string | null
+  verificationExpires?: Date | string | null
+  passwordResetToken?: string | null
+  passwordResetExpires?: Date | string | null
+  lastActiveAt?: Date | string | null
+  city?: string | null
+  country?: string | null
+  language?: string | null
+  dateOfBirth?: Date | string | null
+  googleId?: string | null
+  googleRefreshToken?: string | null
+  grade?: number | null
+  province?: string | null
+  school?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  invitedBy?: Prisma.UserCreateNestedOneWithoutInviteesInput
+  invitees?: Prisma.UserCreateNestedManyWithoutInvitedByInput
+  managedLearners?: Prisma.UserCreateNestedManyWithoutManagerInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  learnerProfile?: Prisma.LearnerProfileCreateNestedOneWithoutLearnerInput
+  assessmentSessions?: Prisma.LearnerAssessmentSessionCreateNestedManyWithoutLearnerInput
+  reviewAssignments?: Prisma.ContentReviewCreateNestedManyWithoutReviewerInput
+  verificationItems?: Prisma.DataVerificationCreateNestedManyWithoutVerifierInput
+  generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutRequestedByInput
+}
+
+export type UserUncheckedCreateWithoutManagerInput = {
+  id?: string
+  email: string
+  password?: string | null
+  role?: $Enums.Role
+  accountStatus?: $Enums.AccountStatus
+  firstName?: string | null
+  lastName?: string | null
+  displayName?: string | null
+  avatarUrl?: string | null
+  phone?: string | null
+  verificationCode?: string | null
+  verificationExpires?: Date | string | null
+  passwordResetToken?: string | null
+  passwordResetExpires?: Date | string | null
+  lastActiveAt?: Date | string | null
+  city?: string | null
+  country?: string | null
+  language?: string | null
+  dateOfBirth?: Date | string | null
+  googleId?: string | null
+  googleRefreshToken?: string | null
+  grade?: number | null
+  province?: string | null
+  school?: string | null
+  invitedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  invitees?: Prisma.UserUncheckedCreateNestedManyWithoutInvitedByInput
+  managedLearners?: Prisma.UserUncheckedCreateNestedManyWithoutManagerInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  learnerProfile?: Prisma.LearnerProfileUncheckedCreateNestedOneWithoutLearnerInput
+  assessmentSessions?: Prisma.LearnerAssessmentSessionUncheckedCreateNestedManyWithoutLearnerInput
+  reviewAssignments?: Prisma.ContentReviewUncheckedCreateNestedManyWithoutReviewerInput
+  verificationItems?: Prisma.DataVerificationUncheckedCreateNestedManyWithoutVerifierInput
+  generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutRequestedByInput
+}
+
+export type UserCreateOrConnectWithoutManagerInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutManagerInput, Prisma.UserUncheckedCreateWithoutManagerInput>
+}
+
+export type UserCreateManyManagerInputEnvelope = {
+  data: Prisma.UserCreateManyManagerInput | Prisma.UserCreateManyManagerInput[]
   skipDuplicates?: boolean
 }
 
@@ -1021,7 +1544,7 @@ export type UserUpdateToOneWithWhereWithoutInviteesInput = {
 export type UserUpdateWithoutInviteesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1040,17 +1563,27 @@ export type UserUpdateWithoutInviteesInput = {
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   invitedBy?: Prisma.UserUpdateOneWithoutInviteesNestedInput
+  manager?: Prisma.UserUpdateOneWithoutManagedLearnersNestedInput
+  managedLearners?: Prisma.UserUpdateManyWithoutManagerNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  learnerProfile?: Prisma.LearnerProfileUpdateOneWithoutLearnerNestedInput
+  assessmentSessions?: Prisma.LearnerAssessmentSessionUpdateManyWithoutLearnerNestedInput
+  reviewAssignments?: Prisma.ContentReviewUpdateManyWithoutReviewerNestedInput
+  verificationItems?: Prisma.DataVerificationUpdateManyWithoutVerifierNestedInput
+  generationJobs?: Prisma.GenerationJobUpdateManyWithoutRequestedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutInviteesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1069,11 +1602,21 @@ export type UserUncheckedUpdateWithoutInviteesInput = {
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   invitedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  managerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  managedLearners?: Prisma.UserUncheckedUpdateManyWithoutManagerNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  learnerProfile?: Prisma.LearnerProfileUncheckedUpdateOneWithoutLearnerNestedInput
+  assessmentSessions?: Prisma.LearnerAssessmentSessionUncheckedUpdateManyWithoutLearnerNestedInput
+  reviewAssignments?: Prisma.ContentReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  verificationItems?: Prisma.DataVerificationUncheckedUpdateManyWithoutVerifierNestedInput
+  generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutRequestedByNestedInput
 }
 
 export type UserUpsertWithWhereUniqueWithoutInvitedByInput = {
@@ -1098,7 +1641,7 @@ export type UserScalarWhereInput = {
   NOT?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
   id?: Prisma.StringFilter<"User"> | string
   email?: Prisma.StringFilter<"User"> | string
-  password?: Prisma.StringFilter<"User"> | string
+  password?: Prisma.StringNullableFilter<"User"> | string | null
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
   accountStatus?: Prisma.EnumAccountStatusFilter<"User"> | $Enums.AccountStatus
   firstName?: Prisma.StringNullableFilter<"User"> | string | null
@@ -1117,15 +1660,124 @@ export type UserScalarWhereInput = {
   dateOfBirth?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   googleId?: Prisma.StringNullableFilter<"User"> | string | null
   googleRefreshToken?: Prisma.StringNullableFilter<"User"> | string | null
+  grade?: Prisma.IntNullableFilter<"User"> | number | null
+  province?: Prisma.StringNullableFilter<"User"> | string | null
+  school?: Prisma.StringNullableFilter<"User"> | string | null
   invitedById?: Prisma.StringNullableFilter<"User"> | string | null
+  managerId?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+}
+
+export type UserUpsertWithoutManagedLearnersInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutManagedLearnersInput, Prisma.UserUncheckedUpdateWithoutManagedLearnersInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutManagedLearnersInput, Prisma.UserUncheckedCreateWithoutManagedLearnersInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutManagedLearnersInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutManagedLearnersInput, Prisma.UserUncheckedUpdateWithoutManagedLearnersInput>
+}
+
+export type UserUpdateWithoutManagedLearnersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordResetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordResetExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  invitedBy?: Prisma.UserUpdateOneWithoutInviteesNestedInput
+  invitees?: Prisma.UserUpdateManyWithoutInvitedByNestedInput
+  manager?: Prisma.UserUpdateOneWithoutManagedLearnersNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  learnerProfile?: Prisma.LearnerProfileUpdateOneWithoutLearnerNestedInput
+  assessmentSessions?: Prisma.LearnerAssessmentSessionUpdateManyWithoutLearnerNestedInput
+  reviewAssignments?: Prisma.ContentReviewUpdateManyWithoutReviewerNestedInput
+  verificationItems?: Prisma.DataVerificationUpdateManyWithoutVerifierNestedInput
+  generationJobs?: Prisma.GenerationJobUpdateManyWithoutRequestedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutManagedLearnersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordResetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordResetExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invitedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  managerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  invitees?: Prisma.UserUncheckedUpdateManyWithoutInvitedByNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  learnerProfile?: Prisma.LearnerProfileUncheckedUpdateOneWithoutLearnerNestedInput
+  assessmentSessions?: Prisma.LearnerAssessmentSessionUncheckedUpdateManyWithoutLearnerNestedInput
+  reviewAssignments?: Prisma.ContentReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  verificationItems?: Prisma.DataVerificationUncheckedUpdateManyWithoutVerifierNestedInput
+  generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutRequestedByNestedInput
+}
+
+export type UserUpsertWithWhereUniqueWithoutManagerInput = {
+  where: Prisma.UserWhereUniqueInput
+  update: Prisma.XOR<Prisma.UserUpdateWithoutManagerInput, Prisma.UserUncheckedUpdateWithoutManagerInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutManagerInput, Prisma.UserUncheckedCreateWithoutManagerInput>
+}
+
+export type UserUpdateWithWhereUniqueWithoutManagerInput = {
+  where: Prisma.UserWhereUniqueInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutManagerInput, Prisma.UserUncheckedUpdateWithoutManagerInput>
+}
+
+export type UserUpdateManyWithWhereWithoutManagerInput = {
+  where: Prisma.UserScalarWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateManyMutationInput, Prisma.UserUncheckedUpdateManyWithoutManagerInput>
 }
 
 export type UserCreateWithoutAuditLogsInput = {
   id?: string
   email: string
-  password: string
+  password?: string | null
   role?: $Enums.Role
   accountStatus?: $Enums.AccountStatus
   firstName?: string | null
@@ -1144,17 +1796,27 @@ export type UserCreateWithoutAuditLogsInput = {
   dateOfBirth?: Date | string | null
   googleId?: string | null
   googleRefreshToken?: string | null
+  grade?: number | null
+  province?: string | null
+  school?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   invitedBy?: Prisma.UserCreateNestedOneWithoutInviteesInput
   invitees?: Prisma.UserCreateNestedManyWithoutInvitedByInput
+  manager?: Prisma.UserCreateNestedOneWithoutManagedLearnersInput
+  managedLearners?: Prisma.UserCreateNestedManyWithoutManagerInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  learnerProfile?: Prisma.LearnerProfileCreateNestedOneWithoutLearnerInput
+  assessmentSessions?: Prisma.LearnerAssessmentSessionCreateNestedManyWithoutLearnerInput
+  reviewAssignments?: Prisma.ContentReviewCreateNestedManyWithoutReviewerInput
+  verificationItems?: Prisma.DataVerificationCreateNestedManyWithoutVerifierInput
+  generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutRequestedByInput
 }
 
 export type UserUncheckedCreateWithoutAuditLogsInput = {
   id?: string
   email: string
-  password: string
+  password?: string | null
   role?: $Enums.Role
   accountStatus?: $Enums.AccountStatus
   firstName?: string | null
@@ -1173,11 +1835,21 @@ export type UserUncheckedCreateWithoutAuditLogsInput = {
   dateOfBirth?: Date | string | null
   googleId?: string | null
   googleRefreshToken?: string | null
+  grade?: number | null
+  province?: string | null
+  school?: string | null
   invitedById?: string | null
+  managerId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   invitees?: Prisma.UserUncheckedCreateNestedManyWithoutInvitedByInput
+  managedLearners?: Prisma.UserUncheckedCreateNestedManyWithoutManagerInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  learnerProfile?: Prisma.LearnerProfileUncheckedCreateNestedOneWithoutLearnerInput
+  assessmentSessions?: Prisma.LearnerAssessmentSessionUncheckedCreateNestedManyWithoutLearnerInput
+  reviewAssignments?: Prisma.ContentReviewUncheckedCreateNestedManyWithoutReviewerInput
+  verificationItems?: Prisma.DataVerificationUncheckedCreateNestedManyWithoutVerifierInput
+  generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutRequestedByInput
 }
 
 export type UserCreateOrConnectWithoutAuditLogsInput = {
@@ -1199,7 +1871,7 @@ export type UserUpdateToOneWithWhereWithoutAuditLogsInput = {
 export type UserUpdateWithoutAuditLogsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1218,17 +1890,27 @@ export type UserUpdateWithoutAuditLogsInput = {
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   invitedBy?: Prisma.UserUpdateOneWithoutInviteesNestedInput
   invitees?: Prisma.UserUpdateManyWithoutInvitedByNestedInput
+  manager?: Prisma.UserUpdateOneWithoutManagedLearnersNestedInput
+  managedLearners?: Prisma.UserUpdateManyWithoutManagerNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  learnerProfile?: Prisma.LearnerProfileUpdateOneWithoutLearnerNestedInput
+  assessmentSessions?: Prisma.LearnerAssessmentSessionUpdateManyWithoutLearnerNestedInput
+  reviewAssignments?: Prisma.ContentReviewUpdateManyWithoutReviewerNestedInput
+  verificationItems?: Prisma.DataVerificationUpdateManyWithoutVerifierNestedInput
+  generationJobs?: Prisma.GenerationJobUpdateManyWithoutRequestedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAuditLogsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1247,17 +1929,27 @@ export type UserUncheckedUpdateWithoutAuditLogsInput = {
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   invitedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  managerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   invitees?: Prisma.UserUncheckedUpdateManyWithoutInvitedByNestedInput
+  managedLearners?: Prisma.UserUncheckedUpdateManyWithoutManagerNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  learnerProfile?: Prisma.LearnerProfileUncheckedUpdateOneWithoutLearnerNestedInput
+  assessmentSessions?: Prisma.LearnerAssessmentSessionUncheckedUpdateManyWithoutLearnerNestedInput
+  reviewAssignments?: Prisma.ContentReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  verificationItems?: Prisma.DataVerificationUncheckedUpdateManyWithoutVerifierNestedInput
+  generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutRequestedByNestedInput
 }
 
 export type UserCreateWithoutNotificationsInput = {
   id?: string
   email: string
-  password: string
+  password?: string | null
   role?: $Enums.Role
   accountStatus?: $Enums.AccountStatus
   firstName?: string | null
@@ -1276,17 +1968,27 @@ export type UserCreateWithoutNotificationsInput = {
   dateOfBirth?: Date | string | null
   googleId?: string | null
   googleRefreshToken?: string | null
+  grade?: number | null
+  province?: string | null
+  school?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   invitedBy?: Prisma.UserCreateNestedOneWithoutInviteesInput
   invitees?: Prisma.UserCreateNestedManyWithoutInvitedByInput
+  manager?: Prisma.UserCreateNestedOneWithoutManagedLearnersInput
+  managedLearners?: Prisma.UserCreateNestedManyWithoutManagerInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  learnerProfile?: Prisma.LearnerProfileCreateNestedOneWithoutLearnerInput
+  assessmentSessions?: Prisma.LearnerAssessmentSessionCreateNestedManyWithoutLearnerInput
+  reviewAssignments?: Prisma.ContentReviewCreateNestedManyWithoutReviewerInput
+  verificationItems?: Prisma.DataVerificationCreateNestedManyWithoutVerifierInput
+  generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutRequestedByInput
 }
 
 export type UserUncheckedCreateWithoutNotificationsInput = {
   id?: string
   email: string
-  password: string
+  password?: string | null
   role?: $Enums.Role
   accountStatus?: $Enums.AccountStatus
   firstName?: string | null
@@ -1305,11 +2007,21 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   dateOfBirth?: Date | string | null
   googleId?: string | null
   googleRefreshToken?: string | null
+  grade?: number | null
+  province?: string | null
+  school?: string | null
   invitedById?: string | null
+  managerId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   invitees?: Prisma.UserUncheckedCreateNestedManyWithoutInvitedByInput
+  managedLearners?: Prisma.UserUncheckedCreateNestedManyWithoutManagerInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  learnerProfile?: Prisma.LearnerProfileUncheckedCreateNestedOneWithoutLearnerInput
+  assessmentSessions?: Prisma.LearnerAssessmentSessionUncheckedCreateNestedManyWithoutLearnerInput
+  reviewAssignments?: Prisma.ContentReviewUncheckedCreateNestedManyWithoutReviewerInput
+  verificationItems?: Prisma.DataVerificationUncheckedCreateNestedManyWithoutVerifierInput
+  generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutRequestedByInput
 }
 
 export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -1331,7 +2043,7 @@ export type UserUpdateToOneWithWhereWithoutNotificationsInput = {
 export type UserUpdateWithoutNotificationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1350,17 +2062,27 @@ export type UserUpdateWithoutNotificationsInput = {
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   invitedBy?: Prisma.UserUpdateOneWithoutInviteesNestedInput
   invitees?: Prisma.UserUpdateManyWithoutInvitedByNestedInput
+  manager?: Prisma.UserUpdateOneWithoutManagedLearnersNestedInput
+  managedLearners?: Prisma.UserUpdateManyWithoutManagerNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  learnerProfile?: Prisma.LearnerProfileUpdateOneWithoutLearnerNestedInput
+  assessmentSessions?: Prisma.LearnerAssessmentSessionUpdateManyWithoutLearnerNestedInput
+  reviewAssignments?: Prisma.ContentReviewUpdateManyWithoutReviewerNestedInput
+  verificationItems?: Prisma.DataVerificationUpdateManyWithoutVerifierNestedInput
+  generationJobs?: Prisma.GenerationJobUpdateManyWithoutRequestedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNotificationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1379,17 +2101,27 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   invitedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  managerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   invitees?: Prisma.UserUncheckedUpdateManyWithoutInvitedByNestedInput
+  managedLearners?: Prisma.UserUncheckedUpdateManyWithoutManagerNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  learnerProfile?: Prisma.LearnerProfileUncheckedUpdateOneWithoutLearnerNestedInput
+  assessmentSessions?: Prisma.LearnerAssessmentSessionUncheckedUpdateManyWithoutLearnerNestedInput
+  reviewAssignments?: Prisma.ContentReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  verificationItems?: Prisma.DataVerificationUncheckedUpdateManyWithoutVerifierNestedInput
+  generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutRequestedByNestedInput
 }
 
-export type UserCreateManyInvitedByInput = {
+export type UserCreateWithoutAssessmentSessionsInput = {
   id?: string
   email: string
-  password: string
+  password?: string | null
   role?: $Enums.Role
   accountStatus?: $Enums.AccountStatus
   firstName?: string | null
@@ -1408,6 +2140,900 @@ export type UserCreateManyInvitedByInput = {
   dateOfBirth?: Date | string | null
   googleId?: string | null
   googleRefreshToken?: string | null
+  grade?: number | null
+  province?: string | null
+  school?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  invitedBy?: Prisma.UserCreateNestedOneWithoutInviteesInput
+  invitees?: Prisma.UserCreateNestedManyWithoutInvitedByInput
+  manager?: Prisma.UserCreateNestedOneWithoutManagedLearnersInput
+  managedLearners?: Prisma.UserCreateNestedManyWithoutManagerInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  learnerProfile?: Prisma.LearnerProfileCreateNestedOneWithoutLearnerInput
+  reviewAssignments?: Prisma.ContentReviewCreateNestedManyWithoutReviewerInput
+  verificationItems?: Prisma.DataVerificationCreateNestedManyWithoutVerifierInput
+  generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutRequestedByInput
+}
+
+export type UserUncheckedCreateWithoutAssessmentSessionsInput = {
+  id?: string
+  email: string
+  password?: string | null
+  role?: $Enums.Role
+  accountStatus?: $Enums.AccountStatus
+  firstName?: string | null
+  lastName?: string | null
+  displayName?: string | null
+  avatarUrl?: string | null
+  phone?: string | null
+  verificationCode?: string | null
+  verificationExpires?: Date | string | null
+  passwordResetToken?: string | null
+  passwordResetExpires?: Date | string | null
+  lastActiveAt?: Date | string | null
+  city?: string | null
+  country?: string | null
+  language?: string | null
+  dateOfBirth?: Date | string | null
+  googleId?: string | null
+  googleRefreshToken?: string | null
+  grade?: number | null
+  province?: string | null
+  school?: string | null
+  invitedById?: string | null
+  managerId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  invitees?: Prisma.UserUncheckedCreateNestedManyWithoutInvitedByInput
+  managedLearners?: Prisma.UserUncheckedCreateNestedManyWithoutManagerInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  learnerProfile?: Prisma.LearnerProfileUncheckedCreateNestedOneWithoutLearnerInput
+  reviewAssignments?: Prisma.ContentReviewUncheckedCreateNestedManyWithoutReviewerInput
+  verificationItems?: Prisma.DataVerificationUncheckedCreateNestedManyWithoutVerifierInput
+  generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutRequestedByInput
+}
+
+export type UserCreateOrConnectWithoutAssessmentSessionsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutAssessmentSessionsInput, Prisma.UserUncheckedCreateWithoutAssessmentSessionsInput>
+}
+
+export type UserUpsertWithoutAssessmentSessionsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutAssessmentSessionsInput, Prisma.UserUncheckedUpdateWithoutAssessmentSessionsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAssessmentSessionsInput, Prisma.UserUncheckedCreateWithoutAssessmentSessionsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutAssessmentSessionsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutAssessmentSessionsInput, Prisma.UserUncheckedUpdateWithoutAssessmentSessionsInput>
+}
+
+export type UserUpdateWithoutAssessmentSessionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordResetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordResetExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  invitedBy?: Prisma.UserUpdateOneWithoutInviteesNestedInput
+  invitees?: Prisma.UserUpdateManyWithoutInvitedByNestedInput
+  manager?: Prisma.UserUpdateOneWithoutManagedLearnersNestedInput
+  managedLearners?: Prisma.UserUpdateManyWithoutManagerNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  learnerProfile?: Prisma.LearnerProfileUpdateOneWithoutLearnerNestedInput
+  reviewAssignments?: Prisma.ContentReviewUpdateManyWithoutReviewerNestedInput
+  verificationItems?: Prisma.DataVerificationUpdateManyWithoutVerifierNestedInput
+  generationJobs?: Prisma.GenerationJobUpdateManyWithoutRequestedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutAssessmentSessionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordResetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordResetExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invitedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  managerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  invitees?: Prisma.UserUncheckedUpdateManyWithoutInvitedByNestedInput
+  managedLearners?: Prisma.UserUncheckedUpdateManyWithoutManagerNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  learnerProfile?: Prisma.LearnerProfileUncheckedUpdateOneWithoutLearnerNestedInput
+  reviewAssignments?: Prisma.ContentReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  verificationItems?: Prisma.DataVerificationUncheckedUpdateManyWithoutVerifierNestedInput
+  generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutRequestedByNestedInput
+}
+
+export type UserCreateWithoutLearnerProfileInput = {
+  id?: string
+  email: string
+  password?: string | null
+  role?: $Enums.Role
+  accountStatus?: $Enums.AccountStatus
+  firstName?: string | null
+  lastName?: string | null
+  displayName?: string | null
+  avatarUrl?: string | null
+  phone?: string | null
+  verificationCode?: string | null
+  verificationExpires?: Date | string | null
+  passwordResetToken?: string | null
+  passwordResetExpires?: Date | string | null
+  lastActiveAt?: Date | string | null
+  city?: string | null
+  country?: string | null
+  language?: string | null
+  dateOfBirth?: Date | string | null
+  googleId?: string | null
+  googleRefreshToken?: string | null
+  grade?: number | null
+  province?: string | null
+  school?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  invitedBy?: Prisma.UserCreateNestedOneWithoutInviteesInput
+  invitees?: Prisma.UserCreateNestedManyWithoutInvitedByInput
+  manager?: Prisma.UserCreateNestedOneWithoutManagedLearnersInput
+  managedLearners?: Prisma.UserCreateNestedManyWithoutManagerInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  assessmentSessions?: Prisma.LearnerAssessmentSessionCreateNestedManyWithoutLearnerInput
+  reviewAssignments?: Prisma.ContentReviewCreateNestedManyWithoutReviewerInput
+  verificationItems?: Prisma.DataVerificationCreateNestedManyWithoutVerifierInput
+  generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutRequestedByInput
+}
+
+export type UserUncheckedCreateWithoutLearnerProfileInput = {
+  id?: string
+  email: string
+  password?: string | null
+  role?: $Enums.Role
+  accountStatus?: $Enums.AccountStatus
+  firstName?: string | null
+  lastName?: string | null
+  displayName?: string | null
+  avatarUrl?: string | null
+  phone?: string | null
+  verificationCode?: string | null
+  verificationExpires?: Date | string | null
+  passwordResetToken?: string | null
+  passwordResetExpires?: Date | string | null
+  lastActiveAt?: Date | string | null
+  city?: string | null
+  country?: string | null
+  language?: string | null
+  dateOfBirth?: Date | string | null
+  googleId?: string | null
+  googleRefreshToken?: string | null
+  grade?: number | null
+  province?: string | null
+  school?: string | null
+  invitedById?: string | null
+  managerId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  invitees?: Prisma.UserUncheckedCreateNestedManyWithoutInvitedByInput
+  managedLearners?: Prisma.UserUncheckedCreateNestedManyWithoutManagerInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  assessmentSessions?: Prisma.LearnerAssessmentSessionUncheckedCreateNestedManyWithoutLearnerInput
+  reviewAssignments?: Prisma.ContentReviewUncheckedCreateNestedManyWithoutReviewerInput
+  verificationItems?: Prisma.DataVerificationUncheckedCreateNestedManyWithoutVerifierInput
+  generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutRequestedByInput
+}
+
+export type UserCreateOrConnectWithoutLearnerProfileInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutLearnerProfileInput, Prisma.UserUncheckedCreateWithoutLearnerProfileInput>
+}
+
+export type UserUpsertWithoutLearnerProfileInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutLearnerProfileInput, Prisma.UserUncheckedUpdateWithoutLearnerProfileInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutLearnerProfileInput, Prisma.UserUncheckedCreateWithoutLearnerProfileInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutLearnerProfileInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutLearnerProfileInput, Prisma.UserUncheckedUpdateWithoutLearnerProfileInput>
+}
+
+export type UserUpdateWithoutLearnerProfileInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordResetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordResetExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  invitedBy?: Prisma.UserUpdateOneWithoutInviteesNestedInput
+  invitees?: Prisma.UserUpdateManyWithoutInvitedByNestedInput
+  manager?: Prisma.UserUpdateOneWithoutManagedLearnersNestedInput
+  managedLearners?: Prisma.UserUpdateManyWithoutManagerNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  assessmentSessions?: Prisma.LearnerAssessmentSessionUpdateManyWithoutLearnerNestedInput
+  reviewAssignments?: Prisma.ContentReviewUpdateManyWithoutReviewerNestedInput
+  verificationItems?: Prisma.DataVerificationUpdateManyWithoutVerifierNestedInput
+  generationJobs?: Prisma.GenerationJobUpdateManyWithoutRequestedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutLearnerProfileInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordResetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordResetExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invitedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  managerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  invitees?: Prisma.UserUncheckedUpdateManyWithoutInvitedByNestedInput
+  managedLearners?: Prisma.UserUncheckedUpdateManyWithoutManagerNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  assessmentSessions?: Prisma.LearnerAssessmentSessionUncheckedUpdateManyWithoutLearnerNestedInput
+  reviewAssignments?: Prisma.ContentReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  verificationItems?: Prisma.DataVerificationUncheckedUpdateManyWithoutVerifierNestedInput
+  generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutRequestedByNestedInput
+}
+
+export type UserCreateWithoutReviewAssignmentsInput = {
+  id?: string
+  email: string
+  password?: string | null
+  role?: $Enums.Role
+  accountStatus?: $Enums.AccountStatus
+  firstName?: string | null
+  lastName?: string | null
+  displayName?: string | null
+  avatarUrl?: string | null
+  phone?: string | null
+  verificationCode?: string | null
+  verificationExpires?: Date | string | null
+  passwordResetToken?: string | null
+  passwordResetExpires?: Date | string | null
+  lastActiveAt?: Date | string | null
+  city?: string | null
+  country?: string | null
+  language?: string | null
+  dateOfBirth?: Date | string | null
+  googleId?: string | null
+  googleRefreshToken?: string | null
+  grade?: number | null
+  province?: string | null
+  school?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  invitedBy?: Prisma.UserCreateNestedOneWithoutInviteesInput
+  invitees?: Prisma.UserCreateNestedManyWithoutInvitedByInput
+  manager?: Prisma.UserCreateNestedOneWithoutManagedLearnersInput
+  managedLearners?: Prisma.UserCreateNestedManyWithoutManagerInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  learnerProfile?: Prisma.LearnerProfileCreateNestedOneWithoutLearnerInput
+  assessmentSessions?: Prisma.LearnerAssessmentSessionCreateNestedManyWithoutLearnerInput
+  verificationItems?: Prisma.DataVerificationCreateNestedManyWithoutVerifierInput
+  generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutRequestedByInput
+}
+
+export type UserUncheckedCreateWithoutReviewAssignmentsInput = {
+  id?: string
+  email: string
+  password?: string | null
+  role?: $Enums.Role
+  accountStatus?: $Enums.AccountStatus
+  firstName?: string | null
+  lastName?: string | null
+  displayName?: string | null
+  avatarUrl?: string | null
+  phone?: string | null
+  verificationCode?: string | null
+  verificationExpires?: Date | string | null
+  passwordResetToken?: string | null
+  passwordResetExpires?: Date | string | null
+  lastActiveAt?: Date | string | null
+  city?: string | null
+  country?: string | null
+  language?: string | null
+  dateOfBirth?: Date | string | null
+  googleId?: string | null
+  googleRefreshToken?: string | null
+  grade?: number | null
+  province?: string | null
+  school?: string | null
+  invitedById?: string | null
+  managerId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  invitees?: Prisma.UserUncheckedCreateNestedManyWithoutInvitedByInput
+  managedLearners?: Prisma.UserUncheckedCreateNestedManyWithoutManagerInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  learnerProfile?: Prisma.LearnerProfileUncheckedCreateNestedOneWithoutLearnerInput
+  assessmentSessions?: Prisma.LearnerAssessmentSessionUncheckedCreateNestedManyWithoutLearnerInput
+  verificationItems?: Prisma.DataVerificationUncheckedCreateNestedManyWithoutVerifierInput
+  generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutRequestedByInput
+}
+
+export type UserCreateOrConnectWithoutReviewAssignmentsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutReviewAssignmentsInput, Prisma.UserUncheckedCreateWithoutReviewAssignmentsInput>
+}
+
+export type UserUpsertWithoutReviewAssignmentsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutReviewAssignmentsInput, Prisma.UserUncheckedUpdateWithoutReviewAssignmentsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutReviewAssignmentsInput, Prisma.UserUncheckedCreateWithoutReviewAssignmentsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutReviewAssignmentsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutReviewAssignmentsInput, Prisma.UserUncheckedUpdateWithoutReviewAssignmentsInput>
+}
+
+export type UserUpdateWithoutReviewAssignmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordResetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordResetExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  invitedBy?: Prisma.UserUpdateOneWithoutInviteesNestedInput
+  invitees?: Prisma.UserUpdateManyWithoutInvitedByNestedInput
+  manager?: Prisma.UserUpdateOneWithoutManagedLearnersNestedInput
+  managedLearners?: Prisma.UserUpdateManyWithoutManagerNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  learnerProfile?: Prisma.LearnerProfileUpdateOneWithoutLearnerNestedInput
+  assessmentSessions?: Prisma.LearnerAssessmentSessionUpdateManyWithoutLearnerNestedInput
+  verificationItems?: Prisma.DataVerificationUpdateManyWithoutVerifierNestedInput
+  generationJobs?: Prisma.GenerationJobUpdateManyWithoutRequestedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutReviewAssignmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordResetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordResetExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invitedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  managerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  invitees?: Prisma.UserUncheckedUpdateManyWithoutInvitedByNestedInput
+  managedLearners?: Prisma.UserUncheckedUpdateManyWithoutManagerNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  learnerProfile?: Prisma.LearnerProfileUncheckedUpdateOneWithoutLearnerNestedInput
+  assessmentSessions?: Prisma.LearnerAssessmentSessionUncheckedUpdateManyWithoutLearnerNestedInput
+  verificationItems?: Prisma.DataVerificationUncheckedUpdateManyWithoutVerifierNestedInput
+  generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutRequestedByNestedInput
+}
+
+export type UserCreateWithoutVerificationItemsInput = {
+  id?: string
+  email: string
+  password?: string | null
+  role?: $Enums.Role
+  accountStatus?: $Enums.AccountStatus
+  firstName?: string | null
+  lastName?: string | null
+  displayName?: string | null
+  avatarUrl?: string | null
+  phone?: string | null
+  verificationCode?: string | null
+  verificationExpires?: Date | string | null
+  passwordResetToken?: string | null
+  passwordResetExpires?: Date | string | null
+  lastActiveAt?: Date | string | null
+  city?: string | null
+  country?: string | null
+  language?: string | null
+  dateOfBirth?: Date | string | null
+  googleId?: string | null
+  googleRefreshToken?: string | null
+  grade?: number | null
+  province?: string | null
+  school?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  invitedBy?: Prisma.UserCreateNestedOneWithoutInviteesInput
+  invitees?: Prisma.UserCreateNestedManyWithoutInvitedByInput
+  manager?: Prisma.UserCreateNestedOneWithoutManagedLearnersInput
+  managedLearners?: Prisma.UserCreateNestedManyWithoutManagerInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  learnerProfile?: Prisma.LearnerProfileCreateNestedOneWithoutLearnerInput
+  assessmentSessions?: Prisma.LearnerAssessmentSessionCreateNestedManyWithoutLearnerInput
+  reviewAssignments?: Prisma.ContentReviewCreateNestedManyWithoutReviewerInput
+  generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutRequestedByInput
+}
+
+export type UserUncheckedCreateWithoutVerificationItemsInput = {
+  id?: string
+  email: string
+  password?: string | null
+  role?: $Enums.Role
+  accountStatus?: $Enums.AccountStatus
+  firstName?: string | null
+  lastName?: string | null
+  displayName?: string | null
+  avatarUrl?: string | null
+  phone?: string | null
+  verificationCode?: string | null
+  verificationExpires?: Date | string | null
+  passwordResetToken?: string | null
+  passwordResetExpires?: Date | string | null
+  lastActiveAt?: Date | string | null
+  city?: string | null
+  country?: string | null
+  language?: string | null
+  dateOfBirth?: Date | string | null
+  googleId?: string | null
+  googleRefreshToken?: string | null
+  grade?: number | null
+  province?: string | null
+  school?: string | null
+  invitedById?: string | null
+  managerId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  invitees?: Prisma.UserUncheckedCreateNestedManyWithoutInvitedByInput
+  managedLearners?: Prisma.UserUncheckedCreateNestedManyWithoutManagerInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  learnerProfile?: Prisma.LearnerProfileUncheckedCreateNestedOneWithoutLearnerInput
+  assessmentSessions?: Prisma.LearnerAssessmentSessionUncheckedCreateNestedManyWithoutLearnerInput
+  reviewAssignments?: Prisma.ContentReviewUncheckedCreateNestedManyWithoutReviewerInput
+  generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutRequestedByInput
+}
+
+export type UserCreateOrConnectWithoutVerificationItemsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutVerificationItemsInput, Prisma.UserUncheckedCreateWithoutVerificationItemsInput>
+}
+
+export type UserUpsertWithoutVerificationItemsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutVerificationItemsInput, Prisma.UserUncheckedUpdateWithoutVerificationItemsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutVerificationItemsInput, Prisma.UserUncheckedCreateWithoutVerificationItemsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutVerificationItemsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutVerificationItemsInput, Prisma.UserUncheckedUpdateWithoutVerificationItemsInput>
+}
+
+export type UserUpdateWithoutVerificationItemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordResetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordResetExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  invitedBy?: Prisma.UserUpdateOneWithoutInviteesNestedInput
+  invitees?: Prisma.UserUpdateManyWithoutInvitedByNestedInput
+  manager?: Prisma.UserUpdateOneWithoutManagedLearnersNestedInput
+  managedLearners?: Prisma.UserUpdateManyWithoutManagerNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  learnerProfile?: Prisma.LearnerProfileUpdateOneWithoutLearnerNestedInput
+  assessmentSessions?: Prisma.LearnerAssessmentSessionUpdateManyWithoutLearnerNestedInput
+  reviewAssignments?: Prisma.ContentReviewUpdateManyWithoutReviewerNestedInput
+  generationJobs?: Prisma.GenerationJobUpdateManyWithoutRequestedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutVerificationItemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordResetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordResetExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invitedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  managerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  invitees?: Prisma.UserUncheckedUpdateManyWithoutInvitedByNestedInput
+  managedLearners?: Prisma.UserUncheckedUpdateManyWithoutManagerNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  learnerProfile?: Prisma.LearnerProfileUncheckedUpdateOneWithoutLearnerNestedInput
+  assessmentSessions?: Prisma.LearnerAssessmentSessionUncheckedUpdateManyWithoutLearnerNestedInput
+  reviewAssignments?: Prisma.ContentReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutRequestedByNestedInput
+}
+
+export type UserCreateWithoutGenerationJobsInput = {
+  id?: string
+  email: string
+  password?: string | null
+  role?: $Enums.Role
+  accountStatus?: $Enums.AccountStatus
+  firstName?: string | null
+  lastName?: string | null
+  displayName?: string | null
+  avatarUrl?: string | null
+  phone?: string | null
+  verificationCode?: string | null
+  verificationExpires?: Date | string | null
+  passwordResetToken?: string | null
+  passwordResetExpires?: Date | string | null
+  lastActiveAt?: Date | string | null
+  city?: string | null
+  country?: string | null
+  language?: string | null
+  dateOfBirth?: Date | string | null
+  googleId?: string | null
+  googleRefreshToken?: string | null
+  grade?: number | null
+  province?: string | null
+  school?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  invitedBy?: Prisma.UserCreateNestedOneWithoutInviteesInput
+  invitees?: Prisma.UserCreateNestedManyWithoutInvitedByInput
+  manager?: Prisma.UserCreateNestedOneWithoutManagedLearnersInput
+  managedLearners?: Prisma.UserCreateNestedManyWithoutManagerInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  learnerProfile?: Prisma.LearnerProfileCreateNestedOneWithoutLearnerInput
+  assessmentSessions?: Prisma.LearnerAssessmentSessionCreateNestedManyWithoutLearnerInput
+  reviewAssignments?: Prisma.ContentReviewCreateNestedManyWithoutReviewerInput
+  verificationItems?: Prisma.DataVerificationCreateNestedManyWithoutVerifierInput
+}
+
+export type UserUncheckedCreateWithoutGenerationJobsInput = {
+  id?: string
+  email: string
+  password?: string | null
+  role?: $Enums.Role
+  accountStatus?: $Enums.AccountStatus
+  firstName?: string | null
+  lastName?: string | null
+  displayName?: string | null
+  avatarUrl?: string | null
+  phone?: string | null
+  verificationCode?: string | null
+  verificationExpires?: Date | string | null
+  passwordResetToken?: string | null
+  passwordResetExpires?: Date | string | null
+  lastActiveAt?: Date | string | null
+  city?: string | null
+  country?: string | null
+  language?: string | null
+  dateOfBirth?: Date | string | null
+  googleId?: string | null
+  googleRefreshToken?: string | null
+  grade?: number | null
+  province?: string | null
+  school?: string | null
+  invitedById?: string | null
+  managerId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  invitees?: Prisma.UserUncheckedCreateNestedManyWithoutInvitedByInput
+  managedLearners?: Prisma.UserUncheckedCreateNestedManyWithoutManagerInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  learnerProfile?: Prisma.LearnerProfileUncheckedCreateNestedOneWithoutLearnerInput
+  assessmentSessions?: Prisma.LearnerAssessmentSessionUncheckedCreateNestedManyWithoutLearnerInput
+  reviewAssignments?: Prisma.ContentReviewUncheckedCreateNestedManyWithoutReviewerInput
+  verificationItems?: Prisma.DataVerificationUncheckedCreateNestedManyWithoutVerifierInput
+}
+
+export type UserCreateOrConnectWithoutGenerationJobsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutGenerationJobsInput, Prisma.UserUncheckedCreateWithoutGenerationJobsInput>
+}
+
+export type UserUpsertWithoutGenerationJobsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutGenerationJobsInput, Prisma.UserUncheckedUpdateWithoutGenerationJobsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutGenerationJobsInput, Prisma.UserUncheckedCreateWithoutGenerationJobsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutGenerationJobsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutGenerationJobsInput, Prisma.UserUncheckedUpdateWithoutGenerationJobsInput>
+}
+
+export type UserUpdateWithoutGenerationJobsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordResetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordResetExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  invitedBy?: Prisma.UserUpdateOneWithoutInviteesNestedInput
+  invitees?: Prisma.UserUpdateManyWithoutInvitedByNestedInput
+  manager?: Prisma.UserUpdateOneWithoutManagedLearnersNestedInput
+  managedLearners?: Prisma.UserUpdateManyWithoutManagerNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  learnerProfile?: Prisma.LearnerProfileUpdateOneWithoutLearnerNestedInput
+  assessmentSessions?: Prisma.LearnerAssessmentSessionUpdateManyWithoutLearnerNestedInput
+  reviewAssignments?: Prisma.ContentReviewUpdateManyWithoutReviewerNestedInput
+  verificationItems?: Prisma.DataVerificationUpdateManyWithoutVerifierNestedInput
+}
+
+export type UserUncheckedUpdateWithoutGenerationJobsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordResetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordResetExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invitedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  managerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  invitees?: Prisma.UserUncheckedUpdateManyWithoutInvitedByNestedInput
+  managedLearners?: Prisma.UserUncheckedUpdateManyWithoutManagerNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  learnerProfile?: Prisma.LearnerProfileUncheckedUpdateOneWithoutLearnerNestedInput
+  assessmentSessions?: Prisma.LearnerAssessmentSessionUncheckedUpdateManyWithoutLearnerNestedInput
+  reviewAssignments?: Prisma.ContentReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  verificationItems?: Prisma.DataVerificationUncheckedUpdateManyWithoutVerifierNestedInput
+}
+
+export type UserCreateManyInvitedByInput = {
+  id?: string
+  email: string
+  password?: string | null
+  role?: $Enums.Role
+  accountStatus?: $Enums.AccountStatus
+  firstName?: string | null
+  lastName?: string | null
+  displayName?: string | null
+  avatarUrl?: string | null
+  phone?: string | null
+  verificationCode?: string | null
+  verificationExpires?: Date | string | null
+  passwordResetToken?: string | null
+  passwordResetExpires?: Date | string | null
+  lastActiveAt?: Date | string | null
+  city?: string | null
+  country?: string | null
+  language?: string | null
+  dateOfBirth?: Date | string | null
+  googleId?: string | null
+  googleRefreshToken?: string | null
+  grade?: number | null
+  province?: string | null
+  school?: string | null
+  managerId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type UserCreateManyManagerInput = {
+  id?: string
+  email: string
+  password?: string | null
+  role?: $Enums.Role
+  accountStatus?: $Enums.AccountStatus
+  firstName?: string | null
+  lastName?: string | null
+  displayName?: string | null
+  avatarUrl?: string | null
+  phone?: string | null
+  verificationCode?: string | null
+  verificationExpires?: Date | string | null
+  passwordResetToken?: string | null
+  passwordResetExpires?: Date | string | null
+  lastActiveAt?: Date | string | null
+  city?: string | null
+  country?: string | null
+  language?: string | null
+  dateOfBirth?: Date | string | null
+  googleId?: string | null
+  googleRefreshToken?: string | null
+  grade?: number | null
+  province?: string | null
+  school?: string | null
+  invitedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1415,7 +3041,7 @@ export type UserCreateManyInvitedByInput = {
 export type UserUpdateWithoutInvitedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1434,17 +3060,27 @@ export type UserUpdateWithoutInvitedByInput = {
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   invitees?: Prisma.UserUpdateManyWithoutInvitedByNestedInput
+  manager?: Prisma.UserUpdateOneWithoutManagedLearnersNestedInput
+  managedLearners?: Prisma.UserUpdateManyWithoutManagerNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  learnerProfile?: Prisma.LearnerProfileUpdateOneWithoutLearnerNestedInput
+  assessmentSessions?: Prisma.LearnerAssessmentSessionUpdateManyWithoutLearnerNestedInput
+  reviewAssignments?: Prisma.ContentReviewUpdateManyWithoutReviewerNestedInput
+  verificationItems?: Prisma.DataVerificationUpdateManyWithoutVerifierNestedInput
+  generationJobs?: Prisma.GenerationJobUpdateManyWithoutRequestedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutInvitedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1463,17 +3099,27 @@ export type UserUncheckedUpdateWithoutInvitedByInput = {
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  managerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   invitees?: Prisma.UserUncheckedUpdateManyWithoutInvitedByNestedInput
+  managedLearners?: Prisma.UserUncheckedUpdateManyWithoutManagerNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  learnerProfile?: Prisma.LearnerProfileUncheckedUpdateOneWithoutLearnerNestedInput
+  assessmentSessions?: Prisma.LearnerAssessmentSessionUncheckedUpdateManyWithoutLearnerNestedInput
+  reviewAssignments?: Prisma.ContentReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  verificationItems?: Prisma.DataVerificationUncheckedUpdateManyWithoutVerifierNestedInput
+  generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutRequestedByNestedInput
 }
 
 export type UserUncheckedUpdateManyWithoutInvitedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1492,6 +3138,118 @@ export type UserUncheckedUpdateManyWithoutInvitedByInput = {
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  managerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type UserUpdateWithoutManagerInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordResetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordResetExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  invitedBy?: Prisma.UserUpdateOneWithoutInviteesNestedInput
+  invitees?: Prisma.UserUpdateManyWithoutInvitedByNestedInput
+  managedLearners?: Prisma.UserUpdateManyWithoutManagerNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  learnerProfile?: Prisma.LearnerProfileUpdateOneWithoutLearnerNestedInput
+  assessmentSessions?: Prisma.LearnerAssessmentSessionUpdateManyWithoutLearnerNestedInput
+  reviewAssignments?: Prisma.ContentReviewUpdateManyWithoutReviewerNestedInput
+  verificationItems?: Prisma.DataVerificationUpdateManyWithoutVerifierNestedInput
+  generationJobs?: Prisma.GenerationJobUpdateManyWithoutRequestedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutManagerInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordResetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordResetExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invitedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  invitees?: Prisma.UserUncheckedUpdateManyWithoutInvitedByNestedInput
+  managedLearners?: Prisma.UserUncheckedUpdateManyWithoutManagerNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  learnerProfile?: Prisma.LearnerProfileUncheckedUpdateOneWithoutLearnerNestedInput
+  assessmentSessions?: Prisma.LearnerAssessmentSessionUncheckedUpdateManyWithoutLearnerNestedInput
+  reviewAssignments?: Prisma.ContentReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  verificationItems?: Prisma.DataVerificationUncheckedUpdateManyWithoutVerifierNestedInput
+  generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutRequestedByNestedInput
+}
+
+export type UserUncheckedUpdateManyWithoutManagerInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordResetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordResetExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invitedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1503,14 +3261,24 @@ export type UserUncheckedUpdateManyWithoutInvitedByInput = {
 
 export type UserCountOutputType = {
   invitees: number
+  managedLearners: number
   auditLogs: number
   notifications: number
+  assessmentSessions: number
+  reviewAssignments: number
+  verificationItems: number
+  generationJobs: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   invitees?: boolean | UserCountOutputTypeCountInviteesArgs
+  managedLearners?: boolean | UserCountOutputTypeCountManagedLearnersArgs
   auditLogs?: boolean | UserCountOutputTypeCountAuditLogsArgs
   notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
+  assessmentSessions?: boolean | UserCountOutputTypeCountAssessmentSessionsArgs
+  reviewAssignments?: boolean | UserCountOutputTypeCountReviewAssignmentsArgs
+  verificationItems?: boolean | UserCountOutputTypeCountVerificationItemsArgs
+  generationJobs?: boolean | UserCountOutputTypeCountGenerationJobsArgs
 }
 
 /**
@@ -1533,6 +3301,13 @@ export type UserCountOutputTypeCountInviteesArgs<ExtArgs extends runtime.Types.E
 /**
  * UserCountOutputType without action
  */
+export type UserCountOutputTypeCountManagedLearnersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
 export type UserCountOutputTypeCountAuditLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.AuditLogWhereInput
 }
@@ -1542,6 +3317,34 @@ export type UserCountOutputTypeCountAuditLogsArgs<ExtArgs extends runtime.Types.
  */
 export type UserCountOutputTypeCountNotificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.NotificationWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountAssessmentSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LearnerAssessmentSessionWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountReviewAssignmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ContentReviewWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountVerificationItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DataVerificationWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountGenerationJobsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.GenerationJobWhereInput
 }
 
 
@@ -1567,13 +3370,24 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   dateOfBirth?: boolean
   googleId?: boolean
   googleRefreshToken?: boolean
+  grade?: boolean
+  province?: boolean
+  school?: boolean
   invitedById?: boolean
+  managerId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   invitedBy?: boolean | Prisma.User$invitedByArgs<ExtArgs>
   invitees?: boolean | Prisma.User$inviteesArgs<ExtArgs>
+  manager?: boolean | Prisma.User$managerArgs<ExtArgs>
+  managedLearners?: boolean | Prisma.User$managedLearnersArgs<ExtArgs>
   auditLogs?: boolean | Prisma.User$auditLogsArgs<ExtArgs>
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
+  learnerProfile?: boolean | Prisma.User$learnerProfileArgs<ExtArgs>
+  assessmentSessions?: boolean | Prisma.User$assessmentSessionsArgs<ExtArgs>
+  reviewAssignments?: boolean | Prisma.User$reviewAssignmentsArgs<ExtArgs>
+  verificationItems?: boolean | Prisma.User$verificationItemsArgs<ExtArgs>
+  generationJobs?: boolean | Prisma.User$generationJobsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1599,10 +3413,15 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   dateOfBirth?: boolean
   googleId?: boolean
   googleRefreshToken?: boolean
+  grade?: boolean
+  province?: boolean
+  school?: boolean
   invitedById?: boolean
+  managerId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   invitedBy?: boolean | Prisma.User$invitedByArgs<ExtArgs>
+  manager?: boolean | Prisma.User$managerArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1627,10 +3446,15 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   dateOfBirth?: boolean
   googleId?: boolean
   googleRefreshToken?: boolean
+  grade?: boolean
+  province?: boolean
+  school?: boolean
   invitedById?: boolean
+  managerId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   invitedBy?: boolean | Prisma.User$invitedByArgs<ExtArgs>
+  manager?: boolean | Prisma.User$managerArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectScalar = {
@@ -1655,24 +3479,37 @@ export type UserSelectScalar = {
   dateOfBirth?: boolean
   googleId?: boolean
   googleRefreshToken?: boolean
+  grade?: boolean
+  province?: boolean
+  school?: boolean
   invitedById?: boolean
+  managerId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "password" | "role" | "accountStatus" | "firstName" | "lastName" | "displayName" | "avatarUrl" | "phone" | "verificationCode" | "verificationExpires" | "passwordResetToken" | "passwordResetExpires" | "lastActiveAt" | "city" | "country" | "language" | "dateOfBirth" | "googleId" | "googleRefreshToken" | "invitedById" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "password" | "role" | "accountStatus" | "firstName" | "lastName" | "displayName" | "avatarUrl" | "phone" | "verificationCode" | "verificationExpires" | "passwordResetToken" | "passwordResetExpires" | "lastActiveAt" | "city" | "country" | "language" | "dateOfBirth" | "googleId" | "googleRefreshToken" | "grade" | "province" | "school" | "invitedById" | "managerId" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   invitedBy?: boolean | Prisma.User$invitedByArgs<ExtArgs>
   invitees?: boolean | Prisma.User$inviteesArgs<ExtArgs>
+  manager?: boolean | Prisma.User$managerArgs<ExtArgs>
+  managedLearners?: boolean | Prisma.User$managedLearnersArgs<ExtArgs>
   auditLogs?: boolean | Prisma.User$auditLogsArgs<ExtArgs>
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
+  learnerProfile?: boolean | Prisma.User$learnerProfileArgs<ExtArgs>
+  assessmentSessions?: boolean | Prisma.User$assessmentSessionsArgs<ExtArgs>
+  reviewAssignments?: boolean | Prisma.User$reviewAssignmentsArgs<ExtArgs>
+  verificationItems?: boolean | Prisma.User$verificationItemsArgs<ExtArgs>
+  generationJobs?: boolean | Prisma.User$generationJobsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   invitedBy?: boolean | Prisma.User$invitedByArgs<ExtArgs>
+  manager?: boolean | Prisma.User$managerArgs<ExtArgs>
 }
 export type UserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   invitedBy?: boolean | Prisma.User$invitedByArgs<ExtArgs>
+  manager?: boolean | Prisma.User$managerArgs<ExtArgs>
 }
 
 export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1680,13 +3517,20 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   objects: {
     invitedBy: Prisma.$UserPayload<ExtArgs> | null
     invitees: Prisma.$UserPayload<ExtArgs>[]
+    manager: Prisma.$UserPayload<ExtArgs> | null
+    managedLearners: Prisma.$UserPayload<ExtArgs>[]
     auditLogs: Prisma.$AuditLogPayload<ExtArgs>[]
     notifications: Prisma.$NotificationPayload<ExtArgs>[]
+    learnerProfile: Prisma.$LearnerProfilePayload<ExtArgs> | null
+    assessmentSessions: Prisma.$LearnerAssessmentSessionPayload<ExtArgs>[]
+    reviewAssignments: Prisma.$ContentReviewPayload<ExtArgs>[]
+    verificationItems: Prisma.$DataVerificationPayload<ExtArgs>[]
+    generationJobs: Prisma.$GenerationJobPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     email: string
-    password: string
+    password: string | null
     role: $Enums.Role
     accountStatus: $Enums.AccountStatus
     firstName: string | null
@@ -1705,7 +3549,11 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     dateOfBirth: Date | null
     googleId: string | null
     googleRefreshToken: string | null
+    grade: number | null
+    province: string | null
+    school: string | null
     invitedById: string | null
+    managerId: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["user"]>
@@ -2104,8 +3952,15 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   readonly [Symbol.toStringTag]: "PrismaPromise"
   invitedBy<T extends Prisma.User$invitedByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$invitedByArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   invitees<T extends Prisma.User$inviteesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$inviteesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  manager<T extends Prisma.User$managerArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$managerArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  managedLearners<T extends Prisma.User$managedLearnersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$managedLearnersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   auditLogs<T extends Prisma.User$auditLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$auditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   notifications<T extends Prisma.User$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  learnerProfile<T extends Prisma.User$learnerProfileArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$learnerProfileArgs<ExtArgs>>): Prisma.Prisma__LearnerProfileClient<runtime.Types.Result.GetResult<Prisma.$LearnerProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  assessmentSessions<T extends Prisma.User$assessmentSessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$assessmentSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LearnerAssessmentSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  reviewAssignments<T extends Prisma.User$reviewAssignmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$reviewAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ContentReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  verificationItems<T extends Prisma.User$verificationItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$verificationItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DataVerificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  generationJobs<T extends Prisma.User$generationJobsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$generationJobsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GenerationJobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2156,7 +4011,11 @@ export interface UserFieldRefs {
   readonly dateOfBirth: Prisma.FieldRef<"User", 'DateTime'>
   readonly googleId: Prisma.FieldRef<"User", 'String'>
   readonly googleRefreshToken: Prisma.FieldRef<"User", 'String'>
+  readonly grade: Prisma.FieldRef<"User", 'Int'>
+  readonly province: Prisma.FieldRef<"User", 'String'>
+  readonly school: Prisma.FieldRef<"User", 'String'>
   readonly invitedById: Prisma.FieldRef<"User", 'String'>
+  readonly managerId: Prisma.FieldRef<"User", 'String'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
 }
@@ -2603,6 +4462,49 @@ export type User$inviteesArgs<ExtArgs extends runtime.Types.Extensions.InternalA
 }
 
 /**
+ * User.manager
+ */
+export type User$managerArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
+}
+
+/**
+ * User.managedLearners
+ */
+export type User$managedLearnersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
+  orderBy?: Prisma.UserOrderByWithRelationInput | Prisma.UserOrderByWithRelationInput[]
+  cursor?: Prisma.UserWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.UserScalarFieldEnum | Prisma.UserScalarFieldEnum[]
+}
+
+/**
  * User.auditLogs
  */
 export type User$auditLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2648,6 +4550,121 @@ export type User$notificationsArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   distinct?: Prisma.NotificationScalarFieldEnum | Prisma.NotificationScalarFieldEnum[]
+}
+
+/**
+ * User.learnerProfile
+ */
+export type User$learnerProfileArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LearnerProfile
+   */
+  select?: Prisma.LearnerProfileSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LearnerProfile
+   */
+  omit?: Prisma.LearnerProfileOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LearnerProfileInclude<ExtArgs> | null
+  where?: Prisma.LearnerProfileWhereInput
+}
+
+/**
+ * User.assessmentSessions
+ */
+export type User$assessmentSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LearnerAssessmentSession
+   */
+  select?: Prisma.LearnerAssessmentSessionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LearnerAssessmentSession
+   */
+  omit?: Prisma.LearnerAssessmentSessionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LearnerAssessmentSessionInclude<ExtArgs> | null
+  where?: Prisma.LearnerAssessmentSessionWhereInput
+  orderBy?: Prisma.LearnerAssessmentSessionOrderByWithRelationInput | Prisma.LearnerAssessmentSessionOrderByWithRelationInput[]
+  cursor?: Prisma.LearnerAssessmentSessionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LearnerAssessmentSessionScalarFieldEnum | Prisma.LearnerAssessmentSessionScalarFieldEnum[]
+}
+
+/**
+ * User.reviewAssignments
+ */
+export type User$reviewAssignmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ContentReview
+   */
+  select?: Prisma.ContentReviewSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ContentReview
+   */
+  omit?: Prisma.ContentReviewOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ContentReviewInclude<ExtArgs> | null
+  where?: Prisma.ContentReviewWhereInput
+  orderBy?: Prisma.ContentReviewOrderByWithRelationInput | Prisma.ContentReviewOrderByWithRelationInput[]
+  cursor?: Prisma.ContentReviewWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ContentReviewScalarFieldEnum | Prisma.ContentReviewScalarFieldEnum[]
+}
+
+/**
+ * User.verificationItems
+ */
+export type User$verificationItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DataVerification
+   */
+  select?: Prisma.DataVerificationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DataVerification
+   */
+  omit?: Prisma.DataVerificationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DataVerificationInclude<ExtArgs> | null
+  where?: Prisma.DataVerificationWhereInput
+  orderBy?: Prisma.DataVerificationOrderByWithRelationInput | Prisma.DataVerificationOrderByWithRelationInput[]
+  cursor?: Prisma.DataVerificationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DataVerificationScalarFieldEnum | Prisma.DataVerificationScalarFieldEnum[]
+}
+
+/**
+ * User.generationJobs
+ */
+export type User$generationJobsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the GenerationJob
+   */
+  select?: Prisma.GenerationJobSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the GenerationJob
+   */
+  omit?: Prisma.GenerationJobOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.GenerationJobInclude<ExtArgs> | null
+  where?: Prisma.GenerationJobWhereInput
+  orderBy?: Prisma.GenerationJobOrderByWithRelationInput | Prisma.GenerationJobOrderByWithRelationInput[]
+  cursor?: Prisma.GenerationJobWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.GenerationJobScalarFieldEnum | Prisma.GenerationJobScalarFieldEnum[]
 }
 
 /**
