@@ -107,6 +107,14 @@ export default function TopNav() {
     user?.email ||
     "User";
 
+  // "CONTENT_MANAGER" → "Content Manager", "SUPER_ADMIN" → "Super Admin"
+  const roleLabel = user?.role
+    ? user.role
+        .split("_")
+        .map((w: string) => w.charAt(0) + w.slice(1).toLowerCase())
+        .join(" ")
+    : "";
+
   const initials = displayName
     .split(" ")
     .map((w: string) => w[0])
@@ -256,14 +264,27 @@ export default function TopNav() {
             zIndex:      100,
           }}>
             {/* User info */}
-            <div style={{
-              padding:      "8px 12px 10px",
-              marginBottom: "2px",
-            }}>
+            <div style={{ padding: "8px 12px 10px", marginBottom: "2px" }}>
               <div style={{ fontSize: "13px", fontWeight: 600, color: "var(--color-text-primary)" }}>
                 {displayName}
               </div>
-              <div style={{ fontSize: "11px", color: "var(--color-text-muted)", marginTop: "2px" }}>
+              {/* Role badge */}
+              <span style={{
+                display:       "inline-block",
+                marginTop:     "5px",
+                padding:       "2px 8px",
+                borderRadius:  "var(--radius-pill)",
+                fontSize:      "11px",
+                fontWeight:    600,
+                letterSpacing: "0.03em",
+                background:    "var(--color-accent-subtle)",
+                color:         "var(--color-accent)",
+                border:        "1px solid var(--color-accent-border)",
+              }}>
+                {roleLabel}
+              </span>
+              {/* Email — smaller, below the role */}
+              <div style={{ fontSize: "11px", color: "var(--color-text-muted)", marginTop: "4px" }}>
                 {user?.email}
               </div>
             </div>
