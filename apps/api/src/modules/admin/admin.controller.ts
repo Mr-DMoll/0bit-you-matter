@@ -1,17 +1,14 @@
 import { Request, Response } from "express";
 import { prisma } from "@repo/database";
-import { HttpStatus, Role } from "@repo/types";
-import { catchAsync }       from "../../utils/catchAsync.js";
-import { AppError }         from "../../utils/appError.js";
-import { sendInviteEmail }  from "../../services/mail.service.js";
+import { HttpStatus } from "@repo/types";
+import { catchAsync }      from "../../utils/catchAsync.js";
+import { AppError }        from "../../utils/appError.js";
+import { sendInviteEmail } from "../../services/mail.service.js";
 
-// Roles that admin can invite/manage (not SUPER_ADMIN, not LEARNER — learners self-register)
-const INVITABLE_ROLES: Role[] = [
-  Role.MANAGER,
-  Role.CONTENT_MANAGER,
-  Role.REVIEWER,
-  Role.DATA_VERIFIER,
-];
+// Use string literals — not the Role enum — so this works even if @repo/types
+// hasn't been rebuilt yet after adding new enum values.
+const INVITABLE_ROLES = ["MANAGER", "CONTENT_MANAGER", "REVIEWER", "DATA_VERIFIER"] as const;
+type InvitableRoleStr = typeof INVITABLE_ROLES[number];
 
 // ── Admin dashboard ────────────────────────────────────────────────────────────
 
@@ -30,7 +27,7 @@ export const adminDashboard = catchAsync(async (_req: Request, res: Response) =>
     prisma.user.count({ where: { role: "CONTENT_MANAGER", accountStatus: { not: "DELETED" } } }),
     prisma.user.count({ where: { role: "REVIEWER",        accountStatus: { not: "DELETED" } } }),
     prisma.user.count({ where: { role: "DATA_VERIFIER",   accountStatus: { not: "DELETED" } } }),
-    prisma.user.count({ where: { accountStatus: "PENDING", role: { in: INVITABLE_ROLES as any } } }),
+    prisma.user.count({ where: { accountStatus: "PENDING", role: { in: [...INVITABLE_ROLES] as any } } }),
     prisma.auditLog.findMany({
       orderBy: { createdAt: "desc" },
       take:    10,
@@ -59,16 +56,15 @@ export const listStaff = catchAsync(async (req: Request, res: Response) => {
   const page   = Math.max(1, parseInt(req.query.page as string) || 1);
   const limit  = 50;
   const skip   = (page - 1) * limit;
-  const roleQ  = (req.query.role as string)?.toUpperCase() as Role | undefined;
+  const roleQ  = (req.query.role as string)?.toUpperCase() as InvitableRoleStr | undefined;
   const status = req.query.status as string | undefined;
 
   // Default: show all invitable roles
-  const allowedRoles = INVITABLE_ROLES as string[];
-  if (roleQ && !allowedRoles.includes(roleQ))
-    throw new AppError("Invalid role filter", HttpStatus.BAD_REQUEST);
+  if (roleQ && !(INVITABLE_ROLES as readonly string[]).includes(roleQ))
+    throw new AppError(`Invalid role filter. Must be one of: ${INVITABLE_ROLES.join(", ")}`, HttpStatus.BAD_REQUEST);
 
   const where: any = {
-    role:          roleQ ? roleQ : { in: allowedRoles },
+    role:          roleQ ? roleQ : { in: [...INVITABLE_ROLES] },
     accountStatus: status ? status : { not: "DELETED" },
   };
 
@@ -138,8 +134,8 @@ export const inviteStaffMember = catchAsync(async (req: Request, res: Response) 
   if (!email) throw new AppError("Email is required", HttpStatus.BAD_REQUEST);
   if (!role)  throw new AppError("Role is required",  HttpStatus.BAD_REQUEST);
 
-  const normalised = (role as string).toUpperCase() as Role;
-  if (!INVITABLE_ROLES.includes(normalised))
+  const normalised = (role as string).toUpperCase() as InvitableRoleStr;
+  if (!(INVITABLE_ROLES as readonly string[]).includes(normalised))
     throw new AppError(
       `Invalid role. Must be one of: ${INVITABLE_ROLES.join(", ")}`,
       HttpStatus.BAD_REQUEST,
@@ -214,8 +210,8 @@ export const updateUserRole = catchAsync(async (req: Request, res: Response) => 
   const { id }   = req.params;
   const { role } = req.body;
 
-  const normalised = (role as string)?.toUpperCase() as Role;
-  if (!INVITABLE_ROLES.includes(normalised))
+  const normalised = (role as string)?.toUpperCase() as InvitableRoleStr;
+  if (!(INVITABLE_ROLES as readonly string[]).includes(normalised))
     throw new AppError(
       `Admins can only assign: ${INVITABLE_ROLES.join(", ")}`,
       HttpStatus.BAD_REQUEST,
