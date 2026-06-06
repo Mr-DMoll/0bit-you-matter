@@ -7,11 +7,16 @@ datasource db {
   provider = "postgresql"
 }
 
+// ─── Enums ────────────────────────────────────────────────────────────────────
+
 enum Role {
   SUPER_ADMIN
   ADMIN
   MANAGER
-  USER
+  CONTENT_MANAGER
+  REVIEWER
+  DATA_VERIFIER
+  LEARNER
 }
 
 enum AccountStatus {
@@ -27,37 +32,111 @@ enum RegistrationMode {
   SELF_REGISTER_AUTO
 }
 
+enum ContentStatus {
+  AI_GENERATED
+  IN_REVIEW
+  APPROVED
+  VERIFIED
+  REJECTED
+  ARCHIVED
+}
+
+enum AssessmentType {
+  INTEREST     // RIASEC-based scenarios
+  APTITUDE     // numerical, verbal, spatial, logical
+  PERSONALITY  // collaborative vs independent, etc.
+  VALUES       // impact, stability, creativity, income, flexibility
+}
+
+enum AssessmentStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum ContentType {
+  CAREER
+  UNIVERSITY_PROGRAMME
+  BURSARY
+  ASSESSMENT_QUESTION
+}
+
+enum GenerationJobStatus {
+  QUEUED
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+enum ReviewStatus {
+  PENDING
+  IN_PROGRESS
+  APPROVED
+  REJECTED
+}
+
+enum VerificationStatus {
+  PENDING
+  IN_PROGRESS
+  VERIFIED
+  FLAGGED
+}
+
+// ─── User ─────────────────────────────────────────────────────────────────────
+
 model User {
   id            String        @id @default(cuid())
   email         String        @unique
-  password      String
-  role          Role          @default(USER)
+  password      String?       // nullable — learners use Google OAuth only
+  role          Role          @default(LEARNER)
   accountStatus AccountStatus @default(PENDING)
 
-  firstName            String?
-  lastName             String?
-  displayName          String?
-  avatarUrl            String?
-  phone                String?
+  firstName   String?
+  lastName    String?
+  displayName String?
+  avatarUrl   String?
+  phone       String?
+
+  // Auth
   verificationCode     String?
   verificationExpires  DateTime?
   passwordResetToken   String?
   passwordResetExpires DateTime?
   lastActiveAt         DateTime?
 
+  // Location / profile
   city        String?
   country     String?
   language    String?
   dateOfBirth DateTime?
 
-  googleId           String?   @unique
+  // Google OAuth
+  googleId           String? @unique
   googleRefreshToken String?
 
+  // Learner-specific
+  grade    Int?    // 9–12, or 13 for post-matric
+  province String? // one of the 9 SA provinces
+  school   String?
+
+  // Invite chain
   invitedById String?
   invitedBy   User?   @relation("UserInvites", fields: [invitedById], references: [id])
   invitees    User[]  @relation("UserInvites")
-  auditLogs     AuditLog[]
-  notifications Notification[]
+
+  // Manager → Learner assignment
+  managerId      String?
+  manager        User?   @relation("ManagerLearners", fields: [managerId], references: [id])
+  managedLearners User[] @relation("ManagerLearners")
+
+  // Relations
+  auditLogs         AuditLog[]
+  notifications     Notification[]
+  learnerProfile    LearnerProfile?
+  assessmentSessions LearnerAssessmentSession[]
+  reviewAssignments ContentReview[]    @relation("ReviewerAssignments")
+  verificationItems DataVerification[] @relation("VerifierAssignments")
+  generationJobs    GenerationJob[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -65,7 +144,11 @@ model User {
   @@index([email])
   @@index([role])
   @@index([googleId])
+  @@index([managerId])
+  @@index([province])
 }
+
+// ─── Platform infrastructure ──────────────────────────────────────────────────
 
 model AuditLog {
   id        String   @id @default(cuid())
@@ -101,4 +184,447 @@ model SystemSetting {
   value     String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+// ─── Careers ──────────────────────────────────────────────────────────────────
+
+model CareerCluster {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  iconName    String?
+  colorHex    String?
+  careers     Career[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Career {
+  id        String        @id @default(cuid())
+  title     String
+  slug      String        @unique
+  clusterId String
+  cluster   CareerCluster @relation(fields: [clusterId], references: [id])
+
+  // RIASEC codes this career maps to, e.g. ["R","I","A"]
+  riasecCodes String[]
+
+  // Content tabs (as per the learner app design)
+  overview      String? @db.Text
+  dayInTheLife  String? @db.Text
+  howToGetThere String? @db.Text
+
+  // Earnings
+  earningsMin      Int?
+  earningsMax      Int?
+  earningsCurrency String @default("ZAR")
+  earningsNote     String? // e.g. "entry level to senior"
+
+  // SA-specific context
+  nqfLevelMin Int?    // minimum NQF level typically needed
+  saContext   String? @db.Text // additional SA-specific information
+
+  // Meta
+  status       ContentStatus @default(AI_GENERATED)
+  qualityScore Float?
+  viewCount    Int           @default(0)
+
+  // Ownership / review
+  generatedById  String?
+  lastVerifiedAt DateTime?
+  lastVerifiedBy String?
+
+  // Relations
+  reviews          ContentReview[]
+  verifications    DataVerification[]
+  savedByLearners  LearnerSavedCareer[]
+  roadmaps         LearnerRoadmap[]
+  careerMatches    LearnerCareerMatch[]
+  generationJobs   GenerationJob[]      @relation("CareerGenerationJobs")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([clusterId])
+  @@index([status])
+  @@index([slug])
+}
+
+// ─── Universities ─────────────────────────────────────────────────────────────
+
+model University {
+  id           String  @id @default(cuid())
+  name         String
+  abbreviation String?
+  province     String
+  type         String? // traditional, comprehensive, university_of_technology
+  website      String?
+  logoUrl      String?
+
+  programmes Programme[]
+
+  status         ContentStatus @default(AI_GENERATED)
+  lastVerifiedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([province])
+  @@index([status])
+}
+
+model Programme {
+  id           String     @id @default(cuid())
+  universityId String
+  university   University @relation(fields: [universityId], references: [id], onDelete: Cascade)
+
+  name     String
+  faculty  String?
+  duration Int?    // years
+  nqfLevel Int?
+
+  // APS requirements
+  apsMin              Int?
+  subjectRequirements Json? // { "Mathematics": 5, "English": 4 }
+
+  // Application window
+  applicationOpenDate  DateTime?
+  applicationCloseDate DateTime?
+
+  status         ContentStatus @default(AI_GENERATED)
+  lastVerifiedAt DateTime?
+
+  verifications DataVerification[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([universityId])
+  @@index([apsMin])
+  @@index([status])
+  @@index([applicationCloseDate])
+}
+
+// ─── Bursaries ────────────────────────────────────────────────────────────────
+
+model Bursary {
+  id       String @id @default(cuid())
+  name     String
+  provider String
+
+  description  String? @db.Text
+  amount       String? // flexible: "up to R50 000" or range
+  fieldsOfStudy String[] // e.g. ["Engineering", "Science"]
+
+  eligibilityCriteria Json?   // structured eligibility rules
+  applicationUrl      String?
+
+  openDate  DateTime?
+  closeDate DateTime?
+
+  status         ContentStatus @default(AI_GENERATED)
+  lastVerifiedAt DateTime?
+  sourceUrl      String?
+
+  verifications DataVerification[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status])
+  @@index([closeDate])
+}
+
+// ─── Assessments ──────────────────────────────────────────────────────────────
+
+model AssessmentQuestion {
+  id             String         @id @default(cuid())
+  assessmentType AssessmentType
+
+  questionText String  @db.Text
+  contextNote  String? // SA-contextualised scenario framing
+
+  // For RIASEC — which Holland code(s) this maps to
+  riasecMapping String[] // e.g. ["R"] or ["I","A"]
+
+  // Multiple-choice options stored as JSON
+  // [{ "text": "I enjoy fixing things", "value": "R", "score": 1 }]
+  options Json?
+
+  status     ContentStatus @default(AI_GENERATED)
+  orderIndex Int           @default(0)
+
+  answers LearnerAnswer[]
+  reviews ContentReview[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([assessmentType])
+  @@index([status])
+  @@index([orderIndex])
+}
+
+model LearnerAssessmentSession {
+  id        String @id @default(cuid())
+  learnerId String
+  learner   User   @relation(fields: [learnerId], references: [id], onDelete: Cascade)
+
+  assessmentType AssessmentType
+  status         AssessmentStatus @default(NOT_STARTED)
+
+  startedAt   DateTime?
+  completedAt DateTime?
+
+  // Computed after completion — scores stored here
+  // { "riasecScores": { "R": 14, "I": 12, "A": 10 }, "aptitudeScores": {...} }
+  results Json?
+
+  answers LearnerAnswer[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([learnerId, assessmentType]) // one session per assessment type per learner
+  @@index([learnerId])
+  @@index([assessmentType])
+  @@index([status])
+}
+
+model LearnerAnswer {
+  id         String                   @id @default(cuid())
+  sessionId  String
+  session    LearnerAssessmentSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  questionId String
+  question   AssessmentQuestion       @relation(fields: [questionId], references: [id])
+
+  answerValue String   // the option value chosen
+  answeredAt  DateTime @default(now())
+
+  @@unique([sessionId, questionId]) // one answer per question per session
+  @@index([sessionId])
+}
+
+// ─── Learner Profile & Career Matching ───────────────────────────────────────
+
+model LearnerProfile {
+  id        String @id @default(cuid())
+  learnerId String @unique
+  learner   User   @relation(fields: [learnerId], references: [id], onDelete: Cascade)
+
+  // RIASEC results — computed by Assessment Analysis Agent
+  riasecType   String? // top 3 code combo, e.g. "RIA"
+  riasecScores Json?   // { "R": 14, "I": 12, "A": 10, "S": 8, "E": 6, "C": 4 }
+
+  // AI-generated narrative (Assessment Analysis Agent output)
+  profileNarrative String? @db.Text
+  strengthsSummary String? @db.Text
+
+  // Optional: learner subjects and marks for APS calculation
+  // [{ "subject": "Mathematics", "mark": 72, "level": 5 }]
+  subjects Json?
+
+  // The career the learner has chosen to pursue
+  chosenCareerId String?
+
+  generatedAt DateTime?
+
+  careerMatches LearnerCareerMatch[]
+  savedCareers  LearnerSavedCareer[]
+  roadmaps      LearnerRoadmap[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model LearnerCareerMatch {
+  id        String         @id @default(cuid())
+  profileId String
+  profile   LearnerProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  careerId  String
+  career    Career         @relation(fields: [careerId], references: [id])
+
+  matchPercentage Float
+  matchReason     String? @db.Text // brief explanation from the agent
+
+  @@unique([profileId, careerId])
+  @@index([profileId])
+  @@index([matchPercentage])
+}
+
+model LearnerSavedCareer {
+  id        String         @id @default(cuid())
+  profileId String
+  profile   LearnerProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  careerId  String
+  career    Career         @relation(fields: [careerId], references: [id])
+  savedAt   DateTime       @default(now())
+
+  @@unique([profileId, careerId])
+  @@index([profileId])
+}
+
+model LearnerRoadmap {
+  id        String         @id @default(cuid())
+  profileId String
+  profile   LearnerProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  careerId  String
+  career    Career         @relation(fields: [careerId], references: [id])
+
+  // [{ "title": "Pass Grade 12", "description": "...", "targetDate": "2025-12", "completed": false }]
+  milestones Json?
+
+  isActive Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([profileId])
+  @@index([careerId])
+}
+
+// ─── Content Pipeline ─────────────────────────────────────────────────────────
+
+model ContentReview {
+  id          String      @id @default(cuid())
+  contentType ContentType
+
+  // One of these will be set depending on contentType
+  careerId   String?
+  career     Career?             @relation(fields: [careerId], references: [id])
+  questionId String?
+  question   AssessmentQuestion? @relation(fields: [questionId], references: [id])
+
+  reviewerId String
+  reviewer   User         @relation("ReviewerAssignments", fields: [reviewerId], references: [id])
+
+  status ReviewStatus @default(PENDING)
+
+  confidenceRating Int?    // 1–5 scale
+  notes            String? @db.Text
+  trackedChanges   Json?   // diff of reviewer edits
+
+  assignedAt  DateTime  @default(now())
+  dueAt       DateTime?
+  completedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([reviewerId])
+  @@index([status])
+  @@index([contentType])
+  @@index([dueAt])
+}
+
+model DataVerification {
+  id          String      @id @default(cuid())
+  contentType ContentType
+
+  // One of these will be set depending on contentType
+  careerId    String?
+  career      Career?     @relation(fields: [careerId], references: [id])
+  programmeId String?
+  programme   Programme?  @relation(fields: [programmeId], references: [id])
+  bursaryId   String?
+  bursary     Bursary?    @relation(fields: [bursaryId], references: [id])
+
+  verifierId String
+  verifier   User   @relation("VerifierAssignments", fields: [verifierId], references: [id])
+
+  status VerificationStatus @default(PENDING)
+
+  sourceUrl    String?
+  sourceNotes  String? @db.Text
+  // { "apsMin": "verified", "closeDate": "flagged", ... }
+  verifiedFields Json?
+
+  verifiedAt DateTime?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@index([verifierId])
+  @@index([status])
+  @@index([contentType])
+}
+
+// ─── AI Generation Pipeline ───────────────────────────────────────────────────
+
+model PromptTemplate {
+  id          String      @id @default(cuid())
+  contentType ContentType
+  name        String
+  version     Int         @default(1)
+  isActive    Boolean     @default(true)
+
+  systemPrompt String  @db.Text
+  userPrompt   String  @db.Text
+
+  // Quality tracking
+  qualityScore  Float?
+  rejectionRate Float?
+  editDistance  Float? // average how much reviewers change the output
+  usageCount    Int    @default(0)
+
+  jobs GenerationJob[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([contentType, isActive])
+  @@index([version])
+}
+
+model GenerationJob {
+  id          String              @id @default(cuid())
+  contentType ContentType
+  status      GenerationJobStatus @default(QUEUED)
+
+  parameters       Json?   // input parameters sent to the agent
+  promptTemplateId String?
+  promptTemplate   PromptTemplate? @relation(fields: [promptTemplateId], references: [id])
+
+  // The career produced (if contentType = CAREER)
+  outputCareerId String?
+  outputCareer   Career? @relation("CareerGenerationJobs", fields: [outputCareerId], references: [id])
+
+  result    Json?   // raw agent output
+  errorLog  String? @db.Text
+  retryCount Int    @default(0)
+
+  requestedById String
+  requestedBy   User   @relation(fields: [requestedById], references: [id])
+
+  startedAt   DateTime?
+  completedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([status])
+  @@index([contentType])
+  @@index([requestedById])
+  @@index([createdAt])
+}
+
+// ─── Source Library ───────────────────────────────────────────────────────────
+
+model Source {
+  id   String @id @default(cuid())
+  name String
+  url  String
+
+  // university | nsfas | dhet | professional_body | bursary_provider | other
+  type String
+
+  isActive          Boolean  @default(true)
+  reliabilityRating Int?     // 1–5
+  lastCheckedAt     DateTime?
+  notes             String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([type])
+  @@index([isActive])
 }

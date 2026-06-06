@@ -7,13 +7,41 @@ import { NAV_CONFIG } from "@/shared/config/nav.config";
 import { BRAND } from "@/shared/config/branding.config";
 import {
   LayoutDashboard, FolderKanban, Users, UserCircle,
-  FileText, Receipt, UsersRound, Activity, ScrollText,
-  Settings, ChevronRight, ChevronLeft,
+  FileText, UsersRound, Activity, ScrollText, Settings,
+  ChevronRight, ChevronLeft,
+  // Super admin
+  ShieldCheck, Server, Bot, Flag, Lock,
+  // Admin / shared
+  GraduationCap, PenLine, BadgeCheck, Briefcase, Building2,
+  ClipboardList, Coins, Layers, BarChart2, TrendingUp, LineChart,
+  ListChecks, CalendarClock,
+  // Content manager
+  ListOrdered, FileCode, UserCheck, RefreshCw, BookMarked, Map, Star, Leaf,
+  // Reviewer / verifier
+  Trophy, Bell,
+  // Manager
+  AlertTriangle, MonitorPlay, Zap,
+  // Learner
+  Home, Compass, MessageCircle, Target,
 } from "lucide-react";
 
 const ICON_MAP: Record<string, React.ComponentType<{ size?: number; strokeWidth?: number }>> = {
   LayoutDashboard, FolderKanban, Users, UserCircle,
-  FileText, Receipt, UsersRound, Activity, ScrollText, Settings,
+  FileText, UsersRound, Activity, ScrollText, Settings,
+  // Super admin
+  ShieldCheck, Server, Bot, Flag, Lock,
+  // Admin / shared
+  GraduationCap, PenLine, BadgeCheck, Briefcase, Building2,
+  ClipboardList, Coins, Layers, BarChart2, TrendingUp, LineChart,
+  ListChecks, CalendarClock,
+  // Content manager
+  ListOrdered, FileCode, UserCheck, RefreshCw, BookMarked, Map, Star, Leaf,
+  // Reviewer / verifier
+  Trophy, Bell,
+  // Manager
+  AlertTriangle, MonitorPlay, Zap,
+  // Learner
+  Home, Compass, MessageCircle, Target,
 };
 
 interface Props {
