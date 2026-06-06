@@ -1,36 +1,47 @@
 /**
  * PERMISSIONS
- * Agency platform — O-Bit
- * These map to real actions users can perform in the system.
+ * You Matter — career guidance platform
  */
 export const PERMISSIONS = {
-  // ── Super Admin ───────────────────────────────────────────
-  ADD_ADMIN:          "add_admin",
-  MANAGE_PLATFORM:    "manage_platform",
+  // ── Super Admin ──────────────────────────────────────────────────────────
+  ADD_ADMIN:               "add_admin",
+  MANAGE_PLATFORM:         "manage_platform",
+  MANAGE_AI_CONFIG:        "manage_ai_config",
+  MANAGE_FEATURE_FLAGS:    "manage_feature_flags",
+  VIEW_AUDIT_LOGS:         "view_audit_logs",
 
-  // ── Admin ─────────────────────────────────────────────────
-  MANAGE_BILLING:     "manage_billing",
-  VIEW_ALL_PROJECTS:  "view_all_projects",
-  MANAGE_ALL_USERS:   "manage_all_users",
+  // ── Admin ────────────────────────────────────────────────────────────────
+  MANAGE_ALL_USERS:        "manage_all_users",
+  INVITE_USERS:            "invite_users",
+  VIEW_PLATFORM_ANALYTICS: "view_platform_analytics",
+  MANAGE_CONTENT_PIPELINE: "manage_content_pipeline",
 
-  // ── Manager ───────────────────────────────────────────────
-  INVITE_USERS:       "invite_users",      // add developers and clients
-  CREATE_PROJECT:     "create_project",
-  MANAGE_PROJECT:     "manage_project",    // edit milestones, tasks, docs
-  APPROVE_MILESTONE:  "approve_milestone", // triggers invoice
-  VIEW_INVOICES:      "view_invoices",
-  MANAGE_DOCUMENTS:   "manage_documents",
+  // ── Manager ──────────────────────────────────────────────────────────────
+  MANAGE_LEARNERS:         "manage_learners",
+  VIEW_COHORT_REPORTS:     "view_cohort_reports",
+  REQUEST_GENERATION:      "request_generation",
 
-  // ── Developer ─────────────────────────────────────────────
-  VIEW_ASSIGNED_PROJECTS: "view_assigned_projects",
-  UPDATE_TASKS:       "update_tasks",
-  UPLOAD_DOCUMENTS:   "upload_documents",
+  // ── Content Manager ──────────────────────────────────────────────────────
+  TRIGGER_AI_GENERATION:   "trigger_ai_generation",
+  MANAGE_PROMPTS:          "manage_prompts",
+  ASSIGN_REVIEWS:          "assign_reviews",
+  MANAGE_SOURCES:          "manage_sources",
 
-  // ── Client ────────────────────────────────────────────────
-  VIEW_OWN_PROJECT:   "view_own_project",
-  APPROVE_DESIGN:     "approve_design",
-  VIEW_OWN_INVOICES:  "view_own_invoices",
-  LEAVE_COMMENTS:     "leave_comments",
+  // ── Reviewer ─────────────────────────────────────────────────────────────
+  REVIEW_CONTENT:          "review_content",
+  APPROVE_CONTENT:         "approve_content",
+  REJECT_CONTENT:          "reject_content",
+
+  // ── Data Verifier ────────────────────────────────────────────────────────
+  VERIFY_APS_DATA:         "verify_aps_data",
+  VERIFY_DEADLINES:        "verify_deadlines",
+  VERIFY_BURSARIES:        "verify_bursaries",
+
+  // ── Learner ──────────────────────────────────────────────────────────────
+  TAKE_ASSESSMENTS:        "take_assessments",
+  VIEW_CAREER_LIBRARY:     "view_career_library",
+  USE_GUIDANCE_CHAT:       "use_guidance_chat",
+  VIEW_OWN_PROFILE:        "view_own_profile",
 } as const;
 
 export type PermissionType = (typeof PERMISSIONS)[keyof typeof PERMISSIONS];
