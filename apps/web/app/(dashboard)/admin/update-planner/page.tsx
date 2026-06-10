@@ -1,4 +1,3 @@
-import { PlaceholderPage } from "@/shared/components/ui/PlaceholderPage";
-export default function Page() {
-  return <PlaceholderPage title="Update Planner" description="Annual APS and deadline update sprint - calendar view, team assignments and progress tracking." />;
-}
+"use client";
+import { AdminUpdatePlannerPage } from "@/features/admin/pages/UpdatePlannerPage";
+export default function Page() { return <AdminUpdatePlannerPage />; }

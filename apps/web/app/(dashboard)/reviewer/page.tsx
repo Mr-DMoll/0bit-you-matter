@@ -1,4 +1,2 @@
-import { PlaceholderPage } from "@/shared/components/ui/PlaceholderPage";
-export default function Page() {
-  return <PlaceholderPage title="Review Queue" description="Assigned content items - priority flagged, filter by type and date assigned." />;
-}
+import { ReviewerQueuePage } from "@/features/reviewer/pages/ReviewQueuePage";
+export default function Page() { return <ReviewerQueuePage />; }

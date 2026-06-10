@@ -31,6 +31,8 @@ export type LearnerProfileMinAggregateOutputType = {
   profileNarrative: string | null
   strengthsSummary: string | null
   chosenCareerId: string | null
+  studyProvincePreference: string | null
+  chosenPathwayType: string | null
   generatedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -43,6 +45,8 @@ export type LearnerProfileMaxAggregateOutputType = {
   profileNarrative: string | null
   strengthsSummary: string | null
   chosenCareerId: string | null
+  studyProvincePreference: string | null
+  chosenPathwayType: string | null
   generatedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -57,6 +61,8 @@ export type LearnerProfileCountAggregateOutputType = {
   strengthsSummary: number
   subjects: number
   chosenCareerId: number
+  studyProvincePreference: number
+  chosenPathwayType: number
   generatedAt: number
   createdAt: number
   updatedAt: number
@@ -71,6 +77,8 @@ export type LearnerProfileMinAggregateInputType = {
   profileNarrative?: true
   strengthsSummary?: true
   chosenCareerId?: true
+  studyProvincePreference?: true
+  chosenPathwayType?: true
   generatedAt?: true
   createdAt?: true
   updatedAt?: true
@@ -83,6 +91,8 @@ export type LearnerProfileMaxAggregateInputType = {
   profileNarrative?: true
   strengthsSummary?: true
   chosenCareerId?: true
+  studyProvincePreference?: true
+  chosenPathwayType?: true
   generatedAt?: true
   createdAt?: true
   updatedAt?: true
@@ -97,6 +107,8 @@ export type LearnerProfileCountAggregateInputType = {
   strengthsSummary?: true
   subjects?: true
   chosenCareerId?: true
+  studyProvincePreference?: true
+  chosenPathwayType?: true
   generatedAt?: true
   createdAt?: true
   updatedAt?: true
@@ -184,6 +196,8 @@ export type LearnerProfileGroupByOutputType = {
   strengthsSummary: string | null
   subjects: runtime.JsonValue | null
   chosenCareerId: string | null
+  studyProvincePreference: string | null
+  chosenPathwayType: string | null
   generatedAt: Date | null
   createdAt: Date
   updatedAt: Date
@@ -219,6 +233,8 @@ export type LearnerProfileWhereInput = {
   strengthsSummary?: Prisma.StringNullableFilter<"LearnerProfile"> | string | null
   subjects?: Prisma.JsonNullableFilter<"LearnerProfile">
   chosenCareerId?: Prisma.StringNullableFilter<"LearnerProfile"> | string | null
+  studyProvincePreference?: Prisma.StringNullableFilter<"LearnerProfile"> | string | null
+  chosenPathwayType?: Prisma.StringNullableFilter<"LearnerProfile"> | string | null
   generatedAt?: Prisma.DateTimeNullableFilter<"LearnerProfile"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"LearnerProfile"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"LearnerProfile"> | Date | string
@@ -237,6 +253,8 @@ export type LearnerProfileOrderByWithRelationInput = {
   strengthsSummary?: Prisma.SortOrderInput | Prisma.SortOrder
   subjects?: Prisma.SortOrderInput | Prisma.SortOrder
   chosenCareerId?: Prisma.SortOrderInput | Prisma.SortOrder
+  studyProvincePreference?: Prisma.SortOrderInput | Prisma.SortOrder
+  chosenPathwayType?: Prisma.SortOrderInput | Prisma.SortOrder
   generatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -258,6 +276,8 @@ export type LearnerProfileWhereUniqueInput = Prisma.AtLeast<{
   strengthsSummary?: Prisma.StringNullableFilter<"LearnerProfile"> | string | null
   subjects?: Prisma.JsonNullableFilter<"LearnerProfile">
   chosenCareerId?: Prisma.StringNullableFilter<"LearnerProfile"> | string | null
+  studyProvincePreference?: Prisma.StringNullableFilter<"LearnerProfile"> | string | null
+  chosenPathwayType?: Prisma.StringNullableFilter<"LearnerProfile"> | string | null
   generatedAt?: Prisma.DateTimeNullableFilter<"LearnerProfile"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"LearnerProfile"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"LearnerProfile"> | Date | string
@@ -276,6 +296,8 @@ export type LearnerProfileOrderByWithAggregationInput = {
   strengthsSummary?: Prisma.SortOrderInput | Prisma.SortOrder
   subjects?: Prisma.SortOrderInput | Prisma.SortOrder
   chosenCareerId?: Prisma.SortOrderInput | Prisma.SortOrder
+  studyProvincePreference?: Prisma.SortOrderInput | Prisma.SortOrder
+  chosenPathwayType?: Prisma.SortOrderInput | Prisma.SortOrder
   generatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -296,6 +318,8 @@ export type LearnerProfileScalarWhereWithAggregatesInput = {
   strengthsSummary?: Prisma.StringNullableWithAggregatesFilter<"LearnerProfile"> | string | null
   subjects?: Prisma.JsonNullableWithAggregatesFilter<"LearnerProfile">
   chosenCareerId?: Prisma.StringNullableWithAggregatesFilter<"LearnerProfile"> | string | null
+  studyProvincePreference?: Prisma.StringNullableWithAggregatesFilter<"LearnerProfile"> | string | null
+  chosenPathwayType?: Prisma.StringNullableWithAggregatesFilter<"LearnerProfile"> | string | null
   generatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"LearnerProfile"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"LearnerProfile"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"LearnerProfile"> | Date | string
@@ -309,6 +333,8 @@ export type LearnerProfileCreateInput = {
   strengthsSummary?: string | null
   subjects?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   chosenCareerId?: string | null
+  studyProvincePreference?: string | null
+  chosenPathwayType?: string | null
   generatedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -327,6 +353,8 @@ export type LearnerProfileUncheckedCreateInput = {
   strengthsSummary?: string | null
   subjects?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   chosenCareerId?: string | null
+  studyProvincePreference?: string | null
+  chosenPathwayType?: string | null
   generatedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -343,6 +371,8 @@ export type LearnerProfileUpdateInput = {
   strengthsSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subjects?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   chosenCareerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  studyProvincePreference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  chosenPathwayType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   generatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -361,6 +391,8 @@ export type LearnerProfileUncheckedUpdateInput = {
   strengthsSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subjects?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   chosenCareerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  studyProvincePreference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  chosenPathwayType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   generatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -378,6 +410,8 @@ export type LearnerProfileCreateManyInput = {
   strengthsSummary?: string | null
   subjects?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   chosenCareerId?: string | null
+  studyProvincePreference?: string | null
+  chosenPathwayType?: string | null
   generatedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -391,6 +425,8 @@ export type LearnerProfileUpdateManyMutationInput = {
   strengthsSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subjects?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   chosenCareerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  studyProvincePreference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  chosenPathwayType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   generatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -405,6 +441,8 @@ export type LearnerProfileUncheckedUpdateManyInput = {
   strengthsSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subjects?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   chosenCareerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  studyProvincePreference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  chosenPathwayType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   generatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -424,6 +462,8 @@ export type LearnerProfileCountOrderByAggregateInput = {
   strengthsSummary?: Prisma.SortOrder
   subjects?: Prisma.SortOrder
   chosenCareerId?: Prisma.SortOrder
+  studyProvincePreference?: Prisma.SortOrder
+  chosenPathwayType?: Prisma.SortOrder
   generatedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -436,6 +476,8 @@ export type LearnerProfileMaxOrderByAggregateInput = {
   profileNarrative?: Prisma.SortOrder
   strengthsSummary?: Prisma.SortOrder
   chosenCareerId?: Prisma.SortOrder
+  studyProvincePreference?: Prisma.SortOrder
+  chosenPathwayType?: Prisma.SortOrder
   generatedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -448,6 +490,8 @@ export type LearnerProfileMinOrderByAggregateInput = {
   profileNarrative?: Prisma.SortOrder
   strengthsSummary?: Prisma.SortOrder
   chosenCareerId?: Prisma.SortOrder
+  studyProvincePreference?: Prisma.SortOrder
+  chosenPathwayType?: Prisma.SortOrder
   generatedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -540,6 +584,8 @@ export type LearnerProfileCreateWithoutLearnerInput = {
   strengthsSummary?: string | null
   subjects?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   chosenCareerId?: string | null
+  studyProvincePreference?: string | null
+  chosenPathwayType?: string | null
   generatedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -556,6 +602,8 @@ export type LearnerProfileUncheckedCreateWithoutLearnerInput = {
   strengthsSummary?: string | null
   subjects?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   chosenCareerId?: string | null
+  studyProvincePreference?: string | null
+  chosenPathwayType?: string | null
   generatedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -588,6 +636,8 @@ export type LearnerProfileUpdateWithoutLearnerInput = {
   strengthsSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subjects?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   chosenCareerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  studyProvincePreference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  chosenPathwayType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   generatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -604,6 +654,8 @@ export type LearnerProfileUncheckedUpdateWithoutLearnerInput = {
   strengthsSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subjects?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   chosenCareerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  studyProvincePreference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  chosenPathwayType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   generatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -620,6 +672,8 @@ export type LearnerProfileCreateWithoutCareerMatchesInput = {
   strengthsSummary?: string | null
   subjects?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   chosenCareerId?: string | null
+  studyProvincePreference?: string | null
+  chosenPathwayType?: string | null
   generatedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -637,6 +691,8 @@ export type LearnerProfileUncheckedCreateWithoutCareerMatchesInput = {
   strengthsSummary?: string | null
   subjects?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   chosenCareerId?: string | null
+  studyProvincePreference?: string | null
+  chosenPathwayType?: string | null
   generatedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -668,6 +724,8 @@ export type LearnerProfileUpdateWithoutCareerMatchesInput = {
   strengthsSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subjects?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   chosenCareerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  studyProvincePreference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  chosenPathwayType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   generatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -685,6 +743,8 @@ export type LearnerProfileUncheckedUpdateWithoutCareerMatchesInput = {
   strengthsSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subjects?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   chosenCareerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  studyProvincePreference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  chosenPathwayType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   generatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -700,6 +760,8 @@ export type LearnerProfileCreateWithoutSavedCareersInput = {
   strengthsSummary?: string | null
   subjects?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   chosenCareerId?: string | null
+  studyProvincePreference?: string | null
+  chosenPathwayType?: string | null
   generatedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -717,6 +779,8 @@ export type LearnerProfileUncheckedCreateWithoutSavedCareersInput = {
   strengthsSummary?: string | null
   subjects?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   chosenCareerId?: string | null
+  studyProvincePreference?: string | null
+  chosenPathwayType?: string | null
   generatedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -748,6 +812,8 @@ export type LearnerProfileUpdateWithoutSavedCareersInput = {
   strengthsSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subjects?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   chosenCareerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  studyProvincePreference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  chosenPathwayType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   generatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -765,6 +831,8 @@ export type LearnerProfileUncheckedUpdateWithoutSavedCareersInput = {
   strengthsSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subjects?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   chosenCareerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  studyProvincePreference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  chosenPathwayType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   generatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -780,6 +848,8 @@ export type LearnerProfileCreateWithoutRoadmapsInput = {
   strengthsSummary?: string | null
   subjects?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   chosenCareerId?: string | null
+  studyProvincePreference?: string | null
+  chosenPathwayType?: string | null
   generatedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -797,6 +867,8 @@ export type LearnerProfileUncheckedCreateWithoutRoadmapsInput = {
   strengthsSummary?: string | null
   subjects?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   chosenCareerId?: string | null
+  studyProvincePreference?: string | null
+  chosenPathwayType?: string | null
   generatedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -828,6 +900,8 @@ export type LearnerProfileUpdateWithoutRoadmapsInput = {
   strengthsSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subjects?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   chosenCareerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  studyProvincePreference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  chosenPathwayType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   generatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -845,6 +919,8 @@ export type LearnerProfileUncheckedUpdateWithoutRoadmapsInput = {
   strengthsSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subjects?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   chosenCareerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  studyProvincePreference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  chosenPathwayType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   generatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -910,6 +986,8 @@ export type LearnerProfileSelect<ExtArgs extends runtime.Types.Extensions.Intern
   strengthsSummary?: boolean
   subjects?: boolean
   chosenCareerId?: boolean
+  studyProvincePreference?: boolean
+  chosenPathwayType?: boolean
   generatedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -929,6 +1007,8 @@ export type LearnerProfileSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   strengthsSummary?: boolean
   subjects?: boolean
   chosenCareerId?: boolean
+  studyProvincePreference?: boolean
+  chosenPathwayType?: boolean
   generatedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -944,6 +1024,8 @@ export type LearnerProfileSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   strengthsSummary?: boolean
   subjects?: boolean
   chosenCareerId?: boolean
+  studyProvincePreference?: boolean
+  chosenPathwayType?: boolean
   generatedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -959,12 +1041,14 @@ export type LearnerProfileSelectScalar = {
   strengthsSummary?: boolean
   subjects?: boolean
   chosenCareerId?: boolean
+  studyProvincePreference?: boolean
+  chosenPathwayType?: boolean
   generatedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type LearnerProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "learnerId" | "riasecType" | "riasecScores" | "profileNarrative" | "strengthsSummary" | "subjects" | "chosenCareerId" | "generatedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["learnerProfile"]>
+export type LearnerProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "learnerId" | "riasecType" | "riasecScores" | "profileNarrative" | "strengthsSummary" | "subjects" | "chosenCareerId" | "studyProvincePreference" | "chosenPathwayType" | "generatedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["learnerProfile"]>
 export type LearnerProfileInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   learner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   careerMatches?: boolean | Prisma.LearnerProfile$careerMatchesArgs<ExtArgs>
@@ -996,6 +1080,8 @@ export type $LearnerProfilePayload<ExtArgs extends runtime.Types.Extensions.Inte
     strengthsSummary: string | null
     subjects: runtime.JsonValue | null
     chosenCareerId: string | null
+    studyProvincePreference: string | null
+    chosenPathwayType: string | null
     generatedAt: Date | null
     createdAt: Date
     updatedAt: Date
@@ -1434,6 +1520,8 @@ export interface LearnerProfileFieldRefs {
   readonly strengthsSummary: Prisma.FieldRef<"LearnerProfile", 'String'>
   readonly subjects: Prisma.FieldRef<"LearnerProfile", 'Json'>
   readonly chosenCareerId: Prisma.FieldRef<"LearnerProfile", 'String'>
+  readonly studyProvincePreference: Prisma.FieldRef<"LearnerProfile", 'String'>
+  readonly chosenPathwayType: Prisma.FieldRef<"LearnerProfile", 'String'>
   readonly generatedAt: Prisma.FieldRef<"LearnerProfile", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"LearnerProfile", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"LearnerProfile", 'DateTime'>

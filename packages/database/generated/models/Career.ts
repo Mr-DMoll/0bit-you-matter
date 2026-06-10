@@ -371,6 +371,7 @@ export type CareerWhereInput = {
   roadmaps?: Prisma.LearnerRoadmapListRelationFilter
   careerMatches?: Prisma.LearnerCareerMatchListRelationFilter
   generationJobs?: Prisma.GenerationJobListRelationFilter
+  pathways?: Prisma.PathwayListRelationFilter
 }
 
 export type CareerOrderByWithRelationInput = {
@@ -403,6 +404,7 @@ export type CareerOrderByWithRelationInput = {
   roadmaps?: Prisma.LearnerRoadmapOrderByRelationAggregateInput
   careerMatches?: Prisma.LearnerCareerMatchOrderByRelationAggregateInput
   generationJobs?: Prisma.GenerationJobOrderByRelationAggregateInput
+  pathways?: Prisma.PathwayOrderByRelationAggregateInput
 }
 
 export type CareerWhereUniqueInput = Prisma.AtLeast<{
@@ -438,6 +440,7 @@ export type CareerWhereUniqueInput = Prisma.AtLeast<{
   roadmaps?: Prisma.LearnerRoadmapListRelationFilter
   careerMatches?: Prisma.LearnerCareerMatchListRelationFilter
   generationJobs?: Prisma.GenerationJobListRelationFilter
+  pathways?: Prisma.PathwayListRelationFilter
 }, "id" | "slug">
 
 export type CareerOrderByWithAggregationInput = {
@@ -527,6 +530,7 @@ export type CareerCreateInput = {
   roadmaps?: Prisma.LearnerRoadmapCreateNestedManyWithoutCareerInput
   careerMatches?: Prisma.LearnerCareerMatchCreateNestedManyWithoutCareerInput
   generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutOutputCareerInput
+  pathways?: Prisma.PathwayCreateNestedManyWithoutCareerInput
 }
 
 export type CareerUncheckedCreateInput = {
@@ -558,6 +562,7 @@ export type CareerUncheckedCreateInput = {
   roadmaps?: Prisma.LearnerRoadmapUncheckedCreateNestedManyWithoutCareerInput
   careerMatches?: Prisma.LearnerCareerMatchUncheckedCreateNestedManyWithoutCareerInput
   generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutOutputCareerInput
+  pathways?: Prisma.PathwayUncheckedCreateNestedManyWithoutCareerInput
 }
 
 export type CareerUpdateInput = {
@@ -589,6 +594,7 @@ export type CareerUpdateInput = {
   roadmaps?: Prisma.LearnerRoadmapUpdateManyWithoutCareerNestedInput
   careerMatches?: Prisma.LearnerCareerMatchUpdateManyWithoutCareerNestedInput
   generationJobs?: Prisma.GenerationJobUpdateManyWithoutOutputCareerNestedInput
+  pathways?: Prisma.PathwayUpdateManyWithoutCareerNestedInput
 }
 
 export type CareerUncheckedUpdateInput = {
@@ -620,6 +626,7 @@ export type CareerUncheckedUpdateInput = {
   roadmaps?: Prisma.LearnerRoadmapUncheckedUpdateManyWithoutCareerNestedInput
   careerMatches?: Prisma.LearnerCareerMatchUncheckedUpdateManyWithoutCareerNestedInput
   generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutOutputCareerNestedInput
+  pathways?: Prisma.PathwayUncheckedUpdateManyWithoutCareerNestedInput
 }
 
 export type CareerCreateManyInput = {
@@ -884,6 +891,20 @@ export type IntFieldUpdateOperationsInput = {
   divide?: number
 }
 
+export type CareerCreateNestedOneWithoutPathwaysInput = {
+  create?: Prisma.XOR<Prisma.CareerCreateWithoutPathwaysInput, Prisma.CareerUncheckedCreateWithoutPathwaysInput>
+  connectOrCreate?: Prisma.CareerCreateOrConnectWithoutPathwaysInput
+  connect?: Prisma.CareerWhereUniqueInput
+}
+
+export type CareerUpdateOneRequiredWithoutPathwaysNestedInput = {
+  create?: Prisma.XOR<Prisma.CareerCreateWithoutPathwaysInput, Prisma.CareerUncheckedCreateWithoutPathwaysInput>
+  connectOrCreate?: Prisma.CareerCreateOrConnectWithoutPathwaysInput
+  upsert?: Prisma.CareerUpsertWithoutPathwaysInput
+  connect?: Prisma.CareerWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CareerUpdateToOneWithWhereWithoutPathwaysInput, Prisma.CareerUpdateWithoutPathwaysInput>, Prisma.CareerUncheckedUpdateWithoutPathwaysInput>
+}
+
 export type CareerCreateNestedOneWithoutCareerMatchesInput = {
   create?: Prisma.XOR<Prisma.CareerCreateWithoutCareerMatchesInput, Prisma.CareerUncheckedCreateWithoutCareerMatchesInput>
   connectOrCreate?: Prisma.CareerCreateOrConnectWithoutCareerMatchesInput
@@ -1002,6 +1023,7 @@ export type CareerCreateWithoutClusterInput = {
   roadmaps?: Prisma.LearnerRoadmapCreateNestedManyWithoutCareerInput
   careerMatches?: Prisma.LearnerCareerMatchCreateNestedManyWithoutCareerInput
   generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutOutputCareerInput
+  pathways?: Prisma.PathwayCreateNestedManyWithoutCareerInput
 }
 
 export type CareerUncheckedCreateWithoutClusterInput = {
@@ -1032,6 +1054,7 @@ export type CareerUncheckedCreateWithoutClusterInput = {
   roadmaps?: Prisma.LearnerRoadmapUncheckedCreateNestedManyWithoutCareerInput
   careerMatches?: Prisma.LearnerCareerMatchUncheckedCreateNestedManyWithoutCareerInput
   generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutOutputCareerInput
+  pathways?: Prisma.PathwayUncheckedCreateNestedManyWithoutCareerInput
 }
 
 export type CareerCreateOrConnectWithoutClusterInput = {
@@ -1088,6 +1111,146 @@ export type CareerScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Career"> | Date | string
 }
 
+export type CareerCreateWithoutPathwaysInput = {
+  id?: string
+  title: string
+  slug: string
+  riasecCodes?: Prisma.CareerCreateriasecCodesInput | string[]
+  overview?: string | null
+  dayInTheLife?: string | null
+  howToGetThere?: string | null
+  earningsMin?: number | null
+  earningsMax?: number | null
+  earningsCurrency?: string
+  earningsNote?: string | null
+  nqfLevelMin?: number | null
+  saContext?: string | null
+  status?: $Enums.ContentStatus
+  qualityScore?: number | null
+  viewCount?: number
+  generatedById?: string | null
+  lastVerifiedAt?: Date | string | null
+  lastVerifiedBy?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  cluster: Prisma.CareerClusterCreateNestedOneWithoutCareersInput
+  reviews?: Prisma.ContentReviewCreateNestedManyWithoutCareerInput
+  verifications?: Prisma.DataVerificationCreateNestedManyWithoutCareerInput
+  savedByLearners?: Prisma.LearnerSavedCareerCreateNestedManyWithoutCareerInput
+  roadmaps?: Prisma.LearnerRoadmapCreateNestedManyWithoutCareerInput
+  careerMatches?: Prisma.LearnerCareerMatchCreateNestedManyWithoutCareerInput
+  generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutOutputCareerInput
+}
+
+export type CareerUncheckedCreateWithoutPathwaysInput = {
+  id?: string
+  title: string
+  slug: string
+  clusterId: string
+  riasecCodes?: Prisma.CareerCreateriasecCodesInput | string[]
+  overview?: string | null
+  dayInTheLife?: string | null
+  howToGetThere?: string | null
+  earningsMin?: number | null
+  earningsMax?: number | null
+  earningsCurrency?: string
+  earningsNote?: string | null
+  nqfLevelMin?: number | null
+  saContext?: string | null
+  status?: $Enums.ContentStatus
+  qualityScore?: number | null
+  viewCount?: number
+  generatedById?: string | null
+  lastVerifiedAt?: Date | string | null
+  lastVerifiedBy?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  reviews?: Prisma.ContentReviewUncheckedCreateNestedManyWithoutCareerInput
+  verifications?: Prisma.DataVerificationUncheckedCreateNestedManyWithoutCareerInput
+  savedByLearners?: Prisma.LearnerSavedCareerUncheckedCreateNestedManyWithoutCareerInput
+  roadmaps?: Prisma.LearnerRoadmapUncheckedCreateNestedManyWithoutCareerInput
+  careerMatches?: Prisma.LearnerCareerMatchUncheckedCreateNestedManyWithoutCareerInput
+  generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutOutputCareerInput
+}
+
+export type CareerCreateOrConnectWithoutPathwaysInput = {
+  where: Prisma.CareerWhereUniqueInput
+  create: Prisma.XOR<Prisma.CareerCreateWithoutPathwaysInput, Prisma.CareerUncheckedCreateWithoutPathwaysInput>
+}
+
+export type CareerUpsertWithoutPathwaysInput = {
+  update: Prisma.XOR<Prisma.CareerUpdateWithoutPathwaysInput, Prisma.CareerUncheckedUpdateWithoutPathwaysInput>
+  create: Prisma.XOR<Prisma.CareerCreateWithoutPathwaysInput, Prisma.CareerUncheckedCreateWithoutPathwaysInput>
+  where?: Prisma.CareerWhereInput
+}
+
+export type CareerUpdateToOneWithWhereWithoutPathwaysInput = {
+  where?: Prisma.CareerWhereInput
+  data: Prisma.XOR<Prisma.CareerUpdateWithoutPathwaysInput, Prisma.CareerUncheckedUpdateWithoutPathwaysInput>
+}
+
+export type CareerUpdateWithoutPathwaysInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  riasecCodes?: Prisma.CareerUpdateriasecCodesInput | string[]
+  overview?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dayInTheLife?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  howToGetThere?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  earningsMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  earningsMax?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  earningsCurrency?: Prisma.StringFieldUpdateOperationsInput | string
+  earningsNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nqfLevelMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  saContext?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
+  qualityScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  viewCount?: Prisma.IntFieldUpdateOperationsInput | number
+  generatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastVerifiedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cluster?: Prisma.CareerClusterUpdateOneRequiredWithoutCareersNestedInput
+  reviews?: Prisma.ContentReviewUpdateManyWithoutCareerNestedInput
+  verifications?: Prisma.DataVerificationUpdateManyWithoutCareerNestedInput
+  savedByLearners?: Prisma.LearnerSavedCareerUpdateManyWithoutCareerNestedInput
+  roadmaps?: Prisma.LearnerRoadmapUpdateManyWithoutCareerNestedInput
+  careerMatches?: Prisma.LearnerCareerMatchUpdateManyWithoutCareerNestedInput
+  generationJobs?: Prisma.GenerationJobUpdateManyWithoutOutputCareerNestedInput
+}
+
+export type CareerUncheckedUpdateWithoutPathwaysInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  clusterId?: Prisma.StringFieldUpdateOperationsInput | string
+  riasecCodes?: Prisma.CareerUpdateriasecCodesInput | string[]
+  overview?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dayInTheLife?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  howToGetThere?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  earningsMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  earningsMax?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  earningsCurrency?: Prisma.StringFieldUpdateOperationsInput | string
+  earningsNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nqfLevelMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  saContext?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
+  qualityScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  viewCount?: Prisma.IntFieldUpdateOperationsInput | number
+  generatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastVerifiedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reviews?: Prisma.ContentReviewUncheckedUpdateManyWithoutCareerNestedInput
+  verifications?: Prisma.DataVerificationUncheckedUpdateManyWithoutCareerNestedInput
+  savedByLearners?: Prisma.LearnerSavedCareerUncheckedUpdateManyWithoutCareerNestedInput
+  roadmaps?: Prisma.LearnerRoadmapUncheckedUpdateManyWithoutCareerNestedInput
+  careerMatches?: Prisma.LearnerCareerMatchUncheckedUpdateManyWithoutCareerNestedInput
+  generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutOutputCareerNestedInput
+}
+
 export type CareerCreateWithoutCareerMatchesInput = {
   id?: string
   title: string
@@ -1116,6 +1279,7 @@ export type CareerCreateWithoutCareerMatchesInput = {
   savedByLearners?: Prisma.LearnerSavedCareerCreateNestedManyWithoutCareerInput
   roadmaps?: Prisma.LearnerRoadmapCreateNestedManyWithoutCareerInput
   generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutOutputCareerInput
+  pathways?: Prisma.PathwayCreateNestedManyWithoutCareerInput
 }
 
 export type CareerUncheckedCreateWithoutCareerMatchesInput = {
@@ -1146,6 +1310,7 @@ export type CareerUncheckedCreateWithoutCareerMatchesInput = {
   savedByLearners?: Prisma.LearnerSavedCareerUncheckedCreateNestedManyWithoutCareerInput
   roadmaps?: Prisma.LearnerRoadmapUncheckedCreateNestedManyWithoutCareerInput
   generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutOutputCareerInput
+  pathways?: Prisma.PathwayUncheckedCreateNestedManyWithoutCareerInput
 }
 
 export type CareerCreateOrConnectWithoutCareerMatchesInput = {
@@ -1192,6 +1357,7 @@ export type CareerUpdateWithoutCareerMatchesInput = {
   savedByLearners?: Prisma.LearnerSavedCareerUpdateManyWithoutCareerNestedInput
   roadmaps?: Prisma.LearnerRoadmapUpdateManyWithoutCareerNestedInput
   generationJobs?: Prisma.GenerationJobUpdateManyWithoutOutputCareerNestedInput
+  pathways?: Prisma.PathwayUpdateManyWithoutCareerNestedInput
 }
 
 export type CareerUncheckedUpdateWithoutCareerMatchesInput = {
@@ -1222,6 +1388,7 @@ export type CareerUncheckedUpdateWithoutCareerMatchesInput = {
   savedByLearners?: Prisma.LearnerSavedCareerUncheckedUpdateManyWithoutCareerNestedInput
   roadmaps?: Prisma.LearnerRoadmapUncheckedUpdateManyWithoutCareerNestedInput
   generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutOutputCareerNestedInput
+  pathways?: Prisma.PathwayUncheckedUpdateManyWithoutCareerNestedInput
 }
 
 export type CareerCreateWithoutSavedByLearnersInput = {
@@ -1252,6 +1419,7 @@ export type CareerCreateWithoutSavedByLearnersInput = {
   roadmaps?: Prisma.LearnerRoadmapCreateNestedManyWithoutCareerInput
   careerMatches?: Prisma.LearnerCareerMatchCreateNestedManyWithoutCareerInput
   generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutOutputCareerInput
+  pathways?: Prisma.PathwayCreateNestedManyWithoutCareerInput
 }
 
 export type CareerUncheckedCreateWithoutSavedByLearnersInput = {
@@ -1282,6 +1450,7 @@ export type CareerUncheckedCreateWithoutSavedByLearnersInput = {
   roadmaps?: Prisma.LearnerRoadmapUncheckedCreateNestedManyWithoutCareerInput
   careerMatches?: Prisma.LearnerCareerMatchUncheckedCreateNestedManyWithoutCareerInput
   generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutOutputCareerInput
+  pathways?: Prisma.PathwayUncheckedCreateNestedManyWithoutCareerInput
 }
 
 export type CareerCreateOrConnectWithoutSavedByLearnersInput = {
@@ -1328,6 +1497,7 @@ export type CareerUpdateWithoutSavedByLearnersInput = {
   roadmaps?: Prisma.LearnerRoadmapUpdateManyWithoutCareerNestedInput
   careerMatches?: Prisma.LearnerCareerMatchUpdateManyWithoutCareerNestedInput
   generationJobs?: Prisma.GenerationJobUpdateManyWithoutOutputCareerNestedInput
+  pathways?: Prisma.PathwayUpdateManyWithoutCareerNestedInput
 }
 
 export type CareerUncheckedUpdateWithoutSavedByLearnersInput = {
@@ -1358,6 +1528,7 @@ export type CareerUncheckedUpdateWithoutSavedByLearnersInput = {
   roadmaps?: Prisma.LearnerRoadmapUncheckedUpdateManyWithoutCareerNestedInput
   careerMatches?: Prisma.LearnerCareerMatchUncheckedUpdateManyWithoutCareerNestedInput
   generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutOutputCareerNestedInput
+  pathways?: Prisma.PathwayUncheckedUpdateManyWithoutCareerNestedInput
 }
 
 export type CareerCreateWithoutRoadmapsInput = {
@@ -1388,6 +1559,7 @@ export type CareerCreateWithoutRoadmapsInput = {
   savedByLearners?: Prisma.LearnerSavedCareerCreateNestedManyWithoutCareerInput
   careerMatches?: Prisma.LearnerCareerMatchCreateNestedManyWithoutCareerInput
   generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutOutputCareerInput
+  pathways?: Prisma.PathwayCreateNestedManyWithoutCareerInput
 }
 
 export type CareerUncheckedCreateWithoutRoadmapsInput = {
@@ -1418,6 +1590,7 @@ export type CareerUncheckedCreateWithoutRoadmapsInput = {
   savedByLearners?: Prisma.LearnerSavedCareerUncheckedCreateNestedManyWithoutCareerInput
   careerMatches?: Prisma.LearnerCareerMatchUncheckedCreateNestedManyWithoutCareerInput
   generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutOutputCareerInput
+  pathways?: Prisma.PathwayUncheckedCreateNestedManyWithoutCareerInput
 }
 
 export type CareerCreateOrConnectWithoutRoadmapsInput = {
@@ -1464,6 +1637,7 @@ export type CareerUpdateWithoutRoadmapsInput = {
   savedByLearners?: Prisma.LearnerSavedCareerUpdateManyWithoutCareerNestedInput
   careerMatches?: Prisma.LearnerCareerMatchUpdateManyWithoutCareerNestedInput
   generationJobs?: Prisma.GenerationJobUpdateManyWithoutOutputCareerNestedInput
+  pathways?: Prisma.PathwayUpdateManyWithoutCareerNestedInput
 }
 
 export type CareerUncheckedUpdateWithoutRoadmapsInput = {
@@ -1494,6 +1668,7 @@ export type CareerUncheckedUpdateWithoutRoadmapsInput = {
   savedByLearners?: Prisma.LearnerSavedCareerUncheckedUpdateManyWithoutCareerNestedInput
   careerMatches?: Prisma.LearnerCareerMatchUncheckedUpdateManyWithoutCareerNestedInput
   generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutOutputCareerNestedInput
+  pathways?: Prisma.PathwayUncheckedUpdateManyWithoutCareerNestedInput
 }
 
 export type CareerCreateWithoutReviewsInput = {
@@ -1524,6 +1699,7 @@ export type CareerCreateWithoutReviewsInput = {
   roadmaps?: Prisma.LearnerRoadmapCreateNestedManyWithoutCareerInput
   careerMatches?: Prisma.LearnerCareerMatchCreateNestedManyWithoutCareerInput
   generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutOutputCareerInput
+  pathways?: Prisma.PathwayCreateNestedManyWithoutCareerInput
 }
 
 export type CareerUncheckedCreateWithoutReviewsInput = {
@@ -1554,6 +1730,7 @@ export type CareerUncheckedCreateWithoutReviewsInput = {
   roadmaps?: Prisma.LearnerRoadmapUncheckedCreateNestedManyWithoutCareerInput
   careerMatches?: Prisma.LearnerCareerMatchUncheckedCreateNestedManyWithoutCareerInput
   generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutOutputCareerInput
+  pathways?: Prisma.PathwayUncheckedCreateNestedManyWithoutCareerInput
 }
 
 export type CareerCreateOrConnectWithoutReviewsInput = {
@@ -1600,6 +1777,7 @@ export type CareerUpdateWithoutReviewsInput = {
   roadmaps?: Prisma.LearnerRoadmapUpdateManyWithoutCareerNestedInput
   careerMatches?: Prisma.LearnerCareerMatchUpdateManyWithoutCareerNestedInput
   generationJobs?: Prisma.GenerationJobUpdateManyWithoutOutputCareerNestedInput
+  pathways?: Prisma.PathwayUpdateManyWithoutCareerNestedInput
 }
 
 export type CareerUncheckedUpdateWithoutReviewsInput = {
@@ -1630,6 +1808,7 @@ export type CareerUncheckedUpdateWithoutReviewsInput = {
   roadmaps?: Prisma.LearnerRoadmapUncheckedUpdateManyWithoutCareerNestedInput
   careerMatches?: Prisma.LearnerCareerMatchUncheckedUpdateManyWithoutCareerNestedInput
   generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutOutputCareerNestedInput
+  pathways?: Prisma.PathwayUncheckedUpdateManyWithoutCareerNestedInput
 }
 
 export type CareerCreateWithoutVerificationsInput = {
@@ -1660,6 +1839,7 @@ export type CareerCreateWithoutVerificationsInput = {
   roadmaps?: Prisma.LearnerRoadmapCreateNestedManyWithoutCareerInput
   careerMatches?: Prisma.LearnerCareerMatchCreateNestedManyWithoutCareerInput
   generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutOutputCareerInput
+  pathways?: Prisma.PathwayCreateNestedManyWithoutCareerInput
 }
 
 export type CareerUncheckedCreateWithoutVerificationsInput = {
@@ -1690,6 +1870,7 @@ export type CareerUncheckedCreateWithoutVerificationsInput = {
   roadmaps?: Prisma.LearnerRoadmapUncheckedCreateNestedManyWithoutCareerInput
   careerMatches?: Prisma.LearnerCareerMatchUncheckedCreateNestedManyWithoutCareerInput
   generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutOutputCareerInput
+  pathways?: Prisma.PathwayUncheckedCreateNestedManyWithoutCareerInput
 }
 
 export type CareerCreateOrConnectWithoutVerificationsInput = {
@@ -1736,6 +1917,7 @@ export type CareerUpdateWithoutVerificationsInput = {
   roadmaps?: Prisma.LearnerRoadmapUpdateManyWithoutCareerNestedInput
   careerMatches?: Prisma.LearnerCareerMatchUpdateManyWithoutCareerNestedInput
   generationJobs?: Prisma.GenerationJobUpdateManyWithoutOutputCareerNestedInput
+  pathways?: Prisma.PathwayUpdateManyWithoutCareerNestedInput
 }
 
 export type CareerUncheckedUpdateWithoutVerificationsInput = {
@@ -1766,6 +1948,7 @@ export type CareerUncheckedUpdateWithoutVerificationsInput = {
   roadmaps?: Prisma.LearnerRoadmapUncheckedUpdateManyWithoutCareerNestedInput
   careerMatches?: Prisma.LearnerCareerMatchUncheckedUpdateManyWithoutCareerNestedInput
   generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutOutputCareerNestedInput
+  pathways?: Prisma.PathwayUncheckedUpdateManyWithoutCareerNestedInput
 }
 
 export type CareerCreateWithoutGenerationJobsInput = {
@@ -1796,6 +1979,7 @@ export type CareerCreateWithoutGenerationJobsInput = {
   savedByLearners?: Prisma.LearnerSavedCareerCreateNestedManyWithoutCareerInput
   roadmaps?: Prisma.LearnerRoadmapCreateNestedManyWithoutCareerInput
   careerMatches?: Prisma.LearnerCareerMatchCreateNestedManyWithoutCareerInput
+  pathways?: Prisma.PathwayCreateNestedManyWithoutCareerInput
 }
 
 export type CareerUncheckedCreateWithoutGenerationJobsInput = {
@@ -1826,6 +2010,7 @@ export type CareerUncheckedCreateWithoutGenerationJobsInput = {
   savedByLearners?: Prisma.LearnerSavedCareerUncheckedCreateNestedManyWithoutCareerInput
   roadmaps?: Prisma.LearnerRoadmapUncheckedCreateNestedManyWithoutCareerInput
   careerMatches?: Prisma.LearnerCareerMatchUncheckedCreateNestedManyWithoutCareerInput
+  pathways?: Prisma.PathwayUncheckedCreateNestedManyWithoutCareerInput
 }
 
 export type CareerCreateOrConnectWithoutGenerationJobsInput = {
@@ -1872,6 +2057,7 @@ export type CareerUpdateWithoutGenerationJobsInput = {
   savedByLearners?: Prisma.LearnerSavedCareerUpdateManyWithoutCareerNestedInput
   roadmaps?: Prisma.LearnerRoadmapUpdateManyWithoutCareerNestedInput
   careerMatches?: Prisma.LearnerCareerMatchUpdateManyWithoutCareerNestedInput
+  pathways?: Prisma.PathwayUpdateManyWithoutCareerNestedInput
 }
 
 export type CareerUncheckedUpdateWithoutGenerationJobsInput = {
@@ -1902,6 +2088,7 @@ export type CareerUncheckedUpdateWithoutGenerationJobsInput = {
   savedByLearners?: Prisma.LearnerSavedCareerUncheckedUpdateManyWithoutCareerNestedInput
   roadmaps?: Prisma.LearnerRoadmapUncheckedUpdateManyWithoutCareerNestedInput
   careerMatches?: Prisma.LearnerCareerMatchUncheckedUpdateManyWithoutCareerNestedInput
+  pathways?: Prisma.PathwayUncheckedUpdateManyWithoutCareerNestedInput
 }
 
 export type CareerCreateManyClusterInput = {
@@ -1956,6 +2143,7 @@ export type CareerUpdateWithoutClusterInput = {
   roadmaps?: Prisma.LearnerRoadmapUpdateManyWithoutCareerNestedInput
   careerMatches?: Prisma.LearnerCareerMatchUpdateManyWithoutCareerNestedInput
   generationJobs?: Prisma.GenerationJobUpdateManyWithoutOutputCareerNestedInput
+  pathways?: Prisma.PathwayUpdateManyWithoutCareerNestedInput
 }
 
 export type CareerUncheckedUpdateWithoutClusterInput = {
@@ -1986,6 +2174,7 @@ export type CareerUncheckedUpdateWithoutClusterInput = {
   roadmaps?: Prisma.LearnerRoadmapUncheckedUpdateManyWithoutCareerNestedInput
   careerMatches?: Prisma.LearnerCareerMatchUncheckedUpdateManyWithoutCareerNestedInput
   generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutOutputCareerNestedInput
+  pathways?: Prisma.PathwayUncheckedUpdateManyWithoutCareerNestedInput
 }
 
 export type CareerUncheckedUpdateManyWithoutClusterInput = {
@@ -2024,6 +2213,7 @@ export type CareerCountOutputType = {
   roadmaps: number
   careerMatches: number
   generationJobs: number
+  pathways: number
 }
 
 export type CareerCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2033,6 +2223,7 @@ export type CareerCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions
   roadmaps?: boolean | CareerCountOutputTypeCountRoadmapsArgs
   careerMatches?: boolean | CareerCountOutputTypeCountCareerMatchesArgs
   generationJobs?: boolean | CareerCountOutputTypeCountGenerationJobsArgs
+  pathways?: boolean | CareerCountOutputTypeCountPathwaysArgs
 }
 
 /**
@@ -2087,6 +2278,13 @@ export type CareerCountOutputTypeCountGenerationJobsArgs<ExtArgs extends runtime
   where?: Prisma.GenerationJobWhereInput
 }
 
+/**
+ * CareerCountOutputType without action
+ */
+export type CareerCountOutputTypeCountPathwaysArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PathwayWhereInput
+}
+
 
 export type CareerSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2118,6 +2316,7 @@ export type CareerSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   roadmaps?: boolean | Prisma.Career$roadmapsArgs<ExtArgs>
   careerMatches?: boolean | Prisma.Career$careerMatchesArgs<ExtArgs>
   generationJobs?: boolean | Prisma.Career$generationJobsArgs<ExtArgs>
+  pathways?: boolean | Prisma.Career$pathwaysArgs<ExtArgs>
   _count?: boolean | Prisma.CareerCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["career"]>
 
@@ -2207,6 +2406,7 @@ export type CareerInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   roadmaps?: boolean | Prisma.Career$roadmapsArgs<ExtArgs>
   careerMatches?: boolean | Prisma.Career$careerMatchesArgs<ExtArgs>
   generationJobs?: boolean | Prisma.Career$generationJobsArgs<ExtArgs>
+  pathways?: boolean | Prisma.Career$pathwaysArgs<ExtArgs>
   _count?: boolean | Prisma.CareerCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CareerIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2226,6 +2426,7 @@ export type $CareerPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     roadmaps: Prisma.$LearnerRoadmapPayload<ExtArgs>[]
     careerMatches: Prisma.$LearnerCareerMatchPayload<ExtArgs>[]
     generationJobs: Prisma.$GenerationJobPayload<ExtArgs>[]
+    pathways: Prisma.$PathwayPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2651,6 +2852,7 @@ export interface Prisma__CareerClient<T, Null = never, ExtArgs extends runtime.T
   roadmaps<T extends Prisma.Career$roadmapsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Career$roadmapsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LearnerRoadmapPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   careerMatches<T extends Prisma.Career$careerMatchesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Career$careerMatchesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LearnerCareerMatchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   generationJobs<T extends Prisma.Career$generationJobsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Career$generationJobsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GenerationJobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  pathways<T extends Prisma.Career$pathwaysArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Career$pathwaysArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PathwayPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3244,6 +3446,30 @@ export type Career$generationJobsArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   distinct?: Prisma.GenerationJobScalarFieldEnum | Prisma.GenerationJobScalarFieldEnum[]
+}
+
+/**
+ * Career.pathways
+ */
+export type Career$pathwaysArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Pathway
+   */
+  select?: Prisma.PathwaySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Pathway
+   */
+  omit?: Prisma.PathwayOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PathwayInclude<ExtArgs> | null
+  where?: Prisma.PathwayWhereInput
+  orderBy?: Prisma.PathwayOrderByWithRelationInput | Prisma.PathwayOrderByWithRelationInput[]
+  cursor?: Prisma.PathwayWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PathwayScalarFieldEnum | Prisma.PathwayScalarFieldEnum[]
 }
 
 /**

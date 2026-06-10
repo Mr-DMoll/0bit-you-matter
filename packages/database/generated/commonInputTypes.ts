@@ -331,6 +331,23 @@ export type IntWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedIntFilter<$PrismaModel>
 }
 
+export type EnumPathwayTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.PathwayType | Prisma.EnumPathwayTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.PathwayType[] | Prisma.ListEnumPathwayTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PathwayType[] | Prisma.ListEnumPathwayTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPathwayTypeFilter<$PrismaModel> | $Enums.PathwayType
+}
+
+export type EnumPathwayTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.PathwayType | Prisma.EnumPathwayTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.PathwayType[] | Prisma.ListEnumPathwayTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PathwayType[] | Prisma.ListEnumPathwayTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPathwayTypeWithAggregatesFilter<$PrismaModel> | $Enums.PathwayType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumPathwayTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumPathwayTypeFilter<$PrismaModel>
+}
+
 export type EnumAssessmentTypeFilter<$PrismaModel = never> = {
   equals?: $Enums.AssessmentType | Prisma.EnumAssessmentTypeFieldRefInput<$PrismaModel>
   in?: $Enums.AssessmentType[] | Prisma.ListEnumAssessmentTypeFieldRefInput<$PrismaModel>
@@ -750,6 +767,23 @@ export type NestedFloatFilter<$PrismaModel = never> = {
   gt?: number | Prisma.FloatFieldRefInput<$PrismaModel>
   gte?: number | Prisma.FloatFieldRefInput<$PrismaModel>
   not?: Prisma.NestedFloatFilter<$PrismaModel> | number
+}
+
+export type NestedEnumPathwayTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.PathwayType | Prisma.EnumPathwayTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.PathwayType[] | Prisma.ListEnumPathwayTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PathwayType[] | Prisma.ListEnumPathwayTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPathwayTypeFilter<$PrismaModel> | $Enums.PathwayType
+}
+
+export type NestedEnumPathwayTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.PathwayType | Prisma.EnumPathwayTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.PathwayType[] | Prisma.ListEnumPathwayTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PathwayType[] | Prisma.ListEnumPathwayTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPathwayTypeWithAggregatesFilter<$PrismaModel> | $Enums.PathwayType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumPathwayTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumPathwayTypeFilter<$PrismaModel>
 }
 
 export type NestedEnumAssessmentTypeFilter<$PrismaModel = never> = {

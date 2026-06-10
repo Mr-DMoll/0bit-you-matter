@@ -84,8 +84,20 @@ export async function runMigrationsAndSeed(): Promise<void> {
     await client.query(`
       DO $$ BEGIN
         CREATE TYPE "ContentType" AS ENUM (
-          'CAREER','UNIVERSITY_PROGRAMME','BURSARY','ASSESSMENT_QUESTION'
+          'CAREER','UNIVERSITY_PROGRAMME','UNIVERSITY_PROGRAMMES_BULK',
+          'TVET_PROGRAMMES_BULK','PATHWAY','BURSARY','ASSESSMENT_QUESTION'
         );
+      EXCEPTION WHEN duplicate_object THEN null; END $$;
+    `);
+    // Idempotent additions for enum values added after initial deploy
+    await client.query(`ALTER TYPE "ContentType" ADD VALUE IF NOT EXISTS 'UNIVERSITY_PROGRAMMES_BULK';`);
+    await client.query(`ALTER TYPE "ContentType" ADD VALUE IF NOT EXISTS 'TVET_PROGRAMMES_BULK';`);
+    await client.query(`ALTER TYPE "ContentType" ADD VALUE IF NOT EXISTS 'PATHWAY';`);
+    await client.query(`ALTER TYPE "ContentType" ADD VALUE IF NOT EXISTS 'ASSESSMENT_QUESTIONS_BULK';`);
+    await client.query(`ALTER TABLE "ContentReview" ADD COLUMN IF NOT EXISTS "entityId" TEXT;`);
+    await client.query(`
+      DO $$ BEGIN
+        CREATE TYPE "PathwayType" AS ENUM ('UNIVERSITY','TVET','LEARNERSHIP','DIRECT');
       EXCEPTION WHEN duplicate_object THEN null; END $$;
     `);
     await client.query(`
@@ -267,6 +279,82 @@ export async function runMigrationsAndSeed(): Promise<void> {
         "createdAt"           TIMESTAMP(3)    NOT NULL DEFAULT CURRENT_TIMESTAMP,
         "updatedAt"           TIMESTAMP(3)    NOT NULL DEFAULT CURRENT_TIMESTAMP,
         CONSTRAINT "Programme_pkey" PRIMARY KEY ("id")
+      );
+    `);
+
+    // ── YouMatter — TVET ─────────────────────────────────────────────────────
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS "TvetCollege" (
+        "id"             TEXT            NOT NULL,
+        "name"           TEXT            NOT NULL,
+        "abbreviation"   TEXT,
+        "province"       TEXT            NOT NULL,
+        "website"        TEXT,
+        "logoUrl"        TEXT,
+        "sourceUrl"      TEXT,
+        "verifiedNote"   TEXT,
+        "status"         "ContentStatus" NOT NULL DEFAULT 'AI_GENERATED',
+        "lastVerifiedAt" TIMESTAMP(3),
+        "createdAt"      TIMESTAMP(3)    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        "updatedAt"      TIMESTAMP(3)    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        CONSTRAINT "TvetCollege_pkey" PRIMARY KEY ("id")
+      );
+    `);
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS "TvetProgramme" (
+        "id"                  TEXT            NOT NULL,
+        "collegeId"           TEXT            NOT NULL,
+        "name"                TEXT            NOT NULL,
+        "programmeType"       TEXT            NOT NULL,
+        "field"               TEXT            NOT NULL,
+        "ncvLevel"            INT,
+        "natedLevel"          TEXT,
+        "duration"            INT,
+        "entryRequirement"    TEXT,
+        "description"         TEXT,
+        "careerOutcomes"      TEXT[]          NOT NULL DEFAULT '{}',
+        "subjectRequirements" TEXT,
+        "sourceUrl"           TEXT,
+        "verifiedNote"        TEXT,
+        "status"              "ContentStatus" NOT NULL DEFAULT 'AI_GENERATED',
+        "lastVerifiedAt"      TIMESTAMP(3),
+        "createdAt"           TIMESTAMP(3)    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        "updatedAt"           TIMESTAMP(3)    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        CONSTRAINT "TvetProgramme_pkey" PRIMARY KEY ("id")
+      );
+    `);
+
+    // ── YouMatter — Pathways ──────────────────────────────────────────────────
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS "Pathway" (
+        "id"                  TEXT            NOT NULL,
+        "careerId"            TEXT            NOT NULL,
+        "type"                "PathwayType"   NOT NULL,
+        "title"               TEXT            NOT NULL,
+        "durationLabel"       TEXT,
+        "durationMonths"      INT,
+        "estimatedCostMin"    INT,
+        "estimatedCostMax"    INT,
+        "costNote"            TEXT,
+        "earnWhileLearn"      BOOLEAN         NOT NULL DEFAULT false,
+        "entryRequirements"   TEXT,
+        "apsMin"              INT,
+        "gradeMin"            INT,
+        "steps"               JSONB,
+        "fundingOptions"      TEXT[]          NOT NULL DEFAULT '{}',
+        "setaName"            TEXT,
+        "qualificationEarned" TEXT,
+        "nqfLevelEarned"      INT,
+        "employmentNote"      TEXT,
+        "pros"                TEXT[]          NOT NULL DEFAULT '{}',
+        "cons"                TEXT[]          NOT NULL DEFAULT '{}',
+        "sourceUrl"           TEXT,
+        "verifiedNote"        TEXT,
+        "status"              "ContentStatus" NOT NULL DEFAULT 'AI_GENERATED',
+        "lastVerifiedAt"      TIMESTAMP(3),
+        "createdAt"           TIMESTAMP(3)    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        "updatedAt"           TIMESTAMP(3)    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        CONSTRAINT "Pathway_pkey" PRIMARY KEY ("id")
       );
     `);
 
@@ -535,6 +623,28 @@ export async function runMigrationsAndSeed(): Promise<void> {
     await client.query(`CREATE INDEX IF NOT EXISTS "DataVerification_status_idx"     ON "DataVerification"("status");`);
     await client.query(`CREATE INDEX IF NOT EXISTS "Source_type_idx"     ON "Source"("type");`);
     await client.query(`CREATE INDEX IF NOT EXISTS "Source_isActive_idx" ON "Source"("isActive");`);
+    // TVET
+    await client.query(`CREATE INDEX IF NOT EXISTS "TvetCollege_province_idx"         ON "TvetCollege"("province");`);
+    await client.query(`CREATE INDEX IF NOT EXISTS "TvetCollege_status_idx"           ON "TvetCollege"("status");`);
+    await client.query(`CREATE INDEX IF NOT EXISTS "TvetProgramme_collegeId_idx"      ON "TvetProgramme"("collegeId");`);
+    await client.query(`CREATE INDEX IF NOT EXISTS "TvetProgramme_programmeType_idx"  ON "TvetProgramme"("programmeType");`);
+    await client.query(`CREATE INDEX IF NOT EXISTS "TvetProgramme_field_idx"          ON "TvetProgramme"("field");`);
+    await client.query(`CREATE INDEX IF NOT EXISTS "TvetProgramme_status_idx"         ON "TvetProgramme"("status");`);
+    // Pathways
+    await client.query(`CREATE INDEX IF NOT EXISTS "Pathway_careerId_idx" ON "Pathway"("careerId");`);
+    await client.query(`CREATE INDEX IF NOT EXISTS "Pathway_type_idx"     ON "Pathway"("type");`);
+    await client.query(`CREATE INDEX IF NOT EXISTS "Pathway_status_idx"   ON "Pathway"("status");`);
+
+    // ── Idempotent column additions ───────────────────────────────────────────
+    // TvetCollege — college type (PUBLIC | PRIVATE)
+    await client.query(`ALTER TABLE "TvetCollege" ADD COLUMN IF NOT EXISTS "collegeType" TEXT NOT NULL DEFAULT 'PUBLIC';`);
+    await client.query(`CREATE INDEX IF NOT EXISTS "TvetCollege_collegeType_idx" ON "TvetCollege"("collegeType");`);
+    // LearnerProfile — study preference fields
+    await client.query(`ALTER TABLE "LearnerProfile" ADD COLUMN IF NOT EXISTS "studyProvincePreference" TEXT;`);
+    await client.query(`ALTER TABLE "LearnerProfile" ADD COLUMN IF NOT EXISTS "chosenPathwayType"       TEXT;`);
+    // DataVerification — TVET + Pathway FK columns
+    await client.query(`ALTER TABLE "DataVerification" ADD COLUMN IF NOT EXISTS "tvetProgrammeId" TEXT;`);
+    await client.query(`ALTER TABLE "DataVerification" ADD COLUMN IF NOT EXISTS "pathwayId"       TEXT;`);
 
     // ── Foreign keys ──────────────────────────────────────────────────────────
     const fk = async (constraint: string, sql: string) => {
@@ -584,6 +694,14 @@ export async function runMigrationsAndSeed(): Promise<void> {
       `"GenerationJob" ADD CONSTRAINT "GenerationJob_requestedById_fkey" FOREIGN KEY ("requestedById") REFERENCES "User"("id")`);
     await fk("GenerationJob_promptTemplateId_fkey",
       `"GenerationJob" ADD CONSTRAINT "GenerationJob_promptTemplateId_fkey" FOREIGN KEY ("promptTemplateId") REFERENCES "PromptTemplate"("id")`);
+    await fk("TvetProgramme_collegeId_fkey",
+      `"TvetProgramme" ADD CONSTRAINT "TvetProgramme_collegeId_fkey" FOREIGN KEY ("collegeId") REFERENCES "TvetCollege"("id") ON DELETE CASCADE ON UPDATE CASCADE`);
+    await fk("Pathway_careerId_fkey",
+      `"Pathway" ADD CONSTRAINT "Pathway_careerId_fkey" FOREIGN KEY ("careerId") REFERENCES "Career"("id") ON DELETE CASCADE ON UPDATE CASCADE`);
+    await fk("DataVerification_tvetProgrammeId_fkey",
+      `"DataVerification" ADD CONSTRAINT "DataVerification_tvetProgrammeId_fkey" FOREIGN KEY ("tvetProgrammeId") REFERENCES "TvetProgramme"("id") ON DELETE SET NULL`);
+    await fk("DataVerification_pathwayId_fkey",
+      `"DataVerification" ADD CONSTRAINT "DataVerification_pathwayId_fkey" FOREIGN KEY ("pathwayId") REFERENCES "Pathway"("id") ON DELETE SET NULL`);
 
     console.log("✅ [MIGRATE] Schema ready");
 

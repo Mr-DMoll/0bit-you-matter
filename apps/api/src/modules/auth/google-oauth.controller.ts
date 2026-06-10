@@ -118,7 +118,7 @@ export async function googleCallback(req: Request, res: Response) {
           data: {
             email:              profile.email.toLowerCase(),
             password:           "",
-            role:               "USER",
+            role:               "LEARNER",
             accountStatus:      "ACTIVE",
             firstName:          profile.given_name  ?? null,
             lastName:           profile.family_name ?? null,

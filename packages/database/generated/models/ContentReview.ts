@@ -39,6 +39,7 @@ export type ContentReviewMinAggregateOutputType = {
   contentType: $Enums.ContentType | null
   careerId: string | null
   questionId: string | null
+  entityId: string | null
   reviewerId: string | null
   status: $Enums.ReviewStatus | null
   confidenceRating: number | null
@@ -55,6 +56,7 @@ export type ContentReviewMaxAggregateOutputType = {
   contentType: $Enums.ContentType | null
   careerId: string | null
   questionId: string | null
+  entityId: string | null
   reviewerId: string | null
   status: $Enums.ReviewStatus | null
   confidenceRating: number | null
@@ -71,6 +73,7 @@ export type ContentReviewCountAggregateOutputType = {
   contentType: number
   careerId: number
   questionId: number
+  entityId: number
   reviewerId: number
   status: number
   confidenceRating: number
@@ -98,6 +101,7 @@ export type ContentReviewMinAggregateInputType = {
   contentType?: true
   careerId?: true
   questionId?: true
+  entityId?: true
   reviewerId?: true
   status?: true
   confidenceRating?: true
@@ -114,6 +118,7 @@ export type ContentReviewMaxAggregateInputType = {
   contentType?: true
   careerId?: true
   questionId?: true
+  entityId?: true
   reviewerId?: true
   status?: true
   confidenceRating?: true
@@ -130,6 +135,7 @@ export type ContentReviewCountAggregateInputType = {
   contentType?: true
   careerId?: true
   questionId?: true
+  entityId?: true
   reviewerId?: true
   status?: true
   confidenceRating?: true
@@ -234,6 +240,7 @@ export type ContentReviewGroupByOutputType = {
   contentType: $Enums.ContentType
   careerId: string | null
   questionId: string | null
+  entityId: string | null
   reviewerId: string
   status: $Enums.ReviewStatus
   confidenceRating: number | null
@@ -274,6 +281,7 @@ export type ContentReviewWhereInput = {
   contentType?: Prisma.EnumContentTypeFilter<"ContentReview"> | $Enums.ContentType
   careerId?: Prisma.StringNullableFilter<"ContentReview"> | string | null
   questionId?: Prisma.StringNullableFilter<"ContentReview"> | string | null
+  entityId?: Prisma.StringNullableFilter<"ContentReview"> | string | null
   reviewerId?: Prisma.StringFilter<"ContentReview"> | string
   status?: Prisma.EnumReviewStatusFilter<"ContentReview"> | $Enums.ReviewStatus
   confidenceRating?: Prisma.IntNullableFilter<"ContentReview"> | number | null
@@ -294,6 +302,7 @@ export type ContentReviewOrderByWithRelationInput = {
   contentType?: Prisma.SortOrder
   careerId?: Prisma.SortOrderInput | Prisma.SortOrder
   questionId?: Prisma.SortOrderInput | Prisma.SortOrder
+  entityId?: Prisma.SortOrderInput | Prisma.SortOrder
   reviewerId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   confidenceRating?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -317,6 +326,7 @@ export type ContentReviewWhereUniqueInput = Prisma.AtLeast<{
   contentType?: Prisma.EnumContentTypeFilter<"ContentReview"> | $Enums.ContentType
   careerId?: Prisma.StringNullableFilter<"ContentReview"> | string | null
   questionId?: Prisma.StringNullableFilter<"ContentReview"> | string | null
+  entityId?: Prisma.StringNullableFilter<"ContentReview"> | string | null
   reviewerId?: Prisma.StringFilter<"ContentReview"> | string
   status?: Prisma.EnumReviewStatusFilter<"ContentReview"> | $Enums.ReviewStatus
   confidenceRating?: Prisma.IntNullableFilter<"ContentReview"> | number | null
@@ -337,6 +347,7 @@ export type ContentReviewOrderByWithAggregationInput = {
   contentType?: Prisma.SortOrder
   careerId?: Prisma.SortOrderInput | Prisma.SortOrder
   questionId?: Prisma.SortOrderInput | Prisma.SortOrder
+  entityId?: Prisma.SortOrderInput | Prisma.SortOrder
   reviewerId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   confidenceRating?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -362,6 +373,7 @@ export type ContentReviewScalarWhereWithAggregatesInput = {
   contentType?: Prisma.EnumContentTypeWithAggregatesFilter<"ContentReview"> | $Enums.ContentType
   careerId?: Prisma.StringNullableWithAggregatesFilter<"ContentReview"> | string | null
   questionId?: Prisma.StringNullableWithAggregatesFilter<"ContentReview"> | string | null
+  entityId?: Prisma.StringNullableWithAggregatesFilter<"ContentReview"> | string | null
   reviewerId?: Prisma.StringWithAggregatesFilter<"ContentReview"> | string
   status?: Prisma.EnumReviewStatusWithAggregatesFilter<"ContentReview"> | $Enums.ReviewStatus
   confidenceRating?: Prisma.IntNullableWithAggregatesFilter<"ContentReview"> | number | null
@@ -377,6 +389,7 @@ export type ContentReviewScalarWhereWithAggregatesInput = {
 export type ContentReviewCreateInput = {
   id?: string
   contentType: $Enums.ContentType
+  entityId?: string | null
   status?: $Enums.ReviewStatus
   confidenceRating?: number | null
   notes?: string | null
@@ -396,6 +409,7 @@ export type ContentReviewUncheckedCreateInput = {
   contentType: $Enums.ContentType
   careerId?: string | null
   questionId?: string | null
+  entityId?: string | null
   reviewerId: string
   status?: $Enums.ReviewStatus
   confidenceRating?: number | null
@@ -411,6 +425,7 @@ export type ContentReviewUncheckedCreateInput = {
 export type ContentReviewUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   contentType?: Prisma.EnumContentTypeFieldUpdateOperationsInput | $Enums.ContentType
+  entityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus
   confidenceRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -430,6 +445,7 @@ export type ContentReviewUncheckedUpdateInput = {
   contentType?: Prisma.EnumContentTypeFieldUpdateOperationsInput | $Enums.ContentType
   careerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   questionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  entityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewerId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus
   confidenceRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -447,6 +463,7 @@ export type ContentReviewCreateManyInput = {
   contentType: $Enums.ContentType
   careerId?: string | null
   questionId?: string | null
+  entityId?: string | null
   reviewerId: string
   status?: $Enums.ReviewStatus
   confidenceRating?: number | null
@@ -462,6 +479,7 @@ export type ContentReviewCreateManyInput = {
 export type ContentReviewUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   contentType?: Prisma.EnumContentTypeFieldUpdateOperationsInput | $Enums.ContentType
+  entityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus
   confidenceRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -478,6 +496,7 @@ export type ContentReviewUncheckedUpdateManyInput = {
   contentType?: Prisma.EnumContentTypeFieldUpdateOperationsInput | $Enums.ContentType
   careerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   questionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  entityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewerId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus
   confidenceRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -505,6 +524,7 @@ export type ContentReviewCountOrderByAggregateInput = {
   contentType?: Prisma.SortOrder
   careerId?: Prisma.SortOrder
   questionId?: Prisma.SortOrder
+  entityId?: Prisma.SortOrder
   reviewerId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   confidenceRating?: Prisma.SortOrder
@@ -526,6 +546,7 @@ export type ContentReviewMaxOrderByAggregateInput = {
   contentType?: Prisma.SortOrder
   careerId?: Prisma.SortOrder
   questionId?: Prisma.SortOrder
+  entityId?: Prisma.SortOrder
   reviewerId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   confidenceRating?: Prisma.SortOrder
@@ -542,6 +563,7 @@ export type ContentReviewMinOrderByAggregateInput = {
   contentType?: Prisma.SortOrder
   careerId?: Prisma.SortOrder
   questionId?: Prisma.SortOrder
+  entityId?: Prisma.SortOrder
   reviewerId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   confidenceRating?: Prisma.SortOrder
@@ -694,6 +716,7 @@ export type EnumReviewStatusFieldUpdateOperationsInput = {
 export type ContentReviewCreateWithoutReviewerInput = {
   id?: string
   contentType: $Enums.ContentType
+  entityId?: string | null
   status?: $Enums.ReviewStatus
   confidenceRating?: number | null
   notes?: string | null
@@ -712,6 +735,7 @@ export type ContentReviewUncheckedCreateWithoutReviewerInput = {
   contentType: $Enums.ContentType
   careerId?: string | null
   questionId?: string | null
+  entityId?: string | null
   status?: $Enums.ReviewStatus
   confidenceRating?: number | null
   notes?: string | null
@@ -757,6 +781,7 @@ export type ContentReviewScalarWhereInput = {
   contentType?: Prisma.EnumContentTypeFilter<"ContentReview"> | $Enums.ContentType
   careerId?: Prisma.StringNullableFilter<"ContentReview"> | string | null
   questionId?: Prisma.StringNullableFilter<"ContentReview"> | string | null
+  entityId?: Prisma.StringNullableFilter<"ContentReview"> | string | null
   reviewerId?: Prisma.StringFilter<"ContentReview"> | string
   status?: Prisma.EnumReviewStatusFilter<"ContentReview"> | $Enums.ReviewStatus
   confidenceRating?: Prisma.IntNullableFilter<"ContentReview"> | number | null
@@ -772,6 +797,7 @@ export type ContentReviewScalarWhereInput = {
 export type ContentReviewCreateWithoutCareerInput = {
   id?: string
   contentType: $Enums.ContentType
+  entityId?: string | null
   status?: $Enums.ReviewStatus
   confidenceRating?: number | null
   notes?: string | null
@@ -789,6 +815,7 @@ export type ContentReviewUncheckedCreateWithoutCareerInput = {
   id?: string
   contentType: $Enums.ContentType
   questionId?: string | null
+  entityId?: string | null
   reviewerId: string
   status?: $Enums.ReviewStatus
   confidenceRating?: number | null
@@ -830,6 +857,7 @@ export type ContentReviewUpdateManyWithWhereWithoutCareerInput = {
 export type ContentReviewCreateWithoutQuestionInput = {
   id?: string
   contentType: $Enums.ContentType
+  entityId?: string | null
   status?: $Enums.ReviewStatus
   confidenceRating?: number | null
   notes?: string | null
@@ -847,6 +875,7 @@ export type ContentReviewUncheckedCreateWithoutQuestionInput = {
   id?: string
   contentType: $Enums.ContentType
   careerId?: string | null
+  entityId?: string | null
   reviewerId: string
   status?: $Enums.ReviewStatus
   confidenceRating?: number | null
@@ -890,6 +919,7 @@ export type ContentReviewCreateManyReviewerInput = {
   contentType: $Enums.ContentType
   careerId?: string | null
   questionId?: string | null
+  entityId?: string | null
   status?: $Enums.ReviewStatus
   confidenceRating?: number | null
   notes?: string | null
@@ -904,6 +934,7 @@ export type ContentReviewCreateManyReviewerInput = {
 export type ContentReviewUpdateWithoutReviewerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   contentType?: Prisma.EnumContentTypeFieldUpdateOperationsInput | $Enums.ContentType
+  entityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus
   confidenceRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -922,6 +953,7 @@ export type ContentReviewUncheckedUpdateWithoutReviewerInput = {
   contentType?: Prisma.EnumContentTypeFieldUpdateOperationsInput | $Enums.ContentType
   careerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   questionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  entityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus
   confidenceRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -938,6 +970,7 @@ export type ContentReviewUncheckedUpdateManyWithoutReviewerInput = {
   contentType?: Prisma.EnumContentTypeFieldUpdateOperationsInput | $Enums.ContentType
   careerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   questionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  entityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus
   confidenceRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -953,6 +986,7 @@ export type ContentReviewCreateManyCareerInput = {
   id?: string
   contentType: $Enums.ContentType
   questionId?: string | null
+  entityId?: string | null
   reviewerId: string
   status?: $Enums.ReviewStatus
   confidenceRating?: number | null
@@ -968,6 +1002,7 @@ export type ContentReviewCreateManyCareerInput = {
 export type ContentReviewUpdateWithoutCareerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   contentType?: Prisma.EnumContentTypeFieldUpdateOperationsInput | $Enums.ContentType
+  entityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus
   confidenceRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -985,6 +1020,7 @@ export type ContentReviewUncheckedUpdateWithoutCareerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   contentType?: Prisma.EnumContentTypeFieldUpdateOperationsInput | $Enums.ContentType
   questionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  entityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewerId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus
   confidenceRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1001,6 +1037,7 @@ export type ContentReviewUncheckedUpdateManyWithoutCareerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   contentType?: Prisma.EnumContentTypeFieldUpdateOperationsInput | $Enums.ContentType
   questionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  entityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewerId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus
   confidenceRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1017,6 +1054,7 @@ export type ContentReviewCreateManyQuestionInput = {
   id?: string
   contentType: $Enums.ContentType
   careerId?: string | null
+  entityId?: string | null
   reviewerId: string
   status?: $Enums.ReviewStatus
   confidenceRating?: number | null
@@ -1032,6 +1070,7 @@ export type ContentReviewCreateManyQuestionInput = {
 export type ContentReviewUpdateWithoutQuestionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   contentType?: Prisma.EnumContentTypeFieldUpdateOperationsInput | $Enums.ContentType
+  entityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus
   confidenceRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1049,6 +1088,7 @@ export type ContentReviewUncheckedUpdateWithoutQuestionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   contentType?: Prisma.EnumContentTypeFieldUpdateOperationsInput | $Enums.ContentType
   careerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  entityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewerId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus
   confidenceRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1065,6 +1105,7 @@ export type ContentReviewUncheckedUpdateManyWithoutQuestionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   contentType?: Prisma.EnumContentTypeFieldUpdateOperationsInput | $Enums.ContentType
   careerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  entityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reviewerId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumReviewStatusFieldUpdateOperationsInput | $Enums.ReviewStatus
   confidenceRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1084,6 +1125,7 @@ export type ContentReviewSelect<ExtArgs extends runtime.Types.Extensions.Interna
   contentType?: boolean
   careerId?: boolean
   questionId?: boolean
+  entityId?: boolean
   reviewerId?: boolean
   status?: boolean
   confidenceRating?: boolean
@@ -1104,6 +1146,7 @@ export type ContentReviewSelectCreateManyAndReturn<ExtArgs extends runtime.Types
   contentType?: boolean
   careerId?: boolean
   questionId?: boolean
+  entityId?: boolean
   reviewerId?: boolean
   status?: boolean
   confidenceRating?: boolean
@@ -1124,6 +1167,7 @@ export type ContentReviewSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   contentType?: boolean
   careerId?: boolean
   questionId?: boolean
+  entityId?: boolean
   reviewerId?: boolean
   status?: boolean
   confidenceRating?: boolean
@@ -1144,6 +1188,7 @@ export type ContentReviewSelectScalar = {
   contentType?: boolean
   careerId?: boolean
   questionId?: boolean
+  entityId?: boolean
   reviewerId?: boolean
   status?: boolean
   confidenceRating?: boolean
@@ -1156,7 +1201,7 @@ export type ContentReviewSelectScalar = {
   updatedAt?: boolean
 }
 
-export type ContentReviewOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "contentType" | "careerId" | "questionId" | "reviewerId" | "status" | "confidenceRating" | "notes" | "trackedChanges" | "assignedAt" | "dueAt" | "completedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["contentReview"]>
+export type ContentReviewOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "contentType" | "careerId" | "questionId" | "entityId" | "reviewerId" | "status" | "confidenceRating" | "notes" | "trackedChanges" | "assignedAt" | "dueAt" | "completedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["contentReview"]>
 export type ContentReviewInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   career?: boolean | Prisma.ContentReview$careerArgs<ExtArgs>
   question?: boolean | Prisma.ContentReview$questionArgs<ExtArgs>
@@ -1185,6 +1230,7 @@ export type $ContentReviewPayload<ExtArgs extends runtime.Types.Extensions.Inter
     contentType: $Enums.ContentType
     careerId: string | null
     questionId: string | null
+    entityId: string | null
     reviewerId: string
     status: $Enums.ReviewStatus
     confidenceRating: number | null
@@ -1625,6 +1671,7 @@ export interface ContentReviewFieldRefs {
   readonly contentType: Prisma.FieldRef<"ContentReview", 'ContentType'>
   readonly careerId: Prisma.FieldRef<"ContentReview", 'String'>
   readonly questionId: Prisma.FieldRef<"ContentReview", 'String'>
+  readonly entityId: Prisma.FieldRef<"ContentReview", 'String'>
   readonly reviewerId: Prisma.FieldRef<"ContentReview", 'String'>
   readonly status: Prisma.FieldRef<"ContentReview", 'ReviewStatus'>
   readonly confidenceRating: Prisma.FieldRef<"ContentReview", 'Int'>

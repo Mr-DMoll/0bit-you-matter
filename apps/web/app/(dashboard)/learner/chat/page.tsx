@@ -1,4 +1,2 @@
-import { PlaceholderPage } from "@/shared/components/ui/PlaceholderPage";
-export default function Page() {
-  return <PlaceholderPage title="Guidance Chat" description="AI-powered conversational guide - ask anything about careers, subjects and universities." />;
-}
+import { GuidanceChatPage } from "@/features/learner/pages/GuidanceChatPage";
+export default function Page() { return <GuidanceChatPage />; }

@@ -82,6 +82,21 @@ export type University = Prisma.UniversityModel
  */
 export type Programme = Prisma.ProgrammeModel
 /**
+ * Model TvetCollege
+ * 
+ */
+export type TvetCollege = Prisma.TvetCollegeModel
+/**
+ * Model TvetProgramme
+ * 
+ */
+export type TvetProgramme = Prisma.TvetProgrammeModel
+/**
+ * Model Pathway
+ * 
+ */
+export type Pathway = Prisma.PathwayModel
+/**
  * Model Bursary
  * 
  */

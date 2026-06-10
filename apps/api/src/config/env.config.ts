@@ -30,6 +30,9 @@ const env = {
   // Anthropic — Claude API for automation workers
   ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY as string,
 
+  // Redis — BullMQ job queues
+  REDIS_URL: process.env.REDIS_URL || "redis://localhost:6379",
+
   // File storage — Cloudflare R2 (add when ready)
   R2_ACCOUNT_ID:        process.env.R2_ACCOUNT_ID        as string,
   R2_ACCESS_KEY_ID:     process.env.R2_ACCESS_KEY_ID     as string,

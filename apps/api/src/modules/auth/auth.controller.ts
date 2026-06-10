@@ -212,7 +212,7 @@ export const register = catchAsync(async (req: Request, res: Response) => {
     data: {
       email:         email.trim().toLowerCase(),
       password:      hashed,
-      role:          "USER",
+      role:          "LEARNER",
       accountStatus: status,
       firstName:     firstName ?? null,
       lastName:      lastName  ?? null,

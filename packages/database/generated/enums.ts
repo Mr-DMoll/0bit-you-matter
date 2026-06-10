@@ -75,11 +75,25 @@ export type AssessmentStatus = (typeof AssessmentStatus)[keyof typeof Assessment
 export const ContentType = {
   CAREER: 'CAREER',
   UNIVERSITY_PROGRAMME: 'UNIVERSITY_PROGRAMME',
+  UNIVERSITY_PROGRAMMES_BULK: 'UNIVERSITY_PROGRAMMES_BULK',
+  TVET_PROGRAMMES_BULK: 'TVET_PROGRAMMES_BULK',
+  PATHWAY: 'PATHWAY',
   BURSARY: 'BURSARY',
-  ASSESSMENT_QUESTION: 'ASSESSMENT_QUESTION'
+  ASSESSMENT_QUESTION: 'ASSESSMENT_QUESTION',
+  ASSESSMENT_QUESTIONS_BULK: 'ASSESSMENT_QUESTIONS_BULK'
 } as const
 
 export type ContentType = (typeof ContentType)[keyof typeof ContentType]
+
+
+export const PathwayType = {
+  UNIVERSITY: 'UNIVERSITY',
+  TVET: 'TVET',
+  LEARNERSHIP: 'LEARNERSHIP',
+  DIRECT: 'DIRECT'
+} as const
+
+export type PathwayType = (typeof PathwayType)[keyof typeof PathwayType]
 
 
 export const GenerationJobStatus = {

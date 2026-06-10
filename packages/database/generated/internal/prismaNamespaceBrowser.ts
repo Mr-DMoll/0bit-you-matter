@@ -59,6 +59,9 @@ export const ModelName = {
   Career: 'Career',
   University: 'University',
   Programme: 'Programme',
+  TvetCollege: 'TvetCollege',
+  TvetProgramme: 'TvetProgramme',
+  Pathway: 'Pathway',
   Bursary: 'Bursary',
   AssessmentQuestion: 'AssessmentQuestion',
   LearnerAssessmentSession: 'LearnerAssessmentSession',
@@ -240,6 +243,82 @@ export const ProgrammeScalarFieldEnum = {
 export type ProgrammeScalarFieldEnum = (typeof ProgrammeScalarFieldEnum)[keyof typeof ProgrammeScalarFieldEnum]
 
 
+export const TvetCollegeScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  abbreviation: 'abbreviation',
+  province: 'province',
+  website: 'website',
+  logoUrl: 'logoUrl',
+  collegeType: 'collegeType',
+  sourceUrl: 'sourceUrl',
+  verifiedNote: 'verifiedNote',
+  status: 'status',
+  lastVerifiedAt: 'lastVerifiedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TvetCollegeScalarFieldEnum = (typeof TvetCollegeScalarFieldEnum)[keyof typeof TvetCollegeScalarFieldEnum]
+
+
+export const TvetProgrammeScalarFieldEnum = {
+  id: 'id',
+  collegeId: 'collegeId',
+  name: 'name',
+  programmeType: 'programmeType',
+  field: 'field',
+  ncvLevel: 'ncvLevel',
+  natedLevel: 'natedLevel',
+  duration: 'duration',
+  entryRequirement: 'entryRequirement',
+  description: 'description',
+  careerOutcomes: 'careerOutcomes',
+  subjectRequirements: 'subjectRequirements',
+  sourceUrl: 'sourceUrl',
+  verifiedNote: 'verifiedNote',
+  status: 'status',
+  lastVerifiedAt: 'lastVerifiedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TvetProgrammeScalarFieldEnum = (typeof TvetProgrammeScalarFieldEnum)[keyof typeof TvetProgrammeScalarFieldEnum]
+
+
+export const PathwayScalarFieldEnum = {
+  id: 'id',
+  careerId: 'careerId',
+  type: 'type',
+  title: 'title',
+  durationLabel: 'durationLabel',
+  durationMonths: 'durationMonths',
+  estimatedCostMin: 'estimatedCostMin',
+  estimatedCostMax: 'estimatedCostMax',
+  costNote: 'costNote',
+  earnWhileLearn: 'earnWhileLearn',
+  entryRequirements: 'entryRequirements',
+  apsMin: 'apsMin',
+  gradeMin: 'gradeMin',
+  steps: 'steps',
+  fundingOptions: 'fundingOptions',
+  setaName: 'setaName',
+  qualificationEarned: 'qualificationEarned',
+  nqfLevelEarned: 'nqfLevelEarned',
+  employmentNote: 'employmentNote',
+  pros: 'pros',
+  cons: 'cons',
+  sourceUrl: 'sourceUrl',
+  verifiedNote: 'verifiedNote',
+  status: 'status',
+  lastVerifiedAt: 'lastVerifiedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PathwayScalarFieldEnum = (typeof PathwayScalarFieldEnum)[keyof typeof PathwayScalarFieldEnum]
+
+
 export const BursaryScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -312,6 +391,8 @@ export const LearnerProfileScalarFieldEnum = {
   strengthsSummary: 'strengthsSummary',
   subjects: 'subjects',
   chosenCareerId: 'chosenCareerId',
+  studyProvincePreference: 'studyProvincePreference',
+  chosenPathwayType: 'chosenPathwayType',
   generatedAt: 'generatedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -359,6 +440,7 @@ export const ContentReviewScalarFieldEnum = {
   contentType: 'contentType',
   careerId: 'careerId',
   questionId: 'questionId',
+  entityId: 'entityId',
   reviewerId: 'reviewerId',
   status: 'status',
   confidenceRating: 'confidenceRating',
@@ -380,6 +462,8 @@ export const DataVerificationScalarFieldEnum = {
   careerId: 'careerId',
   programmeId: 'programmeId',
   bursaryId: 'bursaryId',
+  tvetProgrammeId: 'tvetProgrammeId',
+  pathwayId: 'pathwayId',
   verifierId: 'verifierId',
   status: 'status',
   sourceUrl: 'sourceUrl',

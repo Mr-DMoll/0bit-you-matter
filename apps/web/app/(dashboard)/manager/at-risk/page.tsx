@@ -1,4 +1,3 @@
-import { PlaceholderPage } from "@/shared/components/ui/PlaceholderPage";
-export default function Page() {
-  return <PlaceholderPage title="At Risk" description="Learners flagged by low engagement or incomplete assessments - intervention prompts and notes." />;
-}
+"use client";
+import { ManagerAtRiskPage } from "@/features/manager/pages/AtRiskPage";
+export default function Page() { return <ManagerAtRiskPage />; }

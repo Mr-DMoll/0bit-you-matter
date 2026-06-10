@@ -267,7 +267,7 @@ export function AllUsersPage() {
   };
 
   const handleInvite = async (email: string) => {
-    await adminService.inviteUser(email);
+    await (adminService as any).inviteStaffMember?.(email);
     await fetchUsers();
   };
 

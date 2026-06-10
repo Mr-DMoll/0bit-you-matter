@@ -57,8 +57,19 @@ enum AssessmentStatus {
 enum ContentType {
   CAREER
   UNIVERSITY_PROGRAMME
+  UNIVERSITY_PROGRAMMES_BULK
+  TVET_PROGRAMMES_BULK
+  PATHWAY
   BURSARY
   ASSESSMENT_QUESTION
+  ASSESSMENT_QUESTIONS_BULK
+}
+
+enum PathwayType {
+  UNIVERSITY
+  TVET
+  LEARNERSHIP
+  DIRECT
 }
 
 enum GenerationJobStatus {
@@ -242,6 +253,7 @@ model Career {
   roadmaps         LearnerRoadmap[]
   careerMatches    LearnerCareerMatch[]
   generationJobs   GenerationJob[]      @relation("CareerGenerationJobs")
+  pathways         Pathway[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -304,6 +316,132 @@ model Programme {
   @@index([apsMin])
   @@index([status])
   @@index([applicationCloseDate])
+}
+
+// ─── TVET ─────────────────────────────────────────────────────────────────────
+
+model TvetCollege {
+  id           String  @id @default(cuid())
+  name         String
+  abbreviation String?
+  province     String
+  website      String?
+  logoUrl      String?
+
+  // PUBLIC = DHET-funded (50 colleges); PRIVATE = private providers (Boston, Damelin, etc.)
+  collegeType  String  @default("PUBLIC")
+
+  // Source attribution — so learners can verify
+  sourceUrl    String? // e.g. https://tvetcolleges.edu.za or college's own site
+  verifiedNote String? // e.g. "Confirmed against DHET college list 2025"
+
+  programmes TvetProgramme[]
+
+  status         ContentStatus @default(AI_GENERATED)
+  lastVerifiedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([province])
+  @@index([status])
+}
+
+model TvetProgramme {
+  id       String      @id @default(cuid())
+  collegeId String
+  college  TvetCollege @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+
+  name        String  // e.g. "NCV Engineering Studies" or "NATED Electrical Engineering N3"
+  programmeType String  // "NCV" | "NATED" | "OCCUPATIONAL"
+  field       String  // e.g. "Engineering Studies", "Business Studies", "Information Technology"
+
+  // NCV specific (Levels 2, 3, 4)
+  ncvLevel    Int?    // 2, 3, or 4
+
+  // NATED specific (N1–N6)
+  natedLevel  String? // "N1" | "N2" | "N3" | "N4" | "N5" | "N6"
+
+  duration           Int?    // months
+  entryRequirement   String? // e.g. "Grade 9 pass" or "Grade 11 with Maths"
+  description        String? @db.Text
+  careerOutcomes     String[] // e.g. ["Electrician", "Electrical Engineer (with degree)"]
+  subjectRequirements String? // e.g. "Mathematics, English, Engineering Science"
+
+  // Source attribution
+  sourceUrl    String?
+  verifiedNote String?
+
+  status         ContentStatus @default(AI_GENERATED)
+  lastVerifiedAt DateTime?
+
+  verifications DataVerification[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([collegeId])
+  @@index([programmeType])
+  @@index([field])
+  @@index([status])
+}
+
+// ─── Pathways ─────────────────────────────────────────────────────────────────
+
+model Pathway {
+  id       String      @id @default(cuid())
+  careerId String
+  career   Career      @relation(fields: [careerId], references: [id], onDelete: Cascade)
+
+  type  PathwayType // UNIVERSITY | TVET | LEARNERSHIP | DIRECT
+  title String      // e.g. "Become an Electrician via TVET N1–N6 + Trade Test"
+
+  // Duration
+  durationLabel  String? // e.g. "3–4 years"
+  durationMonths Int?    // for sorting
+
+  // Cost
+  estimatedCostMin Int?    // ZAR per year
+  estimatedCostMax Int?    // ZAR per year
+  costNote         String? // e.g. "NSFAS covers full cost for qualifying students"
+  earnWhileLearn   Boolean @default(false) // true for learnerships
+
+  // Requirements
+  entryRequirements String? // e.g. "Grade 12 with Maths and Science"
+  apsMin            Int?    // minimum APS (for university routes)
+  gradeMin          Int?    // minimum school grade (e.g. Grade 9 for some TVET)
+
+  // Steps — the actual journey
+  // [{ "step": 1, "title": "Pass Grade 12", "description": "...", "duration": "1 year" }]
+  steps Json?
+
+  // Funding
+  fundingOptions String[] // e.g. ["NSFAS", "Merseta Bursary", "Company Learnership"]
+  setaName       String?  // for learnership routes, e.g. "MERSETA", "EWSETA"
+
+  // Outcomes
+  qualificationEarned String? // e.g. "N6 Certificate + Trade Test = Qualified Artisan"
+  nqfLevelEarned      Int?
+  employmentNote      String? // e.g. "70% of learnership candidates are absorbed by host companies"
+
+  pros String[] // plain language advantages
+  cons String[] // honest trade-offs
+
+  // Source attribution
+  sourceUrl    String?
+  verifiedNote String?
+
+  status         ContentStatus @default(AI_GENERATED)
+  lastVerifiedAt DateTime?
+
+  verifications DataVerification[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([careerId])
+  @@index([type])
+  @@index([status])
 }
 
 // ─── Bursaries ────────────────────────────────────────────────────────────────
@@ -428,6 +566,11 @@ model LearnerProfile {
   // The career the learner has chosen to pursue
   chosenCareerId String?
 
+  // Where they want to study (separate from home province — learners often move)
+  studyProvincePreference String?
+  // The pathway type they've chosen (UNIVERSITY | TVET | LEARNERSHIP | DIRECT)
+  chosenPathwayType       String?
+
   generatedAt DateTime?
 
   careerMatches LearnerCareerMatch[]
@@ -496,6 +639,9 @@ model ContentReview {
   questionId String?
   question   AssessmentQuestion? @relation(fields: [questionId], references: [id])
 
+  // Generic entity reference for pathway / bursary / tvet college / private college
+  entityId   String?
+
   reviewerId String
   reviewer   User         @relation("ReviewerAssignments", fields: [reviewerId], references: [id])
 
@@ -523,12 +669,16 @@ model DataVerification {
   contentType ContentType
 
   // One of these will be set depending on contentType
-  careerId    String?
-  career      Career?     @relation(fields: [careerId], references: [id])
-  programmeId String?
-  programme   Programme?  @relation(fields: [programmeId], references: [id])
-  bursaryId   String?
-  bursary     Bursary?    @relation(fields: [bursaryId], references: [id])
+  careerId       String?
+  career         Career?        @relation(fields: [careerId], references: [id])
+  programmeId    String?
+  programme      Programme?     @relation(fields: [programmeId], references: [id])
+  bursaryId      String?
+  bursary        Bursary?       @relation(fields: [bursaryId], references: [id])
+  tvetProgrammeId String?
+  tvetProgramme  TvetProgramme? @relation(fields: [tvetProgrammeId], references: [id])
+  pathwayId      String?
+  pathway        Pathway?       @relation(fields: [pathwayId], references: [id])
 
   verifierId String
   verifier   User   @relation("VerifierAssignments", fields: [verifierId], references: [id])

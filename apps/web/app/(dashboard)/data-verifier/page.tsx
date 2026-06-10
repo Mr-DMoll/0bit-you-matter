@@ -1,4 +1,2 @@
-import { PlaceholderPage } from "@/shared/components/ui/PlaceholderPage";
-export default function Page() {
-  return <PlaceholderPage title="APS Queue" description="Highest priority - verify APS scores and subject requirements for all university programmes." />;
-}
+import { APSQueuePage } from "@/features/data-verifier/pages/APSQueuePage";
+export default function Page() { return <APSQueuePage />; }

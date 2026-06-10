@@ -392,6 +392,9 @@ export const ModelName = {
   Career: 'Career',
   University: 'University',
   Programme: 'Programme',
+  TvetCollege: 'TvetCollege',
+  TvetProgramme: 'TvetProgramme',
+  Pathway: 'Pathway',
   Bursary: 'Bursary',
   AssessmentQuestion: 'AssessmentQuestion',
   LearnerAssessmentSession: 'LearnerAssessmentSession',
@@ -420,7 +423,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "auditLog" | "notification" | "systemSetting" | "careerCluster" | "career" | "university" | "programme" | "bursary" | "assessmentQuestion" | "learnerAssessmentSession" | "learnerAnswer" | "learnerProfile" | "learnerCareerMatch" | "learnerSavedCareer" | "learnerRoadmap" | "contentReview" | "dataVerification" | "promptTemplate" | "generationJob" | "source"
+    modelProps: "user" | "auditLog" | "notification" | "systemSetting" | "careerCluster" | "career" | "university" | "programme" | "tvetCollege" | "tvetProgramme" | "pathway" | "bursary" | "assessmentQuestion" | "learnerAssessmentSession" | "learnerAnswer" | "learnerProfile" | "learnerCareerMatch" | "learnerSavedCareer" | "learnerRoadmap" | "contentReview" | "dataVerification" | "promptTemplate" | "generationJob" | "source"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1013,6 +1016,228 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.ProgrammeCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.ProgrammeCountAggregateOutputType> | number
+        }
+      }
+    }
+    TvetCollege: {
+      payload: Prisma.$TvetCollegePayload<ExtArgs>
+      fields: Prisma.TvetCollegeFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TvetCollegeFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TvetCollegePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TvetCollegeFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TvetCollegePayload>
+        }
+        findFirst: {
+          args: Prisma.TvetCollegeFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TvetCollegePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TvetCollegeFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TvetCollegePayload>
+        }
+        findMany: {
+          args: Prisma.TvetCollegeFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TvetCollegePayload>[]
+        }
+        create: {
+          args: Prisma.TvetCollegeCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TvetCollegePayload>
+        }
+        createMany: {
+          args: Prisma.TvetCollegeCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TvetCollegeCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TvetCollegePayload>[]
+        }
+        delete: {
+          args: Prisma.TvetCollegeDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TvetCollegePayload>
+        }
+        update: {
+          args: Prisma.TvetCollegeUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TvetCollegePayload>
+        }
+        deleteMany: {
+          args: Prisma.TvetCollegeDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TvetCollegeUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TvetCollegeUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TvetCollegePayload>[]
+        }
+        upsert: {
+          args: Prisma.TvetCollegeUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TvetCollegePayload>
+        }
+        aggregate: {
+          args: Prisma.TvetCollegeAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTvetCollege>
+        }
+        groupBy: {
+          args: Prisma.TvetCollegeGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TvetCollegeGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TvetCollegeCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TvetCollegeCountAggregateOutputType> | number
+        }
+      }
+    }
+    TvetProgramme: {
+      payload: Prisma.$TvetProgrammePayload<ExtArgs>
+      fields: Prisma.TvetProgrammeFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TvetProgrammeFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TvetProgrammePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TvetProgrammeFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TvetProgrammePayload>
+        }
+        findFirst: {
+          args: Prisma.TvetProgrammeFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TvetProgrammePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TvetProgrammeFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TvetProgrammePayload>
+        }
+        findMany: {
+          args: Prisma.TvetProgrammeFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TvetProgrammePayload>[]
+        }
+        create: {
+          args: Prisma.TvetProgrammeCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TvetProgrammePayload>
+        }
+        createMany: {
+          args: Prisma.TvetProgrammeCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TvetProgrammeCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TvetProgrammePayload>[]
+        }
+        delete: {
+          args: Prisma.TvetProgrammeDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TvetProgrammePayload>
+        }
+        update: {
+          args: Prisma.TvetProgrammeUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TvetProgrammePayload>
+        }
+        deleteMany: {
+          args: Prisma.TvetProgrammeDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TvetProgrammeUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TvetProgrammeUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TvetProgrammePayload>[]
+        }
+        upsert: {
+          args: Prisma.TvetProgrammeUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TvetProgrammePayload>
+        }
+        aggregate: {
+          args: Prisma.TvetProgrammeAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTvetProgramme>
+        }
+        groupBy: {
+          args: Prisma.TvetProgrammeGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TvetProgrammeGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TvetProgrammeCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TvetProgrammeCountAggregateOutputType> | number
+        }
+      }
+    }
+    Pathway: {
+      payload: Prisma.$PathwayPayload<ExtArgs>
+      fields: Prisma.PathwayFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PathwayFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PathwayPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PathwayFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PathwayPayload>
+        }
+        findFirst: {
+          args: Prisma.PathwayFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PathwayPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PathwayFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PathwayPayload>
+        }
+        findMany: {
+          args: Prisma.PathwayFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PathwayPayload>[]
+        }
+        create: {
+          args: Prisma.PathwayCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PathwayPayload>
+        }
+        createMany: {
+          args: Prisma.PathwayCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PathwayCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PathwayPayload>[]
+        }
+        delete: {
+          args: Prisma.PathwayDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PathwayPayload>
+        }
+        update: {
+          args: Prisma.PathwayUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PathwayPayload>
+        }
+        deleteMany: {
+          args: Prisma.PathwayDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PathwayUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PathwayUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PathwayPayload>[]
+        }
+        upsert: {
+          args: Prisma.PathwayUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PathwayPayload>
+        }
+        aggregate: {
+          args: Prisma.PathwayAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePathway>
+        }
+        groupBy: {
+          args: Prisma.PathwayGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PathwayGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PathwayCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PathwayCountAggregateOutputType> | number
         }
       }
     }
@@ -2167,6 +2392,82 @@ export const ProgrammeScalarFieldEnum = {
 export type ProgrammeScalarFieldEnum = (typeof ProgrammeScalarFieldEnum)[keyof typeof ProgrammeScalarFieldEnum]
 
 
+export const TvetCollegeScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  abbreviation: 'abbreviation',
+  province: 'province',
+  website: 'website',
+  logoUrl: 'logoUrl',
+  collegeType: 'collegeType',
+  sourceUrl: 'sourceUrl',
+  verifiedNote: 'verifiedNote',
+  status: 'status',
+  lastVerifiedAt: 'lastVerifiedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TvetCollegeScalarFieldEnum = (typeof TvetCollegeScalarFieldEnum)[keyof typeof TvetCollegeScalarFieldEnum]
+
+
+export const TvetProgrammeScalarFieldEnum = {
+  id: 'id',
+  collegeId: 'collegeId',
+  name: 'name',
+  programmeType: 'programmeType',
+  field: 'field',
+  ncvLevel: 'ncvLevel',
+  natedLevel: 'natedLevel',
+  duration: 'duration',
+  entryRequirement: 'entryRequirement',
+  description: 'description',
+  careerOutcomes: 'careerOutcomes',
+  subjectRequirements: 'subjectRequirements',
+  sourceUrl: 'sourceUrl',
+  verifiedNote: 'verifiedNote',
+  status: 'status',
+  lastVerifiedAt: 'lastVerifiedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TvetProgrammeScalarFieldEnum = (typeof TvetProgrammeScalarFieldEnum)[keyof typeof TvetProgrammeScalarFieldEnum]
+
+
+export const PathwayScalarFieldEnum = {
+  id: 'id',
+  careerId: 'careerId',
+  type: 'type',
+  title: 'title',
+  durationLabel: 'durationLabel',
+  durationMonths: 'durationMonths',
+  estimatedCostMin: 'estimatedCostMin',
+  estimatedCostMax: 'estimatedCostMax',
+  costNote: 'costNote',
+  earnWhileLearn: 'earnWhileLearn',
+  entryRequirements: 'entryRequirements',
+  apsMin: 'apsMin',
+  gradeMin: 'gradeMin',
+  steps: 'steps',
+  fundingOptions: 'fundingOptions',
+  setaName: 'setaName',
+  qualificationEarned: 'qualificationEarned',
+  nqfLevelEarned: 'nqfLevelEarned',
+  employmentNote: 'employmentNote',
+  pros: 'pros',
+  cons: 'cons',
+  sourceUrl: 'sourceUrl',
+  verifiedNote: 'verifiedNote',
+  status: 'status',
+  lastVerifiedAt: 'lastVerifiedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PathwayScalarFieldEnum = (typeof PathwayScalarFieldEnum)[keyof typeof PathwayScalarFieldEnum]
+
+
 export const BursaryScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -2239,6 +2540,8 @@ export const LearnerProfileScalarFieldEnum = {
   strengthsSummary: 'strengthsSummary',
   subjects: 'subjects',
   chosenCareerId: 'chosenCareerId',
+  studyProvincePreference: 'studyProvincePreference',
+  chosenPathwayType: 'chosenPathwayType',
   generatedAt: 'generatedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -2286,6 +2589,7 @@ export const ContentReviewScalarFieldEnum = {
   contentType: 'contentType',
   careerId: 'careerId',
   questionId: 'questionId',
+  entityId: 'entityId',
   reviewerId: 'reviewerId',
   status: 'status',
   confidenceRating: 'confidenceRating',
@@ -2307,6 +2611,8 @@ export const DataVerificationScalarFieldEnum = {
   careerId: 'careerId',
   programmeId: 'programmeId',
   bursaryId: 'bursaryId',
+  tvetProgrammeId: 'tvetProgrammeId',
+  pathwayId: 'pathwayId',
   verifierId: 'verifierId',
   status: 'status',
   sourceUrl: 'sourceUrl',
@@ -2542,6 +2848,20 @@ export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaMode
 
 
 /**
+ * Reference to a field of type 'PathwayType'
+ */
+export type EnumPathwayTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PathwayType'>
+    
+
+
+/**
+ * Reference to a field of type 'PathwayType[]'
+ */
+export type ListEnumPathwayTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PathwayType[]'>
+    
+
+
+/**
  * Reference to a field of type 'AssessmentType'
  */
 export type EnumAssessmentTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AssessmentType'>
@@ -2727,6 +3047,9 @@ export type GlobalOmitConfig = {
   career?: Prisma.CareerOmit
   university?: Prisma.UniversityOmit
   programme?: Prisma.ProgrammeOmit
+  tvetCollege?: Prisma.TvetCollegeOmit
+  tvetProgramme?: Prisma.TvetProgrammeOmit
+  pathway?: Prisma.PathwayOmit
   bursary?: Prisma.BursaryOmit
   assessmentQuestion?: Prisma.AssessmentQuestionOmit
   learnerAssessmentSession?: Prisma.LearnerAssessmentSessionOmit

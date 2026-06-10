@@ -1,4 +1,2 @@
-import { PlaceholderPage } from "@/shared/components/ui/PlaceholderPage";
-export default function Page() {
-  return <PlaceholderPage title="Quality Dashboard" description="Average reviewer scores, rejection rates and edit distance from AI output." />;
-}
+import { QualityDashboardPage } from "@/features/content-manager/pages/QualityDashboardPage";
+export default function Page() { return <QualityDashboardPage />; }

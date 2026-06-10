@@ -59,7 +59,9 @@ export const NAV_CONFIG: Record<string, NavSection[]> = {
         { href: "/admin/universities", label: "University DB",    icon: "Building2"    },
         { href: "/admin/assessments",  label: "Assessment Bank",  icon: "ClipboardList" },
         { href: "/admin/bursaries",    label: "Bursaries",        icon: "Coins"        },
-        { href: "/admin/tvet",         label: "TVET & Pathways",  icon: "Layers"       },
+        { href: "/admin/tvet",             label: "TVET Colleges",     icon: "GraduationCap" },
+        { href: "/admin/private-colleges", label: "Private Colleges",  icon: "School"        },
+        { href: "/admin/pathways",         label: "Pathways Library",  icon: "Route"         },
       ],
     },
     {

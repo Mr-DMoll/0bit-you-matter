@@ -1,3 +1,3 @@
 "use client";
-import { AdminOverviewPage } from "@/features/admin/pages/OverviewPage";
-export default function Page() { return <AdminOverviewPage />; }
+import { AdminDashboardPage } from "@/features/admin/pages/DashboardPage";
+export default function Page() { return <AdminDashboardPage />; }

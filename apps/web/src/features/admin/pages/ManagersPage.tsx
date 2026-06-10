@@ -306,7 +306,7 @@ export function ManagersPage() {
     try {
       setIsLoading(true); setError(null);
       const res = await adminService.getManagers();
-      setManagers(res.data?.managers ?? []);
+      setManagers((res.data as any)?.users ?? (res.data as any)?.managers ?? []);
     } catch (err: any) {
       setError(err?.response?.data?.message ?? "Failed to load managers.");
     } finally {

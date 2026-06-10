@@ -1,4 +1,3 @@
-import { PlaceholderPage } from "@/shared/components/ui/PlaceholderPage";
-export default function Page() {
-  return <PlaceholderPage title="Reports" description="Learner engagement reports, content coverage reports - exportable to CSV or PDF." />;
-}
+"use client";
+import { AdminReportsPage } from "@/features/admin/pages/ReportsPage";
+export default function Page() { return <AdminReportsPage />; }

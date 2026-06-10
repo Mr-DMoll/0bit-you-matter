@@ -258,14 +258,14 @@ export const adminActivity = catchAsync(async (req: Request, res: Response) => {
 
 // ── Legacy compatibility — kept so existing invite routes still work ───────────
 
-export const inviteManager = catchAsync(async (req: Request, res: Response) => {
+export const inviteManager = catchAsync(async (req: Request, res: Response, next: any) => {
   req.body.role = "MANAGER";
-  return inviteStaffMember(req, res);
+  return inviteStaffMember(req, res, next);
 });
 
-export const listManagers = catchAsync(async (req: Request, res: Response) => {
+export const listManagers = catchAsync(async (req: Request, res: Response, next: any) => {
   req.query.role = "MANAGER";
-  return listStaff(req, res);
+  return listStaff(req, res, next);
 });
 
 // Kept for route compatibility

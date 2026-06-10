@@ -23,6 +23,15 @@ import userRoutes         from "./modules/users/user.routes.js";
 import adminRoutes        from "./modules/admin/admin.routes.js";
 import superAdminRoutes   from "./modules/super-admin/super-admin.routes.js";
 import notificationRoutes from "./modules/notifications/notification.routes.js";
+import careersRoutes      from "./modules/careers/careers.routes.js";
+import universitiesRoutes from "./modules/universities/universities.routes.js";
+import bursariesRoutes    from "./modules/bursaries/bursaries.routes.js";
+import assessmentsRoutes  from "./modules/assessments/assessments.routes.js";
+import learnerRoutes      from "./modules/learner/learner.routes.js";
+import contentRoutes      from "./modules/content/content.routes.js";
+import managerRoutes      from "./modules/manager/manager.routes.js";
+import tvetRoutes         from "./modules/tvet/tvet.routes.js";
+import pathwaysRoutes     from "./modules/pathways/pathways.routes.js";
 
 const app: Express = express();
 const isProduction = process.env.NODE_ENV === "production";
@@ -75,6 +84,15 @@ app.use(`${API}/users`,         userRoutes);
 app.use(`${API}/admin`,         adminRoutes);
 app.use(`${API}/super-admin`,   superAdminRoutes);
 app.use(`${API}/notifications`, notificationRoutes);
+app.use(`${API}/careers`,       careersRoutes);
+app.use(`${API}/universities`,  universitiesRoutes);
+app.use(`${API}/bursaries`,     bursariesRoutes);
+app.use(`${API}/assessments`,   assessmentsRoutes);
+app.use(`${API}/learner`,       learnerRoutes);
+app.use(`${API}/content`,       contentRoutes);
+app.use(`${API}/manager`,       managerRoutes);
+app.use(`${API}/tvet`,          tvetRoutes);
+app.use(`${API}/pathways`,      pathwaysRoutes);
 
 // ── 6. 404 ────────────────────────────────────────────────────────────────────
 app.use((req: Request, res: Response) => {

@@ -63,6 +63,28 @@ export const protect = async (
   }
 };
 
+/**
+ * Optional auth — sets req.user if a valid JWT is present, but never blocks.
+ * Use on public endpoints that show different data to logged-in staff vs public.
+ */
+export const optionalAuth = async (
+  req: Request,
+  _res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const token = req.cookies?.token || req.headers.authorization?.split(" ")[1];
+    if (token) {
+      const decoded = jwt.verify(token, env.JWT_SECRET) as JwtPayload;
+      const user    = await prisma.user.findUnique({ where: { id: decoded.userId } });
+      if (user && user.accountStatus === "ACTIVE") {
+        req.user = { userId: user.id, role: user.role as Role, email: user.email };
+      }
+    }
+  } catch { /* invalid token — just proceed as anonymous */ }
+  next();
+};
+
 export const restrictTo = (...roles: Role[]) => {
   return (req: Request, res: Response, next: NextFunction) => {
     if (!req.user || !roles.includes(req.user.role as Role)) {

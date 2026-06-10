@@ -30,6 +30,8 @@ export type DataVerificationMinAggregateOutputType = {
   careerId: string | null
   programmeId: string | null
   bursaryId: string | null
+  tvetProgrammeId: string | null
+  pathwayId: string | null
   verifierId: string | null
   status: $Enums.VerificationStatus | null
   sourceUrl: string | null
@@ -45,6 +47,8 @@ export type DataVerificationMaxAggregateOutputType = {
   careerId: string | null
   programmeId: string | null
   bursaryId: string | null
+  tvetProgrammeId: string | null
+  pathwayId: string | null
   verifierId: string | null
   status: $Enums.VerificationStatus | null
   sourceUrl: string | null
@@ -60,6 +64,8 @@ export type DataVerificationCountAggregateOutputType = {
   careerId: number
   programmeId: number
   bursaryId: number
+  tvetProgrammeId: number
+  pathwayId: number
   verifierId: number
   status: number
   sourceUrl: number
@@ -78,6 +84,8 @@ export type DataVerificationMinAggregateInputType = {
   careerId?: true
   programmeId?: true
   bursaryId?: true
+  tvetProgrammeId?: true
+  pathwayId?: true
   verifierId?: true
   status?: true
   sourceUrl?: true
@@ -93,6 +101,8 @@ export type DataVerificationMaxAggregateInputType = {
   careerId?: true
   programmeId?: true
   bursaryId?: true
+  tvetProgrammeId?: true
+  pathwayId?: true
   verifierId?: true
   status?: true
   sourceUrl?: true
@@ -108,6 +118,8 @@ export type DataVerificationCountAggregateInputType = {
   careerId?: true
   programmeId?: true
   bursaryId?: true
+  tvetProgrammeId?: true
+  pathwayId?: true
   verifierId?: true
   status?: true
   sourceUrl?: true
@@ -197,6 +209,8 @@ export type DataVerificationGroupByOutputType = {
   careerId: string | null
   programmeId: string | null
   bursaryId: string | null
+  tvetProgrammeId: string | null
+  pathwayId: string | null
   verifierId: string
   status: $Enums.VerificationStatus
   sourceUrl: string | null
@@ -234,6 +248,8 @@ export type DataVerificationWhereInput = {
   careerId?: Prisma.StringNullableFilter<"DataVerification"> | string | null
   programmeId?: Prisma.StringNullableFilter<"DataVerification"> | string | null
   bursaryId?: Prisma.StringNullableFilter<"DataVerification"> | string | null
+  tvetProgrammeId?: Prisma.StringNullableFilter<"DataVerification"> | string | null
+  pathwayId?: Prisma.StringNullableFilter<"DataVerification"> | string | null
   verifierId?: Prisma.StringFilter<"DataVerification"> | string
   status?: Prisma.EnumVerificationStatusFilter<"DataVerification"> | $Enums.VerificationStatus
   sourceUrl?: Prisma.StringNullableFilter<"DataVerification"> | string | null
@@ -245,6 +261,8 @@ export type DataVerificationWhereInput = {
   career?: Prisma.XOR<Prisma.CareerNullableScalarRelationFilter, Prisma.CareerWhereInput> | null
   programme?: Prisma.XOR<Prisma.ProgrammeNullableScalarRelationFilter, Prisma.ProgrammeWhereInput> | null
   bursary?: Prisma.XOR<Prisma.BursaryNullableScalarRelationFilter, Prisma.BursaryWhereInput> | null
+  tvetProgramme?: Prisma.XOR<Prisma.TvetProgrammeNullableScalarRelationFilter, Prisma.TvetProgrammeWhereInput> | null
+  pathway?: Prisma.XOR<Prisma.PathwayNullableScalarRelationFilter, Prisma.PathwayWhereInput> | null
   verifier?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
 
@@ -254,6 +272,8 @@ export type DataVerificationOrderByWithRelationInput = {
   careerId?: Prisma.SortOrderInput | Prisma.SortOrder
   programmeId?: Prisma.SortOrderInput | Prisma.SortOrder
   bursaryId?: Prisma.SortOrderInput | Prisma.SortOrder
+  tvetProgrammeId?: Prisma.SortOrderInput | Prisma.SortOrder
+  pathwayId?: Prisma.SortOrderInput | Prisma.SortOrder
   verifierId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   sourceUrl?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -265,6 +285,8 @@ export type DataVerificationOrderByWithRelationInput = {
   career?: Prisma.CareerOrderByWithRelationInput
   programme?: Prisma.ProgrammeOrderByWithRelationInput
   bursary?: Prisma.BursaryOrderByWithRelationInput
+  tvetProgramme?: Prisma.TvetProgrammeOrderByWithRelationInput
+  pathway?: Prisma.PathwayOrderByWithRelationInput
   verifier?: Prisma.UserOrderByWithRelationInput
 }
 
@@ -277,6 +299,8 @@ export type DataVerificationWhereUniqueInput = Prisma.AtLeast<{
   careerId?: Prisma.StringNullableFilter<"DataVerification"> | string | null
   programmeId?: Prisma.StringNullableFilter<"DataVerification"> | string | null
   bursaryId?: Prisma.StringNullableFilter<"DataVerification"> | string | null
+  tvetProgrammeId?: Prisma.StringNullableFilter<"DataVerification"> | string | null
+  pathwayId?: Prisma.StringNullableFilter<"DataVerification"> | string | null
   verifierId?: Prisma.StringFilter<"DataVerification"> | string
   status?: Prisma.EnumVerificationStatusFilter<"DataVerification"> | $Enums.VerificationStatus
   sourceUrl?: Prisma.StringNullableFilter<"DataVerification"> | string | null
@@ -288,6 +312,8 @@ export type DataVerificationWhereUniqueInput = Prisma.AtLeast<{
   career?: Prisma.XOR<Prisma.CareerNullableScalarRelationFilter, Prisma.CareerWhereInput> | null
   programme?: Prisma.XOR<Prisma.ProgrammeNullableScalarRelationFilter, Prisma.ProgrammeWhereInput> | null
   bursary?: Prisma.XOR<Prisma.BursaryNullableScalarRelationFilter, Prisma.BursaryWhereInput> | null
+  tvetProgramme?: Prisma.XOR<Prisma.TvetProgrammeNullableScalarRelationFilter, Prisma.TvetProgrammeWhereInput> | null
+  pathway?: Prisma.XOR<Prisma.PathwayNullableScalarRelationFilter, Prisma.PathwayWhereInput> | null
   verifier?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }, "id">
 
@@ -297,6 +323,8 @@ export type DataVerificationOrderByWithAggregationInput = {
   careerId?: Prisma.SortOrderInput | Prisma.SortOrder
   programmeId?: Prisma.SortOrderInput | Prisma.SortOrder
   bursaryId?: Prisma.SortOrderInput | Prisma.SortOrder
+  tvetProgrammeId?: Prisma.SortOrderInput | Prisma.SortOrder
+  pathwayId?: Prisma.SortOrderInput | Prisma.SortOrder
   verifierId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   sourceUrl?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -319,6 +347,8 @@ export type DataVerificationScalarWhereWithAggregatesInput = {
   careerId?: Prisma.StringNullableWithAggregatesFilter<"DataVerification"> | string | null
   programmeId?: Prisma.StringNullableWithAggregatesFilter<"DataVerification"> | string | null
   bursaryId?: Prisma.StringNullableWithAggregatesFilter<"DataVerification"> | string | null
+  tvetProgrammeId?: Prisma.StringNullableWithAggregatesFilter<"DataVerification"> | string | null
+  pathwayId?: Prisma.StringNullableWithAggregatesFilter<"DataVerification"> | string | null
   verifierId?: Prisma.StringWithAggregatesFilter<"DataVerification"> | string
   status?: Prisma.EnumVerificationStatusWithAggregatesFilter<"DataVerification"> | $Enums.VerificationStatus
   sourceUrl?: Prisma.StringNullableWithAggregatesFilter<"DataVerification"> | string | null
@@ -342,6 +372,8 @@ export type DataVerificationCreateInput = {
   career?: Prisma.CareerCreateNestedOneWithoutVerificationsInput
   programme?: Prisma.ProgrammeCreateNestedOneWithoutVerificationsInput
   bursary?: Prisma.BursaryCreateNestedOneWithoutVerificationsInput
+  tvetProgramme?: Prisma.TvetProgrammeCreateNestedOneWithoutVerificationsInput
+  pathway?: Prisma.PathwayCreateNestedOneWithoutVerificationsInput
   verifier: Prisma.UserCreateNestedOneWithoutVerificationItemsInput
 }
 
@@ -351,6 +383,8 @@ export type DataVerificationUncheckedCreateInput = {
   careerId?: string | null
   programmeId?: string | null
   bursaryId?: string | null
+  tvetProgrammeId?: string | null
+  pathwayId?: string | null
   verifierId: string
   status?: $Enums.VerificationStatus
   sourceUrl?: string | null
@@ -374,6 +408,8 @@ export type DataVerificationUpdateInput = {
   career?: Prisma.CareerUpdateOneWithoutVerificationsNestedInput
   programme?: Prisma.ProgrammeUpdateOneWithoutVerificationsNestedInput
   bursary?: Prisma.BursaryUpdateOneWithoutVerificationsNestedInput
+  tvetProgramme?: Prisma.TvetProgrammeUpdateOneWithoutVerificationsNestedInput
+  pathway?: Prisma.PathwayUpdateOneWithoutVerificationsNestedInput
   verifier?: Prisma.UserUpdateOneRequiredWithoutVerificationItemsNestedInput
 }
 
@@ -383,6 +419,8 @@ export type DataVerificationUncheckedUpdateInput = {
   careerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   programmeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bursaryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tvetProgrammeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pathwayId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   verifierId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
   sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -399,6 +437,8 @@ export type DataVerificationCreateManyInput = {
   careerId?: string | null
   programmeId?: string | null
   bursaryId?: string | null
+  tvetProgrammeId?: string | null
+  pathwayId?: string | null
   verifierId: string
   status?: $Enums.VerificationStatus
   sourceUrl?: string | null
@@ -427,6 +467,8 @@ export type DataVerificationUncheckedUpdateManyInput = {
   careerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   programmeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bursaryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tvetProgrammeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pathwayId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   verifierId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
   sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -453,6 +495,8 @@ export type DataVerificationCountOrderByAggregateInput = {
   careerId?: Prisma.SortOrder
   programmeId?: Prisma.SortOrder
   bursaryId?: Prisma.SortOrder
+  tvetProgrammeId?: Prisma.SortOrder
+  pathwayId?: Prisma.SortOrder
   verifierId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   sourceUrl?: Prisma.SortOrder
@@ -469,6 +513,8 @@ export type DataVerificationMaxOrderByAggregateInput = {
   careerId?: Prisma.SortOrder
   programmeId?: Prisma.SortOrder
   bursaryId?: Prisma.SortOrder
+  tvetProgrammeId?: Prisma.SortOrder
+  pathwayId?: Prisma.SortOrder
   verifierId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   sourceUrl?: Prisma.SortOrder
@@ -484,6 +530,8 @@ export type DataVerificationMinOrderByAggregateInput = {
   careerId?: Prisma.SortOrder
   programmeId?: Prisma.SortOrder
   bursaryId?: Prisma.SortOrder
+  tvetProgrammeId?: Prisma.SortOrder
+  pathwayId?: Prisma.SortOrder
   verifierId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   sourceUrl?: Prisma.SortOrder
@@ -619,6 +667,90 @@ export type DataVerificationUncheckedUpdateManyWithoutProgrammeNestedInput = {
   deleteMany?: Prisma.DataVerificationScalarWhereInput | Prisma.DataVerificationScalarWhereInput[]
 }
 
+export type DataVerificationCreateNestedManyWithoutTvetProgrammeInput = {
+  create?: Prisma.XOR<Prisma.DataVerificationCreateWithoutTvetProgrammeInput, Prisma.DataVerificationUncheckedCreateWithoutTvetProgrammeInput> | Prisma.DataVerificationCreateWithoutTvetProgrammeInput[] | Prisma.DataVerificationUncheckedCreateWithoutTvetProgrammeInput[]
+  connectOrCreate?: Prisma.DataVerificationCreateOrConnectWithoutTvetProgrammeInput | Prisma.DataVerificationCreateOrConnectWithoutTvetProgrammeInput[]
+  createMany?: Prisma.DataVerificationCreateManyTvetProgrammeInputEnvelope
+  connect?: Prisma.DataVerificationWhereUniqueInput | Prisma.DataVerificationWhereUniqueInput[]
+}
+
+export type DataVerificationUncheckedCreateNestedManyWithoutTvetProgrammeInput = {
+  create?: Prisma.XOR<Prisma.DataVerificationCreateWithoutTvetProgrammeInput, Prisma.DataVerificationUncheckedCreateWithoutTvetProgrammeInput> | Prisma.DataVerificationCreateWithoutTvetProgrammeInput[] | Prisma.DataVerificationUncheckedCreateWithoutTvetProgrammeInput[]
+  connectOrCreate?: Prisma.DataVerificationCreateOrConnectWithoutTvetProgrammeInput | Prisma.DataVerificationCreateOrConnectWithoutTvetProgrammeInput[]
+  createMany?: Prisma.DataVerificationCreateManyTvetProgrammeInputEnvelope
+  connect?: Prisma.DataVerificationWhereUniqueInput | Prisma.DataVerificationWhereUniqueInput[]
+}
+
+export type DataVerificationUpdateManyWithoutTvetProgrammeNestedInput = {
+  create?: Prisma.XOR<Prisma.DataVerificationCreateWithoutTvetProgrammeInput, Prisma.DataVerificationUncheckedCreateWithoutTvetProgrammeInput> | Prisma.DataVerificationCreateWithoutTvetProgrammeInput[] | Prisma.DataVerificationUncheckedCreateWithoutTvetProgrammeInput[]
+  connectOrCreate?: Prisma.DataVerificationCreateOrConnectWithoutTvetProgrammeInput | Prisma.DataVerificationCreateOrConnectWithoutTvetProgrammeInput[]
+  upsert?: Prisma.DataVerificationUpsertWithWhereUniqueWithoutTvetProgrammeInput | Prisma.DataVerificationUpsertWithWhereUniqueWithoutTvetProgrammeInput[]
+  createMany?: Prisma.DataVerificationCreateManyTvetProgrammeInputEnvelope
+  set?: Prisma.DataVerificationWhereUniqueInput | Prisma.DataVerificationWhereUniqueInput[]
+  disconnect?: Prisma.DataVerificationWhereUniqueInput | Prisma.DataVerificationWhereUniqueInput[]
+  delete?: Prisma.DataVerificationWhereUniqueInput | Prisma.DataVerificationWhereUniqueInput[]
+  connect?: Prisma.DataVerificationWhereUniqueInput | Prisma.DataVerificationWhereUniqueInput[]
+  update?: Prisma.DataVerificationUpdateWithWhereUniqueWithoutTvetProgrammeInput | Prisma.DataVerificationUpdateWithWhereUniqueWithoutTvetProgrammeInput[]
+  updateMany?: Prisma.DataVerificationUpdateManyWithWhereWithoutTvetProgrammeInput | Prisma.DataVerificationUpdateManyWithWhereWithoutTvetProgrammeInput[]
+  deleteMany?: Prisma.DataVerificationScalarWhereInput | Prisma.DataVerificationScalarWhereInput[]
+}
+
+export type DataVerificationUncheckedUpdateManyWithoutTvetProgrammeNestedInput = {
+  create?: Prisma.XOR<Prisma.DataVerificationCreateWithoutTvetProgrammeInput, Prisma.DataVerificationUncheckedCreateWithoutTvetProgrammeInput> | Prisma.DataVerificationCreateWithoutTvetProgrammeInput[] | Prisma.DataVerificationUncheckedCreateWithoutTvetProgrammeInput[]
+  connectOrCreate?: Prisma.DataVerificationCreateOrConnectWithoutTvetProgrammeInput | Prisma.DataVerificationCreateOrConnectWithoutTvetProgrammeInput[]
+  upsert?: Prisma.DataVerificationUpsertWithWhereUniqueWithoutTvetProgrammeInput | Prisma.DataVerificationUpsertWithWhereUniqueWithoutTvetProgrammeInput[]
+  createMany?: Prisma.DataVerificationCreateManyTvetProgrammeInputEnvelope
+  set?: Prisma.DataVerificationWhereUniqueInput | Prisma.DataVerificationWhereUniqueInput[]
+  disconnect?: Prisma.DataVerificationWhereUniqueInput | Prisma.DataVerificationWhereUniqueInput[]
+  delete?: Prisma.DataVerificationWhereUniqueInput | Prisma.DataVerificationWhereUniqueInput[]
+  connect?: Prisma.DataVerificationWhereUniqueInput | Prisma.DataVerificationWhereUniqueInput[]
+  update?: Prisma.DataVerificationUpdateWithWhereUniqueWithoutTvetProgrammeInput | Prisma.DataVerificationUpdateWithWhereUniqueWithoutTvetProgrammeInput[]
+  updateMany?: Prisma.DataVerificationUpdateManyWithWhereWithoutTvetProgrammeInput | Prisma.DataVerificationUpdateManyWithWhereWithoutTvetProgrammeInput[]
+  deleteMany?: Prisma.DataVerificationScalarWhereInput | Prisma.DataVerificationScalarWhereInput[]
+}
+
+export type DataVerificationCreateNestedManyWithoutPathwayInput = {
+  create?: Prisma.XOR<Prisma.DataVerificationCreateWithoutPathwayInput, Prisma.DataVerificationUncheckedCreateWithoutPathwayInput> | Prisma.DataVerificationCreateWithoutPathwayInput[] | Prisma.DataVerificationUncheckedCreateWithoutPathwayInput[]
+  connectOrCreate?: Prisma.DataVerificationCreateOrConnectWithoutPathwayInput | Prisma.DataVerificationCreateOrConnectWithoutPathwayInput[]
+  createMany?: Prisma.DataVerificationCreateManyPathwayInputEnvelope
+  connect?: Prisma.DataVerificationWhereUniqueInput | Prisma.DataVerificationWhereUniqueInput[]
+}
+
+export type DataVerificationUncheckedCreateNestedManyWithoutPathwayInput = {
+  create?: Prisma.XOR<Prisma.DataVerificationCreateWithoutPathwayInput, Prisma.DataVerificationUncheckedCreateWithoutPathwayInput> | Prisma.DataVerificationCreateWithoutPathwayInput[] | Prisma.DataVerificationUncheckedCreateWithoutPathwayInput[]
+  connectOrCreate?: Prisma.DataVerificationCreateOrConnectWithoutPathwayInput | Prisma.DataVerificationCreateOrConnectWithoutPathwayInput[]
+  createMany?: Prisma.DataVerificationCreateManyPathwayInputEnvelope
+  connect?: Prisma.DataVerificationWhereUniqueInput | Prisma.DataVerificationWhereUniqueInput[]
+}
+
+export type DataVerificationUpdateManyWithoutPathwayNestedInput = {
+  create?: Prisma.XOR<Prisma.DataVerificationCreateWithoutPathwayInput, Prisma.DataVerificationUncheckedCreateWithoutPathwayInput> | Prisma.DataVerificationCreateWithoutPathwayInput[] | Prisma.DataVerificationUncheckedCreateWithoutPathwayInput[]
+  connectOrCreate?: Prisma.DataVerificationCreateOrConnectWithoutPathwayInput | Prisma.DataVerificationCreateOrConnectWithoutPathwayInput[]
+  upsert?: Prisma.DataVerificationUpsertWithWhereUniqueWithoutPathwayInput | Prisma.DataVerificationUpsertWithWhereUniqueWithoutPathwayInput[]
+  createMany?: Prisma.DataVerificationCreateManyPathwayInputEnvelope
+  set?: Prisma.DataVerificationWhereUniqueInput | Prisma.DataVerificationWhereUniqueInput[]
+  disconnect?: Prisma.DataVerificationWhereUniqueInput | Prisma.DataVerificationWhereUniqueInput[]
+  delete?: Prisma.DataVerificationWhereUniqueInput | Prisma.DataVerificationWhereUniqueInput[]
+  connect?: Prisma.DataVerificationWhereUniqueInput | Prisma.DataVerificationWhereUniqueInput[]
+  update?: Prisma.DataVerificationUpdateWithWhereUniqueWithoutPathwayInput | Prisma.DataVerificationUpdateWithWhereUniqueWithoutPathwayInput[]
+  updateMany?: Prisma.DataVerificationUpdateManyWithWhereWithoutPathwayInput | Prisma.DataVerificationUpdateManyWithWhereWithoutPathwayInput[]
+  deleteMany?: Prisma.DataVerificationScalarWhereInput | Prisma.DataVerificationScalarWhereInput[]
+}
+
+export type DataVerificationUncheckedUpdateManyWithoutPathwayNestedInput = {
+  create?: Prisma.XOR<Prisma.DataVerificationCreateWithoutPathwayInput, Prisma.DataVerificationUncheckedCreateWithoutPathwayInput> | Prisma.DataVerificationCreateWithoutPathwayInput[] | Prisma.DataVerificationUncheckedCreateWithoutPathwayInput[]
+  connectOrCreate?: Prisma.DataVerificationCreateOrConnectWithoutPathwayInput | Prisma.DataVerificationCreateOrConnectWithoutPathwayInput[]
+  upsert?: Prisma.DataVerificationUpsertWithWhereUniqueWithoutPathwayInput | Prisma.DataVerificationUpsertWithWhereUniqueWithoutPathwayInput[]
+  createMany?: Prisma.DataVerificationCreateManyPathwayInputEnvelope
+  set?: Prisma.DataVerificationWhereUniqueInput | Prisma.DataVerificationWhereUniqueInput[]
+  disconnect?: Prisma.DataVerificationWhereUniqueInput | Prisma.DataVerificationWhereUniqueInput[]
+  delete?: Prisma.DataVerificationWhereUniqueInput | Prisma.DataVerificationWhereUniqueInput[]
+  connect?: Prisma.DataVerificationWhereUniqueInput | Prisma.DataVerificationWhereUniqueInput[]
+  update?: Prisma.DataVerificationUpdateWithWhereUniqueWithoutPathwayInput | Prisma.DataVerificationUpdateWithWhereUniqueWithoutPathwayInput[]
+  updateMany?: Prisma.DataVerificationUpdateManyWithWhereWithoutPathwayInput | Prisma.DataVerificationUpdateManyWithWhereWithoutPathwayInput[]
+  deleteMany?: Prisma.DataVerificationScalarWhereInput | Prisma.DataVerificationScalarWhereInput[]
+}
+
 export type DataVerificationCreateNestedManyWithoutBursaryInput = {
   create?: Prisma.XOR<Prisma.DataVerificationCreateWithoutBursaryInput, Prisma.DataVerificationUncheckedCreateWithoutBursaryInput> | Prisma.DataVerificationCreateWithoutBursaryInput[] | Prisma.DataVerificationUncheckedCreateWithoutBursaryInput[]
   connectOrCreate?: Prisma.DataVerificationCreateOrConnectWithoutBursaryInput | Prisma.DataVerificationCreateOrConnectWithoutBursaryInput[]
@@ -678,6 +810,8 @@ export type DataVerificationCreateWithoutVerifierInput = {
   career?: Prisma.CareerCreateNestedOneWithoutVerificationsInput
   programme?: Prisma.ProgrammeCreateNestedOneWithoutVerificationsInput
   bursary?: Prisma.BursaryCreateNestedOneWithoutVerificationsInput
+  tvetProgramme?: Prisma.TvetProgrammeCreateNestedOneWithoutVerificationsInput
+  pathway?: Prisma.PathwayCreateNestedOneWithoutVerificationsInput
 }
 
 export type DataVerificationUncheckedCreateWithoutVerifierInput = {
@@ -686,6 +820,8 @@ export type DataVerificationUncheckedCreateWithoutVerifierInput = {
   careerId?: string | null
   programmeId?: string | null
   bursaryId?: string | null
+  tvetProgrammeId?: string | null
+  pathwayId?: string | null
   status?: $Enums.VerificationStatus
   sourceUrl?: string | null
   sourceNotes?: string | null
@@ -730,6 +866,8 @@ export type DataVerificationScalarWhereInput = {
   careerId?: Prisma.StringNullableFilter<"DataVerification"> | string | null
   programmeId?: Prisma.StringNullableFilter<"DataVerification"> | string | null
   bursaryId?: Prisma.StringNullableFilter<"DataVerification"> | string | null
+  tvetProgrammeId?: Prisma.StringNullableFilter<"DataVerification"> | string | null
+  pathwayId?: Prisma.StringNullableFilter<"DataVerification"> | string | null
   verifierId?: Prisma.StringFilter<"DataVerification"> | string
   status?: Prisma.EnumVerificationStatusFilter<"DataVerification"> | $Enums.VerificationStatus
   sourceUrl?: Prisma.StringNullableFilter<"DataVerification"> | string | null
@@ -752,6 +890,8 @@ export type DataVerificationCreateWithoutCareerInput = {
   updatedAt?: Date | string
   programme?: Prisma.ProgrammeCreateNestedOneWithoutVerificationsInput
   bursary?: Prisma.BursaryCreateNestedOneWithoutVerificationsInput
+  tvetProgramme?: Prisma.TvetProgrammeCreateNestedOneWithoutVerificationsInput
+  pathway?: Prisma.PathwayCreateNestedOneWithoutVerificationsInput
   verifier: Prisma.UserCreateNestedOneWithoutVerificationItemsInput
 }
 
@@ -760,6 +900,8 @@ export type DataVerificationUncheckedCreateWithoutCareerInput = {
   contentType: $Enums.ContentType
   programmeId?: string | null
   bursaryId?: string | null
+  tvetProgrammeId?: string | null
+  pathwayId?: string | null
   verifierId: string
   status?: $Enums.VerificationStatus
   sourceUrl?: string | null
@@ -808,6 +950,8 @@ export type DataVerificationCreateWithoutProgrammeInput = {
   updatedAt?: Date | string
   career?: Prisma.CareerCreateNestedOneWithoutVerificationsInput
   bursary?: Prisma.BursaryCreateNestedOneWithoutVerificationsInput
+  tvetProgramme?: Prisma.TvetProgrammeCreateNestedOneWithoutVerificationsInput
+  pathway?: Prisma.PathwayCreateNestedOneWithoutVerificationsInput
   verifier: Prisma.UserCreateNestedOneWithoutVerificationItemsInput
 }
 
@@ -816,6 +960,8 @@ export type DataVerificationUncheckedCreateWithoutProgrammeInput = {
   contentType: $Enums.ContentType
   careerId?: string | null
   bursaryId?: string | null
+  tvetProgrammeId?: string | null
+  pathwayId?: string | null
   verifierId: string
   status?: $Enums.VerificationStatus
   sourceUrl?: string | null
@@ -852,6 +998,126 @@ export type DataVerificationUpdateManyWithWhereWithoutProgrammeInput = {
   data: Prisma.XOR<Prisma.DataVerificationUpdateManyMutationInput, Prisma.DataVerificationUncheckedUpdateManyWithoutProgrammeInput>
 }
 
+export type DataVerificationCreateWithoutTvetProgrammeInput = {
+  id?: string
+  contentType: $Enums.ContentType
+  status?: $Enums.VerificationStatus
+  sourceUrl?: string | null
+  sourceNotes?: string | null
+  verifiedFields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  verifiedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  career?: Prisma.CareerCreateNestedOneWithoutVerificationsInput
+  programme?: Prisma.ProgrammeCreateNestedOneWithoutVerificationsInput
+  bursary?: Prisma.BursaryCreateNestedOneWithoutVerificationsInput
+  pathway?: Prisma.PathwayCreateNestedOneWithoutVerificationsInput
+  verifier: Prisma.UserCreateNestedOneWithoutVerificationItemsInput
+}
+
+export type DataVerificationUncheckedCreateWithoutTvetProgrammeInput = {
+  id?: string
+  contentType: $Enums.ContentType
+  careerId?: string | null
+  programmeId?: string | null
+  bursaryId?: string | null
+  pathwayId?: string | null
+  verifierId: string
+  status?: $Enums.VerificationStatus
+  sourceUrl?: string | null
+  sourceNotes?: string | null
+  verifiedFields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  verifiedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type DataVerificationCreateOrConnectWithoutTvetProgrammeInput = {
+  where: Prisma.DataVerificationWhereUniqueInput
+  create: Prisma.XOR<Prisma.DataVerificationCreateWithoutTvetProgrammeInput, Prisma.DataVerificationUncheckedCreateWithoutTvetProgrammeInput>
+}
+
+export type DataVerificationCreateManyTvetProgrammeInputEnvelope = {
+  data: Prisma.DataVerificationCreateManyTvetProgrammeInput | Prisma.DataVerificationCreateManyTvetProgrammeInput[]
+  skipDuplicates?: boolean
+}
+
+export type DataVerificationUpsertWithWhereUniqueWithoutTvetProgrammeInput = {
+  where: Prisma.DataVerificationWhereUniqueInput
+  update: Prisma.XOR<Prisma.DataVerificationUpdateWithoutTvetProgrammeInput, Prisma.DataVerificationUncheckedUpdateWithoutTvetProgrammeInput>
+  create: Prisma.XOR<Prisma.DataVerificationCreateWithoutTvetProgrammeInput, Prisma.DataVerificationUncheckedCreateWithoutTvetProgrammeInput>
+}
+
+export type DataVerificationUpdateWithWhereUniqueWithoutTvetProgrammeInput = {
+  where: Prisma.DataVerificationWhereUniqueInput
+  data: Prisma.XOR<Prisma.DataVerificationUpdateWithoutTvetProgrammeInput, Prisma.DataVerificationUncheckedUpdateWithoutTvetProgrammeInput>
+}
+
+export type DataVerificationUpdateManyWithWhereWithoutTvetProgrammeInput = {
+  where: Prisma.DataVerificationScalarWhereInput
+  data: Prisma.XOR<Prisma.DataVerificationUpdateManyMutationInput, Prisma.DataVerificationUncheckedUpdateManyWithoutTvetProgrammeInput>
+}
+
+export type DataVerificationCreateWithoutPathwayInput = {
+  id?: string
+  contentType: $Enums.ContentType
+  status?: $Enums.VerificationStatus
+  sourceUrl?: string | null
+  sourceNotes?: string | null
+  verifiedFields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  verifiedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  career?: Prisma.CareerCreateNestedOneWithoutVerificationsInput
+  programme?: Prisma.ProgrammeCreateNestedOneWithoutVerificationsInput
+  bursary?: Prisma.BursaryCreateNestedOneWithoutVerificationsInput
+  tvetProgramme?: Prisma.TvetProgrammeCreateNestedOneWithoutVerificationsInput
+  verifier: Prisma.UserCreateNestedOneWithoutVerificationItemsInput
+}
+
+export type DataVerificationUncheckedCreateWithoutPathwayInput = {
+  id?: string
+  contentType: $Enums.ContentType
+  careerId?: string | null
+  programmeId?: string | null
+  bursaryId?: string | null
+  tvetProgrammeId?: string | null
+  verifierId: string
+  status?: $Enums.VerificationStatus
+  sourceUrl?: string | null
+  sourceNotes?: string | null
+  verifiedFields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  verifiedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type DataVerificationCreateOrConnectWithoutPathwayInput = {
+  where: Prisma.DataVerificationWhereUniqueInput
+  create: Prisma.XOR<Prisma.DataVerificationCreateWithoutPathwayInput, Prisma.DataVerificationUncheckedCreateWithoutPathwayInput>
+}
+
+export type DataVerificationCreateManyPathwayInputEnvelope = {
+  data: Prisma.DataVerificationCreateManyPathwayInput | Prisma.DataVerificationCreateManyPathwayInput[]
+  skipDuplicates?: boolean
+}
+
+export type DataVerificationUpsertWithWhereUniqueWithoutPathwayInput = {
+  where: Prisma.DataVerificationWhereUniqueInput
+  update: Prisma.XOR<Prisma.DataVerificationUpdateWithoutPathwayInput, Prisma.DataVerificationUncheckedUpdateWithoutPathwayInput>
+  create: Prisma.XOR<Prisma.DataVerificationCreateWithoutPathwayInput, Prisma.DataVerificationUncheckedCreateWithoutPathwayInput>
+}
+
+export type DataVerificationUpdateWithWhereUniqueWithoutPathwayInput = {
+  where: Prisma.DataVerificationWhereUniqueInput
+  data: Prisma.XOR<Prisma.DataVerificationUpdateWithoutPathwayInput, Prisma.DataVerificationUncheckedUpdateWithoutPathwayInput>
+}
+
+export type DataVerificationUpdateManyWithWhereWithoutPathwayInput = {
+  where: Prisma.DataVerificationScalarWhereInput
+  data: Prisma.XOR<Prisma.DataVerificationUpdateManyMutationInput, Prisma.DataVerificationUncheckedUpdateManyWithoutPathwayInput>
+}
+
 export type DataVerificationCreateWithoutBursaryInput = {
   id?: string
   contentType: $Enums.ContentType
@@ -864,6 +1130,8 @@ export type DataVerificationCreateWithoutBursaryInput = {
   updatedAt?: Date | string
   career?: Prisma.CareerCreateNestedOneWithoutVerificationsInput
   programme?: Prisma.ProgrammeCreateNestedOneWithoutVerificationsInput
+  tvetProgramme?: Prisma.TvetProgrammeCreateNestedOneWithoutVerificationsInput
+  pathway?: Prisma.PathwayCreateNestedOneWithoutVerificationsInput
   verifier: Prisma.UserCreateNestedOneWithoutVerificationItemsInput
 }
 
@@ -872,6 +1140,8 @@ export type DataVerificationUncheckedCreateWithoutBursaryInput = {
   contentType: $Enums.ContentType
   careerId?: string | null
   programmeId?: string | null
+  tvetProgrammeId?: string | null
+  pathwayId?: string | null
   verifierId: string
   status?: $Enums.VerificationStatus
   sourceUrl?: string | null
@@ -914,6 +1184,8 @@ export type DataVerificationCreateManyVerifierInput = {
   careerId?: string | null
   programmeId?: string | null
   bursaryId?: string | null
+  tvetProgrammeId?: string | null
+  pathwayId?: string | null
   status?: $Enums.VerificationStatus
   sourceUrl?: string | null
   sourceNotes?: string | null
@@ -936,6 +1208,8 @@ export type DataVerificationUpdateWithoutVerifierInput = {
   career?: Prisma.CareerUpdateOneWithoutVerificationsNestedInput
   programme?: Prisma.ProgrammeUpdateOneWithoutVerificationsNestedInput
   bursary?: Prisma.BursaryUpdateOneWithoutVerificationsNestedInput
+  tvetProgramme?: Prisma.TvetProgrammeUpdateOneWithoutVerificationsNestedInput
+  pathway?: Prisma.PathwayUpdateOneWithoutVerificationsNestedInput
 }
 
 export type DataVerificationUncheckedUpdateWithoutVerifierInput = {
@@ -944,6 +1218,8 @@ export type DataVerificationUncheckedUpdateWithoutVerifierInput = {
   careerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   programmeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bursaryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tvetProgrammeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pathwayId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
   sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -959,6 +1235,8 @@ export type DataVerificationUncheckedUpdateManyWithoutVerifierInput = {
   careerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   programmeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bursaryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tvetProgrammeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pathwayId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
   sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -973,6 +1251,8 @@ export type DataVerificationCreateManyCareerInput = {
   contentType: $Enums.ContentType
   programmeId?: string | null
   bursaryId?: string | null
+  tvetProgrammeId?: string | null
+  pathwayId?: string | null
   verifierId: string
   status?: $Enums.VerificationStatus
   sourceUrl?: string | null
@@ -995,6 +1275,8 @@ export type DataVerificationUpdateWithoutCareerInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   programme?: Prisma.ProgrammeUpdateOneWithoutVerificationsNestedInput
   bursary?: Prisma.BursaryUpdateOneWithoutVerificationsNestedInput
+  tvetProgramme?: Prisma.TvetProgrammeUpdateOneWithoutVerificationsNestedInput
+  pathway?: Prisma.PathwayUpdateOneWithoutVerificationsNestedInput
   verifier?: Prisma.UserUpdateOneRequiredWithoutVerificationItemsNestedInput
 }
 
@@ -1003,6 +1285,8 @@ export type DataVerificationUncheckedUpdateWithoutCareerInput = {
   contentType?: Prisma.EnumContentTypeFieldUpdateOperationsInput | $Enums.ContentType
   programmeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bursaryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tvetProgrammeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pathwayId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   verifierId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
   sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1018,6 +1302,8 @@ export type DataVerificationUncheckedUpdateManyWithoutCareerInput = {
   contentType?: Prisma.EnumContentTypeFieldUpdateOperationsInput | $Enums.ContentType
   programmeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bursaryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tvetProgrammeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pathwayId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   verifierId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
   sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1033,6 +1319,8 @@ export type DataVerificationCreateManyProgrammeInput = {
   contentType: $Enums.ContentType
   careerId?: string | null
   bursaryId?: string | null
+  tvetProgrammeId?: string | null
+  pathwayId?: string | null
   verifierId: string
   status?: $Enums.VerificationStatus
   sourceUrl?: string | null
@@ -1055,6 +1343,8 @@ export type DataVerificationUpdateWithoutProgrammeInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   career?: Prisma.CareerUpdateOneWithoutVerificationsNestedInput
   bursary?: Prisma.BursaryUpdateOneWithoutVerificationsNestedInput
+  tvetProgramme?: Prisma.TvetProgrammeUpdateOneWithoutVerificationsNestedInput
+  pathway?: Prisma.PathwayUpdateOneWithoutVerificationsNestedInput
   verifier?: Prisma.UserUpdateOneRequiredWithoutVerificationItemsNestedInput
 }
 
@@ -1063,6 +1353,8 @@ export type DataVerificationUncheckedUpdateWithoutProgrammeInput = {
   contentType?: Prisma.EnumContentTypeFieldUpdateOperationsInput | $Enums.ContentType
   careerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bursaryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tvetProgrammeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pathwayId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   verifierId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
   sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1078,6 +1370,144 @@ export type DataVerificationUncheckedUpdateManyWithoutProgrammeInput = {
   contentType?: Prisma.EnumContentTypeFieldUpdateOperationsInput | $Enums.ContentType
   careerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bursaryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tvetProgrammeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pathwayId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifierId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+  sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifiedFields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type DataVerificationCreateManyTvetProgrammeInput = {
+  id?: string
+  contentType: $Enums.ContentType
+  careerId?: string | null
+  programmeId?: string | null
+  bursaryId?: string | null
+  pathwayId?: string | null
+  verifierId: string
+  status?: $Enums.VerificationStatus
+  sourceUrl?: string | null
+  sourceNotes?: string | null
+  verifiedFields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  verifiedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type DataVerificationUpdateWithoutTvetProgrammeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  contentType?: Prisma.EnumContentTypeFieldUpdateOperationsInput | $Enums.ContentType
+  status?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+  sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifiedFields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  career?: Prisma.CareerUpdateOneWithoutVerificationsNestedInput
+  programme?: Prisma.ProgrammeUpdateOneWithoutVerificationsNestedInput
+  bursary?: Prisma.BursaryUpdateOneWithoutVerificationsNestedInput
+  pathway?: Prisma.PathwayUpdateOneWithoutVerificationsNestedInput
+  verifier?: Prisma.UserUpdateOneRequiredWithoutVerificationItemsNestedInput
+}
+
+export type DataVerificationUncheckedUpdateWithoutTvetProgrammeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  contentType?: Prisma.EnumContentTypeFieldUpdateOperationsInput | $Enums.ContentType
+  careerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  programmeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bursaryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pathwayId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifierId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+  sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifiedFields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type DataVerificationUncheckedUpdateManyWithoutTvetProgrammeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  contentType?: Prisma.EnumContentTypeFieldUpdateOperationsInput | $Enums.ContentType
+  careerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  programmeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bursaryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pathwayId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifierId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+  sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifiedFields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type DataVerificationCreateManyPathwayInput = {
+  id?: string
+  contentType: $Enums.ContentType
+  careerId?: string | null
+  programmeId?: string | null
+  bursaryId?: string | null
+  tvetProgrammeId?: string | null
+  verifierId: string
+  status?: $Enums.VerificationStatus
+  sourceUrl?: string | null
+  sourceNotes?: string | null
+  verifiedFields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  verifiedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type DataVerificationUpdateWithoutPathwayInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  contentType?: Prisma.EnumContentTypeFieldUpdateOperationsInput | $Enums.ContentType
+  status?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+  sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifiedFields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  career?: Prisma.CareerUpdateOneWithoutVerificationsNestedInput
+  programme?: Prisma.ProgrammeUpdateOneWithoutVerificationsNestedInput
+  bursary?: Prisma.BursaryUpdateOneWithoutVerificationsNestedInput
+  tvetProgramme?: Prisma.TvetProgrammeUpdateOneWithoutVerificationsNestedInput
+  verifier?: Prisma.UserUpdateOneRequiredWithoutVerificationItemsNestedInput
+}
+
+export type DataVerificationUncheckedUpdateWithoutPathwayInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  contentType?: Prisma.EnumContentTypeFieldUpdateOperationsInput | $Enums.ContentType
+  careerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  programmeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bursaryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tvetProgrammeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifierId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
+  sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifiedFields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type DataVerificationUncheckedUpdateManyWithoutPathwayInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  contentType?: Prisma.EnumContentTypeFieldUpdateOperationsInput | $Enums.ContentType
+  careerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  programmeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bursaryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tvetProgrammeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   verifierId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
   sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1093,6 +1523,8 @@ export type DataVerificationCreateManyBursaryInput = {
   contentType: $Enums.ContentType
   careerId?: string | null
   programmeId?: string | null
+  tvetProgrammeId?: string | null
+  pathwayId?: string | null
   verifierId: string
   status?: $Enums.VerificationStatus
   sourceUrl?: string | null
@@ -1115,6 +1547,8 @@ export type DataVerificationUpdateWithoutBursaryInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   career?: Prisma.CareerUpdateOneWithoutVerificationsNestedInput
   programme?: Prisma.ProgrammeUpdateOneWithoutVerificationsNestedInput
+  tvetProgramme?: Prisma.TvetProgrammeUpdateOneWithoutVerificationsNestedInput
+  pathway?: Prisma.PathwayUpdateOneWithoutVerificationsNestedInput
   verifier?: Prisma.UserUpdateOneRequiredWithoutVerificationItemsNestedInput
 }
 
@@ -1123,6 +1557,8 @@ export type DataVerificationUncheckedUpdateWithoutBursaryInput = {
   contentType?: Prisma.EnumContentTypeFieldUpdateOperationsInput | $Enums.ContentType
   careerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   programmeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tvetProgrammeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pathwayId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   verifierId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
   sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1138,6 +1574,8 @@ export type DataVerificationUncheckedUpdateManyWithoutBursaryInput = {
   contentType?: Prisma.EnumContentTypeFieldUpdateOperationsInput | $Enums.ContentType
   careerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   programmeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tvetProgrammeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pathwayId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   verifierId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
   sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1156,6 +1594,8 @@ export type DataVerificationSelect<ExtArgs extends runtime.Types.Extensions.Inte
   careerId?: boolean
   programmeId?: boolean
   bursaryId?: boolean
+  tvetProgrammeId?: boolean
+  pathwayId?: boolean
   verifierId?: boolean
   status?: boolean
   sourceUrl?: boolean
@@ -1167,6 +1607,8 @@ export type DataVerificationSelect<ExtArgs extends runtime.Types.Extensions.Inte
   career?: boolean | Prisma.DataVerification$careerArgs<ExtArgs>
   programme?: boolean | Prisma.DataVerification$programmeArgs<ExtArgs>
   bursary?: boolean | Prisma.DataVerification$bursaryArgs<ExtArgs>
+  tvetProgramme?: boolean | Prisma.DataVerification$tvetProgrammeArgs<ExtArgs>
+  pathway?: boolean | Prisma.DataVerification$pathwayArgs<ExtArgs>
   verifier?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["dataVerification"]>
 
@@ -1176,6 +1618,8 @@ export type DataVerificationSelectCreateManyAndReturn<ExtArgs extends runtime.Ty
   careerId?: boolean
   programmeId?: boolean
   bursaryId?: boolean
+  tvetProgrammeId?: boolean
+  pathwayId?: boolean
   verifierId?: boolean
   status?: boolean
   sourceUrl?: boolean
@@ -1187,6 +1631,8 @@ export type DataVerificationSelectCreateManyAndReturn<ExtArgs extends runtime.Ty
   career?: boolean | Prisma.DataVerification$careerArgs<ExtArgs>
   programme?: boolean | Prisma.DataVerification$programmeArgs<ExtArgs>
   bursary?: boolean | Prisma.DataVerification$bursaryArgs<ExtArgs>
+  tvetProgramme?: boolean | Prisma.DataVerification$tvetProgrammeArgs<ExtArgs>
+  pathway?: boolean | Prisma.DataVerification$pathwayArgs<ExtArgs>
   verifier?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["dataVerification"]>
 
@@ -1196,6 +1642,8 @@ export type DataVerificationSelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
   careerId?: boolean
   programmeId?: boolean
   bursaryId?: boolean
+  tvetProgrammeId?: boolean
+  pathwayId?: boolean
   verifierId?: boolean
   status?: boolean
   sourceUrl?: boolean
@@ -1207,6 +1655,8 @@ export type DataVerificationSelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
   career?: boolean | Prisma.DataVerification$careerArgs<ExtArgs>
   programme?: boolean | Prisma.DataVerification$programmeArgs<ExtArgs>
   bursary?: boolean | Prisma.DataVerification$bursaryArgs<ExtArgs>
+  tvetProgramme?: boolean | Prisma.DataVerification$tvetProgrammeArgs<ExtArgs>
+  pathway?: boolean | Prisma.DataVerification$pathwayArgs<ExtArgs>
   verifier?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["dataVerification"]>
 
@@ -1216,6 +1666,8 @@ export type DataVerificationSelectScalar = {
   careerId?: boolean
   programmeId?: boolean
   bursaryId?: boolean
+  tvetProgrammeId?: boolean
+  pathwayId?: boolean
   verifierId?: boolean
   status?: boolean
   sourceUrl?: boolean
@@ -1226,23 +1678,29 @@ export type DataVerificationSelectScalar = {
   updatedAt?: boolean
 }
 
-export type DataVerificationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "contentType" | "careerId" | "programmeId" | "bursaryId" | "verifierId" | "status" | "sourceUrl" | "sourceNotes" | "verifiedFields" | "verifiedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["dataVerification"]>
+export type DataVerificationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "contentType" | "careerId" | "programmeId" | "bursaryId" | "tvetProgrammeId" | "pathwayId" | "verifierId" | "status" | "sourceUrl" | "sourceNotes" | "verifiedFields" | "verifiedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["dataVerification"]>
 export type DataVerificationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   career?: boolean | Prisma.DataVerification$careerArgs<ExtArgs>
   programme?: boolean | Prisma.DataVerification$programmeArgs<ExtArgs>
   bursary?: boolean | Prisma.DataVerification$bursaryArgs<ExtArgs>
+  tvetProgramme?: boolean | Prisma.DataVerification$tvetProgrammeArgs<ExtArgs>
+  pathway?: boolean | Prisma.DataVerification$pathwayArgs<ExtArgs>
   verifier?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type DataVerificationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   career?: boolean | Prisma.DataVerification$careerArgs<ExtArgs>
   programme?: boolean | Prisma.DataVerification$programmeArgs<ExtArgs>
   bursary?: boolean | Prisma.DataVerification$bursaryArgs<ExtArgs>
+  tvetProgramme?: boolean | Prisma.DataVerification$tvetProgrammeArgs<ExtArgs>
+  pathway?: boolean | Prisma.DataVerification$pathwayArgs<ExtArgs>
   verifier?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type DataVerificationIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   career?: boolean | Prisma.DataVerification$careerArgs<ExtArgs>
   programme?: boolean | Prisma.DataVerification$programmeArgs<ExtArgs>
   bursary?: boolean | Prisma.DataVerification$bursaryArgs<ExtArgs>
+  tvetProgramme?: boolean | Prisma.DataVerification$tvetProgrammeArgs<ExtArgs>
+  pathway?: boolean | Prisma.DataVerification$pathwayArgs<ExtArgs>
   verifier?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 
@@ -1252,6 +1710,8 @@ export type $DataVerificationPayload<ExtArgs extends runtime.Types.Extensions.In
     career: Prisma.$CareerPayload<ExtArgs> | null
     programme: Prisma.$ProgrammePayload<ExtArgs> | null
     bursary: Prisma.$BursaryPayload<ExtArgs> | null
+    tvetProgramme: Prisma.$TvetProgrammePayload<ExtArgs> | null
+    pathway: Prisma.$PathwayPayload<ExtArgs> | null
     verifier: Prisma.$UserPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1260,6 +1720,8 @@ export type $DataVerificationPayload<ExtArgs extends runtime.Types.Extensions.In
     careerId: string | null
     programmeId: string | null
     bursaryId: string | null
+    tvetProgrammeId: string | null
+    pathwayId: string | null
     verifierId: string
     status: $Enums.VerificationStatus
     sourceUrl: string | null
@@ -1665,6 +2127,8 @@ export interface Prisma__DataVerificationClient<T, Null = never, ExtArgs extends
   career<T extends Prisma.DataVerification$careerArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DataVerification$careerArgs<ExtArgs>>): Prisma.Prisma__CareerClient<runtime.Types.Result.GetResult<Prisma.$CareerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   programme<T extends Prisma.DataVerification$programmeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DataVerification$programmeArgs<ExtArgs>>): Prisma.Prisma__ProgrammeClient<runtime.Types.Result.GetResult<Prisma.$ProgrammePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   bursary<T extends Prisma.DataVerification$bursaryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DataVerification$bursaryArgs<ExtArgs>>): Prisma.Prisma__BursaryClient<runtime.Types.Result.GetResult<Prisma.$BursaryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  tvetProgramme<T extends Prisma.DataVerification$tvetProgrammeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DataVerification$tvetProgrammeArgs<ExtArgs>>): Prisma.Prisma__TvetProgrammeClient<runtime.Types.Result.GetResult<Prisma.$TvetProgrammePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  pathway<T extends Prisma.DataVerification$pathwayArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DataVerification$pathwayArgs<ExtArgs>>): Prisma.Prisma__PathwayClient<runtime.Types.Result.GetResult<Prisma.$PathwayPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   verifier<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1700,6 +2164,8 @@ export interface DataVerificationFieldRefs {
   readonly careerId: Prisma.FieldRef<"DataVerification", 'String'>
   readonly programmeId: Prisma.FieldRef<"DataVerification", 'String'>
   readonly bursaryId: Prisma.FieldRef<"DataVerification", 'String'>
+  readonly tvetProgrammeId: Prisma.FieldRef<"DataVerification", 'String'>
+  readonly pathwayId: Prisma.FieldRef<"DataVerification", 'String'>
   readonly verifierId: Prisma.FieldRef<"DataVerification", 'String'>
   readonly status: Prisma.FieldRef<"DataVerification", 'VerificationStatus'>
   readonly sourceUrl: Prisma.FieldRef<"DataVerification", 'String'>
@@ -2163,6 +2629,44 @@ export type DataVerification$bursaryArgs<ExtArgs extends runtime.Types.Extension
    */
   include?: Prisma.BursaryInclude<ExtArgs> | null
   where?: Prisma.BursaryWhereInput
+}
+
+/**
+ * DataVerification.tvetProgramme
+ */
+export type DataVerification$tvetProgrammeArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TvetProgramme
+   */
+  select?: Prisma.TvetProgrammeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TvetProgramme
+   */
+  omit?: Prisma.TvetProgrammeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TvetProgrammeInclude<ExtArgs> | null
+  where?: Prisma.TvetProgrammeWhereInput
+}
+
+/**
+ * DataVerification.pathway
+ */
+export type DataVerification$pathwayArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Pathway
+   */
+  select?: Prisma.PathwaySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Pathway
+   */
+  omit?: Prisma.PathwayOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PathwayInclude<ExtArgs> | null
+  where?: Prisma.PathwayWhereInput
 }
 
 /**

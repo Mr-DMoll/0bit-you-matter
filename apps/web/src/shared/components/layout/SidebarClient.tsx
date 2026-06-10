@@ -23,6 +23,8 @@ import {
   AlertTriangle, MonitorPlay, Zap,
   // Learner
   Home, Compass, MessageCircle, Target,
+  // Additional
+  Route, School,
 } from "lucide-react";
 
 const ICON_MAP: Record<string, React.ComponentType<{ size?: number; strokeWidth?: number }>> = {
@@ -42,6 +44,8 @@ const ICON_MAP: Record<string, React.ComponentType<{ size?: number; strokeWidth?
   AlertTriangle, MonitorPlay, Zap,
   // Learner
   Home, Compass, MessageCircle, Target,
+  // Additional
+  Route, School,
 };
 
 interface Props {

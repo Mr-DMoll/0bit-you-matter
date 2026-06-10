@@ -1,4 +1,3 @@
-import { PlaceholderPage } from "@/shared/components/ui/PlaceholderPage";
-export default function Page() {
-  return <PlaceholderPage title="Groups" description="Organise learners into cohorts, classes or programmes for group tracking and reporting." />;
-}
+"use client";
+import { ManagerGroupsPage } from "@/features/manager/pages/GroupsPage";
+export default function Page() { return <ManagerGroupsPage />; }
