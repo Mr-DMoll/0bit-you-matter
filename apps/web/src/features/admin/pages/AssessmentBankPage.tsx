@@ -348,7 +348,7 @@ function QuestionPanel({ question, onClose, onUpdated }: { question: any; onClos
       await apiClient.patch(`/assessments/questions/${question.id}`, {
         questionText:  form.questionText,
         contextNote:   form.contextNote || null,
-        riasecMapping: form.riasecMapping.split(",").map((s) => s.trim()).filter(Boolean),
+        riasecMapping: form.riasecMapping.split(",").map((s: string) => s.trim()).filter(Boolean),
       });
       onUpdated();
       setEditMode(false);
