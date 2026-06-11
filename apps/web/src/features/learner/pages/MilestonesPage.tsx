@@ -1,150 +1,152 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import apiClient from "@/api/client";
+import { CheckCircle, Circle } from "lucide-react";
 
-const STATUS_STYLE: Record<string, { color: string; label: string }> = {
-  PENDING:    { color: "#94a3b8", label: "To do"       },
-  IN_PROGRESS:{ color: "#f59e0b", label: "In progress" },
-  COMPLETED:  { color: "#22c55e", label: "Done"        },
-  SKIPPED:    { color: "#64748b", label: "Skipped"     },
+const T = {
+  primary:   "#5B4FCF",
+  secondary: "#EEE9FF",
+  coral:     "#F97066",
+  teal:      "#0D9488",
+  sidebar:   "#1E1875",
+  bg:        "#FAFAF9",
+  card:      "#FFFFFF",
+  fg:        "#1A1535",
+  muted:     "#7A7499",
+  border:    "rgba(91,79,207,0.12)",
 };
 
+const MILESTONES = [
+  {
+    label: "Create profile",
+    desc: "Set up your learner profile with your grade, province and subjects.",
+    timeframe: "May 2026",
+    done: true,
+  },
+  {
+    label: "Interest Assessment",
+    desc: "Complete the interest survey to discover what motivates you.",
+    timeframe: "May 2026",
+    done: true,
+  },
+  {
+    label: "Aptitude Assessment",
+    desc: "Measure your natural strengths in reasoning and numeracy.",
+    timeframe: "Jun 2026",
+    done: false,
+  },
+  {
+    label: "Explore career matches",
+    desc: "Browse careers that match your assessment results.",
+    timeframe: "Jun 2026",
+    done: false,
+  },
+  {
+    label: "Research UCT",
+    desc: "View UCT&apos;s programmes, APS requirements and application process.",
+    timeframe: "Jul 2026",
+    done: false,
+  },
+  {
+    label: "Apply Investec bursary",
+    desc: "Submit your application for the Investec STEM Bursary.",
+    timeframe: "Aug 2026",
+    done: false,
+  },
+  {
+    label: "Submit NSFAS application",
+    desc: "Apply for government funding through the NSFAS portal.",
+    timeframe: "Sep 2026",
+    done: false,
+  },
+  {
+    label: "University applications",
+    desc: "Submit applications to your chosen universities through the CAO.",
+    timeframe: "Oct 2026",
+    done: false,
+  },
+];
+
 export function MilestonesPage() {
-  const router = useRouter();
-  const [milestones, setMilestones] = useState<any[]>([]);
-  const [loading, setLoading]       = useState(true);
-  const [updating, setUpdating]     = useState<string | null>(null);
-
-  useEffect(() => {
-    apiClient.get("/learner/milestones")
-      .then((r) => setMilestones(r.data.data ?? []))
-      .catch(() => {})
-      .finally(() => setLoading(false));
-  }, []);
-
-  const updateStatus = async (id: string, status: string) => {
-    setUpdating(id);
-    try {
-      await apiClient.patch(`/learner/milestones/${id}`, { status });
-      setMilestones((prev) => prev.map((m) => m.id === id ? { ...m, status } : m));
-    } catch {}
-    setUpdating(null);
-  };
-
-  const completed = milestones.filter((m) => m.status === "COMPLETED").length;
-  const pct       = milestones.length > 0 ? Math.round((completed / milestones.length) * 100) : 0;
-
-  if (loading) {
-    return <p style={{ textAlign: "center", color: "var(--color-text-muted)", padding: "60px 0" }}>Loading milestones…</p>;
-  }
-
-  if (milestones.length === 0) {
-    return (
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: "calc(100svh - 200px)", textAlign: "center", gap: "16px", padding: "0 8px" }}>
-        <div style={{ fontSize: "48px" }}>🏁</div>
-        <h2 style={{ fontSize: "20px", fontWeight: 800, color: "var(--color-text-primary)" }}>No milestones yet</h2>
-        <p style={{ fontSize: "14px", color: "var(--color-text-secondary)", lineHeight: 1.5, maxWidth: "280px" }}>
-          Generate your roadmap first — milestones will appear here so you can track your progress.
-        </p>
-        <button
-          onClick={() => router.push("/learner/roadmap")}
-          style={{ padding: "12px 24px", background: "var(--color-accent)", color: "#fff", border: "none", borderRadius: "10px", fontSize: "14px", fontWeight: 600, cursor: "pointer" }}
-        >
-          Go to roadmap →
-        </button>
-      </div>
-    );
-  }
+  const doneCount = MILESTONES.filter((m) => m.done).length;
+  const total = MILESTONES.length;
+  const pct = Math.round((doneCount / total) * 100);
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-      <div>
-        <h1 style={{ fontSize: "22px", fontWeight: 800, color: "var(--color-text-primary)" }}>Milestones</h1>
-        <p style={{ fontSize: "13px", color: "var(--color-text-secondary)", marginTop: "4px" }}>
-          {completed} of {milestones.length} complete
-        </p>
+    <div style={{ background: T.bg, minHeight: "100vh", padding: "28px 24px 48px", fontFamily: "inherit" }}>
+      {/* Header */}
+      <div style={{ marginBottom: 24 }}>
+        <h1 style={{ margin: "0 0 4px", fontSize: 24, fontWeight: 700, color: T.fg }}>My Milestones</h1>
+        <p style={{ margin: 0, fontSize: 14, color: T.muted }}>Track your journey to your dream career</p>
       </div>
 
-      {/* Progress bar */}
-      <div>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
-          <span style={{ fontSize: "12px", color: "var(--color-text-muted)" }}>Overall progress</span>
-          <span style={{ fontSize: "13px", fontWeight: 700, color: "var(--color-accent)" }}>{pct}%</span>
+      {/* Progress summary */}
+      <div style={{ background: T.card, borderRadius: 14, padding: 18, border: `1px solid ${T.border}`, marginBottom: 24 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 10 }}>
+          <span style={{ fontSize: 14, fontWeight: 600, color: T.fg }}>{doneCount} of {total} complete</span>
+          <span style={{ fontSize: 14, fontWeight: 700, color: T.primary }}>{pct}%</span>
         </div>
-        <div style={{ height: "8px", background: "var(--color-border)", borderRadius: "4px" }}>
-          <div style={{ height: "100%", width: `${pct}%`, background: "linear-gradient(90deg, #6366f1, #8b5cf6)", borderRadius: "4px", transition: "width 0.4s ease" }} />
+        <div style={{ height: 10, background: T.secondary, borderRadius: 99 }}>
+          <div style={{ width: `${pct}%`, height: "100%", background: T.primary, borderRadius: 99, transition: "width 0.4s ease" }} />
         </div>
       </div>
 
-      {/* Milestone list */}
-      <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-        {milestones.map((m, idx) => {
-          const style = STATUS_STYLE[m.status] ?? STATUS_STYLE.PENDING;
-          const isUpdating = updating === m.id;
-          return (
-            <div
-              key={m.id}
-              style={{
-                padding: "14px 16px",
-                background: "var(--color-bg-secondary)",
-                border: `1px solid ${m.status === "COMPLETED" ? "#22c55e40" : "var(--color-border)"}`,
-                borderRadius: "12px",
-                opacity: m.status === "SKIPPED" ? 0.5 : 1,
-              }}
-            >
-              <div style={{ display: "flex", gap: "12px", alignItems: "flex-start" }}>
-                {/* number bubble */}
-                <div style={{
-                  width: "26px", height: "26px", borderRadius: "50%", flexShrink: 0,
-                  background: m.status === "COMPLETED" ? "#22c55e" : m.status === "IN_PROGRESS" ? "#f59e0b" : "var(--color-border)",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: "11px", fontWeight: 700, color: m.status === "PENDING" ? "var(--color-text-muted)" : "#fff",
-                }}>
-                  {m.status === "COMPLETED" ? "✓" : idx + 1}
-                </div>
-
-                <div style={{ flex: 1 }}>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "2px" }}>
-                    <p style={{ fontSize: "14px", fontWeight: 600, color: "var(--color-text-primary)" }}>{m.title}</p>
-                    <span style={{ fontSize: "11px", fontWeight: 600, color: style.color }}>{style.label}</span>
-                  </div>
-                  {m.description && <p style={{ fontSize: "12px", color: "var(--color-text-secondary)", lineHeight: 1.5, marginBottom: "10px" }}>{m.description}</p>}
-                  {m.dueDate && (
-                    <p style={{ fontSize: "11px", color: "var(--color-text-muted)", marginBottom: "10px" }}>
-                      Due: {new Date(m.dueDate).toLocaleDateString("en-ZA", { day: "numeric", month: "short", year: "numeric" })}
-                    </p>
-                  )}
-
-                  {/* Status toggle buttons */}
-                  {m.status !== "COMPLETED" && (
-                    <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
-                      {m.status === "PENDING" && (
-                        <button
-                          disabled={isUpdating}
-                          onClick={() => updateStatus(m.id, "IN_PROGRESS")}
-                          style={{ padding: "6px 12px", background: "#f59e0b20", border: "1px solid #f59e0b", borderRadius: "8px", fontSize: "11px", fontWeight: 600, color: "#f59e0b", cursor: "pointer" }}
-                        >
-                          Start
-                        </button>
-                      )}
-                      {(m.status === "PENDING" || m.status === "IN_PROGRESS") && (
-                        <button
-                          disabled={isUpdating}
-                          onClick={() => updateStatus(m.id, "COMPLETED")}
-                          style={{ padding: "6px 12px", background: "#22c55e20", border: "1px solid #22c55e", borderRadius: "8px", fontSize: "11px", fontWeight: 600, color: "#22c55e", cursor: "pointer" }}
-                        >
-                          {isUpdating ? "…" : "Mark done ✓"}
-                        </button>
-                      )}
-                    </div>
-                  )}
-                </div>
-              </div>
+      {/* Milestone cards */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+        {MILESTONES.map((m, i) => (
+          <div
+            key={i}
+            style={{
+              background: T.card,
+              borderRadius: 14,
+              padding: 18,
+              border: m.done ? `1.5px solid ${T.teal}` : `1px solid ${T.border}`,
+              display: "flex",
+              alignItems: "flex-start",
+              gap: 14,
+            }}
+          >
+            <div style={{ flexShrink: 0, marginTop: 2 }}>
+              {m.done
+                ? <CheckCircle size={22} color={T.teal} />
+                : <Circle size={22} color={T.muted} />}
             </div>
-          );
-        })}
+            <div style={{ flex: 1 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 8 }}>
+                <h3 style={{ margin: 0, fontSize: 15, fontWeight: 700, color: m.done ? T.muted : T.fg, textDecoration: m.done ? "line-through" : "none" }}>
+                  {m.label}
+                </h3>
+                <span style={{
+                  fontSize: 11,
+                  fontWeight: 600,
+                  background: m.done ? "#D1FAE5" : T.secondary,
+                  color: m.done ? T.teal : T.primary,
+                  borderRadius: 99,
+                  padding: "3px 10px",
+                  whiteSpace: "nowrap",
+                }}>
+                  {m.timeframe}
+                </span>
+              </div>
+              <p style={{ margin: "4px 0 0", fontSize: 13, color: T.muted, lineHeight: 1.5 }}>{m.desc}</p>
+              {!m.done && (
+                <button style={{ marginTop: 12, background: "none", color: T.primary, border: `1.5px solid ${T.primary}`, borderRadius: 8, padding: "6px 14px", fontWeight: 600, fontSize: 12, cursor: "pointer" }}>
+                  Mark Complete
+                </button>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Encouragement footer */}
+      <div style={{ background: `linear-gradient(135deg, ${T.primary} 0%, #7C6FE0 100%)`, borderRadius: 14, padding: 20, marginTop: 24, color: "#fff", display: "flex", alignItems: "center", gap: 14 }}>
+        <span style={{ fontSize: 32 }}>💪</span>
+        <div>
+          <p style={{ margin: "0 0 4px", fontSize: 15, fontWeight: 700 }}>Keep pushing forward!</p>
+          <p style={{ margin: 0, fontSize: 13, opacity: 0.85 }}>
+            Every milestone you complete brings you one step closer to your future career. You&apos;ve got this!
+          </p>
+        </div>
       </div>
     </div>
   );

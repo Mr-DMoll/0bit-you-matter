@@ -1,204 +1,179 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import apiClient from "@/api/client";
-import { useAuth } from "@/shared/context/AuthContext";
+import { Bell, CheckCircle, Circle } from "lucide-react";
+import Link from "next/link";
 
-const ASSESSMENT_TYPES = ["INTEREST", "APTITUDE", "PERSONALITY", "VALUES"] as const;
-const TYPE_COLOR: Record<string, string> = {
-  INTEREST: "#6366f1", APTITUDE: "#3b82f6", PERSONALITY: "#8b5cf6", VALUES: "#f59e0b",
-};
-const TYPE_DESC: Record<string, string> = {
-  INTEREST:    "Discover what truly excites you",
-  APTITUDE:    "Find out where your natural talents lie",
-  PERSONALITY: "Understand how you work best",
-  VALUES:      "What matters most to you in a career",
+const T = {
+  primary:   "#5B4FCF",
+  secondary: "#EEE9FF",
+  coral:     "#F97066",
+  teal:      "#0D9488",
+  sidebar:   "#1E1875",
+  bg:        "#FAFAF9",
+  card:      "#FFFFFF",
+  fg:        "#1A1535",
+  muted:     "#7A7499",
+  border:    "rgba(91,79,207,0.12)",
 };
 
-function ProgressRing({ pct, color }: { pct: number; color: string }) {
-  const r  = 28;
+function CircleProgress({ pct, label, color }: { pct: number; label: string; color: string }) {
+  const r = 28;
   const circ = 2 * Math.PI * r;
+  const dash = (pct / 100) * circ;
   return (
-    <svg width="68" height="68" style={{ transform: "rotate(-90deg)" }}>
-      <circle cx="34" cy="34" r={r} fill="none" stroke="var(--color-border)" strokeWidth="5" />
-      <circle cx="34" cy="34" r={r} fill="none" stroke={color} strokeWidth="5"
-        strokeDasharray={circ} strokeDashoffset={circ * (1 - pct / 100)}
-        strokeLinecap="round" style={{ transition: "stroke-dashoffset 0.6s ease" }} />
-    </svg>
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+      <svg width={72} height={72}>
+        <circle cx={36} cy={36} r={r} fill="none" stroke={T.border} strokeWidth={6} />
+        <circle
+          cx={36} cy={36} r={r} fill="none"
+          stroke={color} strokeWidth={6}
+          strokeDasharray={`${dash} ${circ}`}
+          strokeLinecap="round"
+          transform="rotate(-90 36 36)"
+        />
+        <text x={36} y={40} textAnchor="middle" fontSize={13} fontWeight={700} fill={T.fg}>{pct}%</text>
+      </svg>
+      <span style={{ fontSize: 11, color: T.muted, textAlign: "center" }}>{label}</span>
+    </div>
   );
 }
 
+const recentActivity = [
+  { emoji: "🎯", text: "Completed Interest Assessment", time: "2h ago" },
+  { emoji: "🔍", text: "Explored Software Engineer career", time: "Yesterday" },
+  { emoji: "📚", text: "Viewed UCT university profile", time: "2 days ago" },
+  { emoji: "💡", text: "Saved Investec Bursary", time: "3 days ago" },
+];
+
+const milestones = [
+  { label: "Create profile", done: true },
+  { label: "Complete Interest Assessment", done: true },
+  { label: "Complete Aptitude Assessment", done: false },
+  { label: "Explore career matches", done: false },
+  { label: "Research target university", done: false },
+];
+
+const todos = [
+  "Start Aptitude Assessment",
+  "Explore top career matches",
+  "Save 2 bursaries to apply",
+];
+
 export function LearnerHomePage() {
-  const router = useRouter();
-  const { user } = useAuth() as any;
-  const [profile, setProfile]     = useState<any>(null);
-  const [sessions, setSessions]   = useState<any[]>([]);
-  const [loading, setLoading]     = useState(true);
-
-  useEffect(() => {
-    Promise.all([
-      apiClient.get("/learner/profile"),
-    ])
-      .then(([pRes]) => {
-        setProfile(pRes.data.data?.learnerProfile ?? null);
-        setSessions(pRes.data.data?.assessmentSessions ?? []);
-      })
-      .catch(() => {})
-      .finally(() => setLoading(false));
-  }, []);
-
-  const firstName = user?.firstName ?? user?.displayName?.split(" ")[0] ?? "there";
-
-  const getStatus = (type: string) => {
-    const s = sessions.find((s: any) => s.assessmentType === type);
-    if (!s) return "not_started";
-    return s.status === "COMPLETED" ? "completed" : "in_progress";
-  };
-
-  const completedCount = ASSESSMENT_TYPES.filter((t) => getStatus(t) === "completed").length;
-  const pct            = Math.round((completedCount / 4) * 100);
-
-  const nextAction = (() => {
-    if (completedCount < 4) {
-      const next = ASSESSMENT_TYPES.find((t) => getStatus(t) !== "completed");
-      return { label: `Start ${next} assessment`, href: `/learner/assessments` };
-    }
-    if (!profile?.chosenCareerId) {
-      return { label: "Explore careers & choose one", href: "/learner/explore" };
-    }
-    return { label: "Check your roadmap", href: "/learner/roadmap" };
-  })();
-
-  const hour     = new Date().getHours();
-  const greeting = hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
+  const today = new Date().toLocaleDateString("en-ZA", { weekday: "long", month: "long", day: "numeric" });
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-
-      {/* ── Greeting ── */}
-      <div>
-        <p style={{ fontSize: "13px", color: "var(--color-text-muted)" }}>{greeting} 👋</p>
-        <h1 style={{ fontSize: "22px", fontWeight: 800, color: "var(--color-text-primary)", marginTop: "2px" }}>
-          {firstName}
-        </h1>
-        {profile?.riasecType && (
-          <p style={{ fontSize: "13px", color: "var(--color-text-secondary)", marginTop: "4px" }}>
-            Your type: <strong style={{ color: "var(--color-accent)" }}>{profile.riasecType}</strong>
-          </p>
-        )}
+    <div style={{ background: T.bg, minHeight: "100vh", padding: "24px 24px 48px", fontFamily: "inherit" }}>
+      {/* Top bar */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 28 }}>
+        <div>
+          <p style={{ margin: 0, fontSize: 13, color: T.muted }}>{today}</p>
+          <h1 style={{ margin: 0, fontSize: 22, fontWeight: 700, color: T.fg }}>Good morning, Thabo 👋</h1>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <button style={{ background: "none", border: "none", cursor: "pointer", position: "relative" }}>
+            <Bell size={22} color={T.muted} />
+            <span style={{ position: "absolute", top: -2, right: -2, width: 8, height: 8, background: T.coral, borderRadius: "50%" }} />
+          </button>
+          <div style={{ width: 36, height: 36, borderRadius: "50%", background: T.primary, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, fontWeight: 700 }}>TM</div>
+        </div>
       </div>
 
-      {/* ── Progress card ── */}
-      <div style={{
-        background: "linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)",
-        borderRadius: "16px",
-        padding: "20px",
-        color: "#fff",
-        display: "flex",
-        alignItems: "center",
-        gap: "16px",
-      }}>
-        <div style={{ position: "relative", flexShrink: 0 }}>
-          <ProgressRing pct={pct} color="#fff" />
-          <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <span style={{ fontSize: "14px", fontWeight: 700, transform: "rotate(90deg)", display: "inline-block" }}>{pct}%</span>
+      {/* 3-column top cards */}
+      <div className="home-top-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16, marginBottom: 16 }}>
+        {/* Assessment Progress */}
+        <Link href="/learner/assessments" style={{ textDecoration: "none" }}>
+          <div style={{ background: T.card, borderRadius: 16, padding: 20, border: `1px solid ${T.border}`, height: "100%", boxSizing: "border-box" }}>
+            <h3 style={{ margin: "0 0 16px", fontSize: 15, fontWeight: 700, color: T.fg }}>Assessment Progress</h3>
+            <div style={{ display: "flex", justifyContent: "space-around" }}>
+              <CircleProgress pct={100} label="Interest" color={T.teal} />
+              <CircleProgress pct={0} label="Aptitude" color={T.primary} />
+              <CircleProgress pct={0} label="Personality" color={T.coral} />
+              <CircleProgress pct={0} label="Values" color="#F59E0B" />
+            </div>
           </div>
-        </div>
-        <div style={{ flex: 1 }}>
-          <p style={{ fontSize: "15px", fontWeight: 700 }}>Your profile journey</p>
-          <p style={{ fontSize: "12px", opacity: 0.85, marginTop: "2px" }}>
-            {completedCount} of 4 assessments done
-          </p>
-          {completedCount < 4 && (
-            <p style={{ fontSize: "11px", opacity: 0.7, marginTop: "4px" }}>
-              Complete all 4 to unlock your AI career profile
-            </p>
-          )}
-        </div>
-      </div>
+        </Link>
 
-      {/* ── Next action ── */}
-      <button
-        onClick={() => router.push(nextAction.href)}
-        style={{
-          width: "100%", padding: "16px", background: "var(--color-bg-secondary)",
-          border: "2px solid var(--color-accent)", borderRadius: "12px",
-          display: "flex", alignItems: "center", justifyContent: "space-between",
-          cursor: "pointer", textAlign: "left",
-        }}
-      >
-        <div>
-          <p style={{ fontSize: "11px", color: "var(--color-accent)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em" }}>Suggested next step</p>
-          <p style={{ fontSize: "14px", fontWeight: 600, color: "var(--color-text-primary)", marginTop: "2px" }}>{nextAction.label}</p>
-        </div>
-        <div style={{ width: "32px", height: "32px", borderRadius: "50%", background: "var(--color-accent)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-          <span style={{ color: "#fff", fontSize: "16px" }}>→</span>
-        </div>
-      </button>
-
-      {/* ── Assessment status grid ── */}
-      <div>
-        <p style={{ fontSize: "13px", fontWeight: 600, color: "var(--color-text-muted)", marginBottom: "10px", textTransform: "uppercase", letterSpacing: "0.04em" }}>Assessments</p>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
-          {ASSESSMENT_TYPES.map((type) => {
-            const status = getStatus(type);
-            const color  = TYPE_COLOR[type];
-            return (
-              <button
-                key={type}
-                onClick={() => router.push("/learner/assessments")}
-                style={{
-                  padding: "14px", background: "var(--color-bg-secondary)",
-                  border: `1px solid ${status === "completed" ? color : "var(--color-border)"}`,
-                  borderRadius: "12px", cursor: "pointer", textAlign: "left",
-                }}
-              >
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "6px" }}>
-                  <div style={{ width: "8px", height: "8px", borderRadius: "50%", background: color }} />
-                  <span style={{ fontSize: "11px", color: status === "completed" ? "#22c55e" : status === "in_progress" ? "#f59e0b" : "var(--color-text-muted)" }}>
-                    {status === "completed" ? "✓ Done" : status === "in_progress" ? "In progress" : "Not started"}
-                  </span>
+        {/* Top Career Match */}
+        <Link href="/learner/explore" style={{ textDecoration: "none" }}>
+          <div style={{ background: T.card, borderRadius: 16, padding: 20, border: `1px solid ${T.border}`, height: "100%", boxSizing: "border-box" }}>
+            <h3 style={{ margin: "0 0 6px", fontSize: 15, fontWeight: 700, color: T.fg }}>Top Career Match</h3>
+            <p style={{ margin: "0 0 16px", fontSize: 12, color: T.muted }}>Based on your profile</p>
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              {[
+                { name: "Software Engineer", pct: 92 },
+                { name: "Data Scientist", pct: 85 },
+                { name: "UX Designer", pct: 78 },
+              ].map((c) => (
+                <div key={c.name}>
+                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
+                    <span style={{ fontSize: 13, color: T.fg }}>{c.name}</span>
+                    <span style={{ fontSize: 13, fontWeight: 700, color: T.coral }}>{c.pct}%</span>
+                  </div>
+                  <div style={{ height: 6, background: T.secondary, borderRadius: 99 }}>
+                    <div style={{ width: `${c.pct}%`, height: "100%", background: T.coral, borderRadius: 99 }} />
+                  </div>
                 </div>
-                <p style={{ fontSize: "13px", fontWeight: 600, color: "var(--color-text-primary)" }}>{type}</p>
-                <p style={{ fontSize: "11px", color: "var(--color-text-muted)", marginTop: "2px", lineHeight: 1.3 }}>{TYPE_DESC[type]}</p>
-              </button>
-            );
-          })}
-        </div>
-      </div>
+              ))}
+            </div>
+          </div>
+        </Link>
 
-      {/* ── Quick links ── */}
-      {completedCount >= 2 && (
-        <div>
-          <p style={{ fontSize: "13px", fontWeight: 600, color: "var(--color-text-muted)", marginBottom: "10px", textTransform: "uppercase", letterSpacing: "0.04em" }}>Quick links</p>
-          <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-            {[
-              { label: "Explore careers",    sub: "Browse by cluster",         href: "/learner/explore" },
-              { label: "Find bursaries",     sub: "Money for your studies",    href: "/learner/bursaries" },
-              { label: "Universities",       sub: "Check APS requirements",    href: "/learner/universities" },
-              { label: "Guidance chat",      sub: "Ask me anything",           href: "/learner/chat" },
-            ].map(({ label, sub, href }) => (
-              <button
-                key={href}
-                onClick={() => router.push(href)}
-                style={{
-                  display: "flex", alignItems: "center", justifyContent: "space-between",
-                  padding: "14px 16px", background: "var(--color-bg-secondary)",
-                  border: "1px solid var(--color-border)", borderRadius: "12px",
-                  cursor: "pointer", textAlign: "left",
-                }}
-              >
-                <div>
-                  <p style={{ fontSize: "14px", fontWeight: 500, color: "var(--color-text-primary)" }}>{label}</p>
-                  <p style={{ fontSize: "12px", color: "var(--color-text-muted)" }}>{sub}</p>
-                </div>
-                <span style={{ color: "var(--color-text-muted)", fontSize: "18px" }}>›</span>
-              </button>
+        {/* Today's Action */}
+        <div style={{ background: `linear-gradient(135deg, ${T.primary} 0%, #7C6FE0 100%)`, borderRadius: 16, padding: 20, color: "#fff", height: "100%", boxSizing: "border-box" }}>
+          <h3 style={{ margin: "0 0 6px", fontSize: 15, fontWeight: 700 }}>Today&apos;s Action</h3>
+          <p style={{ margin: "0 0 16px", fontSize: 12, opacity: 0.75 }}>3 tasks to keep you on track</p>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            {todos.map((t, i) => (
+              <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, background: "rgba(255,255,255,0.12)", borderRadius: 10, padding: "8px 12px" }}>
+                <Circle size={16} color="rgba(255,255,255,0.6)" />
+                <span style={{ fontSize: 13 }}>{t}</span>
+              </div>
             ))}
           </div>
         </div>
-      )}
+      </div>
+
+      {/* 2-column bottom */}
+      <div className="home-bottom-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+        {/* Recent Activity */}
+        <div style={{ background: T.card, borderRadius: 16, padding: 20, border: `1px solid ${T.border}` }}>
+          <h3 style={{ margin: "0 0 16px", fontSize: 15, fontWeight: 700, color: T.fg }}>Recent Activity</h3>
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            {recentActivity.map((a, i) => (
+              <div key={i} style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                <span style={{ fontSize: 22 }}>{a.emoji}</span>
+                <div style={{ flex: 1 }}>
+                  <p style={{ margin: 0, fontSize: 13, color: T.fg }}>{a.text}</p>
+                  <p style={{ margin: 0, fontSize: 11, color: T.muted }}>{a.time}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Upcoming Milestones */}
+        <div style={{ background: T.card, borderRadius: 16, padding: 20, border: `1px solid ${T.border}` }}>
+          <h3 style={{ margin: "0 0 16px", fontSize: 15, fontWeight: 700, color: T.fg }}>Upcoming Milestones</h3>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            {milestones.map((m, i) => (
+              <div key={i} style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                {m.done
+                  ? <CheckCircle size={18} color={T.teal} />
+                  : <Circle size={18} color={T.muted} />}
+                <span style={{ fontSize: 13, color: m.done ? T.muted : T.fg, textDecoration: m.done ? "line-through" : "none" }}>{m.label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <style>{`
+        @media (max-width: 768px) {
+          .home-top-grid { grid-template-columns: 1fr !important; }
+          .home-bottom-grid { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
     </div>
   );
 }

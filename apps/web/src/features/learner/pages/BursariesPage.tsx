@@ -1,174 +1,201 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import apiClient from "@/api/client";
+import { useState } from "react";
+import { Clock, ExternalLink } from "lucide-react";
 
-const STATUS_COLOR: Record<string, string> = {
-  ACTIVE:  "#22c55e",
-  CLOSING: "#f59e0b",
-  CLOSED:  "#ef4444",
+const T = {
+  primary:   "#5B4FCF",
+  secondary: "#EEE9FF",
+  coral:     "#F97066",
+  teal:      "#0D9488",
+  sidebar:   "#1E1875",
+  bg:        "#FAFAF9",
+  card:      "#FFFFFF",
+  fg:        "#1A1535",
+  muted:     "#7A7499",
+  border:    "rgba(91,79,207,0.12)",
 };
 
-function daysUntil(dateStr: string | null): number | null {
-  if (!dateStr) return null;
-  return Math.ceil((new Date(dateStr).getTime() - Date.now()) / 86400000);
-}
+const BURSARIES = [
+  {
+    id: 1,
+    provider: "Investec",
+    name: "Investec STEM Bursary",
+    field: "Technology",
+    amount: "R80,000",
+    deadline: "31 Jul 2026",
+    urgent: true,
+    eligibility: "Mathematics 70%+, Grade 11/12",
+  },
+  {
+    id: 2,
+    provider: "Standard Bank",
+    name: "Standard Bank Commerce Bursary",
+    field: "Business",
+    amount: "R60,000",
+    deadline: "15 Aug 2026",
+    urgent: false,
+    eligibility: "Accounting 65%+, Grade 12",
+  },
+  {
+    id: 3,
+    provider: "Sasol",
+    name: "Sasol Engineering Excellence Bursary",
+    field: "Engineering",
+    amount: "R120,000",
+    deadline: "30 Jun 2026",
+    urgent: true,
+    eligibility: "Maths & Science 75%+",
+  },
+  {
+    id: 4,
+    provider: "ABSA",
+    name: "ABSA Technology Bursary",
+    field: "Technology",
+    amount: "R75,000",
+    deadline: "1 Sep 2026",
+    urgent: false,
+    eligibility: "Mathematics 70%+, South African citizen",
+  },
+  {
+    id: 5,
+    provider: "Nedbank",
+    name: "Nedbank Financial Studies Bursary",
+    field: "Business",
+    amount: "R55,000",
+    deadline: "20 Aug 2026",
+    urgent: false,
+    eligibility: "Accounting 60%+, Grade 12",
+  },
+  {
+    id: 6,
+    provider: "MTN",
+    name: "MTN Digital Innovation Bursary",
+    field: "Technology",
+    amount: "R65,000",
+    deadline: "15 Jul 2026",
+    urgent: true,
+    eligibility: "Mathematics & Science 70%+",
+  },
+];
+
+const FIELDS = ["All", "Technology", "Business", "Engineering"];
+
+const fieldColors: Record<string, { bg: string; color: string }> = {
+  Technology:  { bg: T.secondary, color: T.primary },
+  Business:    { bg: "#FEF3C7", color: "#D97706" },
+  Engineering: { bg: "#D1FAE5", color: T.teal },
+};
 
 export function BursariesPage() {
-  const [bursaries, setBursaries] = useState<any[]>([]);
-  const [loading, setLoading]     = useState(true);
-  const [search, setSearch]       = useState("");
-  const [filter, setFilter]       = useState<"ALL" | "ACTIVE" | "CLOSING">("ALL");
-  const [selected, setSelected]   = useState<any | null>(null);
+  const [selectedFields, setSelectedFields] = useState<string[]>([]);
+  const [valueFilter, setValueFilter] = useState("all");
 
-  useEffect(() => {
-    apiClient.get("/bursaries", { params: { status: "VERIFIED" } })
-      .then((r) => setBursaries(r.data.data?.bursaries ?? r.data.data ?? []))
-      .catch(() => {})
-      .finally(() => setLoading(false));
-  }, []);
+  const toggleField = (f: string) => {
+    setSelectedFields((prev) =>
+      prev.includes(f) ? prev.filter((x) => x !== f) : [...prev, f]
+    );
+  };
 
-  const filtered = bursaries.filter((b) => {
-    const days   = daysUntil(b.deadline);
-    const status = days === null ? "ACTIVE" : days < 0 ? "CLOSED" : days <= 14 ? "CLOSING" : "ACTIVE";
-    const matchFilter = filter === "ALL" || status === filter;
-    const matchSearch = !search || b.title.toLowerCase().includes(search.toLowerCase()) || b.provider?.toLowerCase().includes(search.toLowerCase());
-    return matchFilter && matchSearch && status !== "CLOSED";
+  const filtered = BURSARIES.filter((b) => {
+    const fieldOk = selectedFields.length === 0 || selectedFields.includes(b.field);
+    const amount = parseInt(b.amount.replace(/\D/g, ""));
+    const valueOk =
+      valueFilter === "all" ||
+      (valueFilter === "under60" && amount < 60000) ||
+      (valueFilter === "60to80" && amount >= 60000 && amount <= 80000) ||
+      (valueFilter === "over80" && amount > 80000);
+    return fieldOk && valueOk;
   });
 
-  if (selected) {
-    const days   = daysUntil(selected.deadline);
-    const status = days === null ? "ACTIVE" : days < 0 ? "CLOSED" : days <= 14 ? "CLOSING" : "ACTIVE";
-
-    return (
-      <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-        <button onClick={() => setSelected(null)} style={{ background: "none", border: "none", cursor: "pointer", fontSize: "13px", color: "var(--color-text-muted)", padding: 0, alignSelf: "flex-start" }}>
-          ← Back
-        </button>
-
-        <div style={{ background: "linear-gradient(135deg, #f59e0b, #ef4444)", borderRadius: "16px", padding: "20px", color: "#fff" }}>
-          <p style={{ fontSize: "12px", opacity: 0.8, marginBottom: "4px" }}>{selected.provider ?? "Bursary"}</p>
-          <h1 style={{ fontSize: "20px", fontWeight: 800 }}>{selected.title}</h1>
-          {days !== null && days >= 0 && (
-            <p style={{ fontSize: "12px", opacity: 0.85, marginTop: "6px" }}>
-              {days === 0 ? "Closes today!" : `${days} day${days !== 1 ? "s" : ""} left to apply`}
-            </p>
-          )}
-        </div>
-
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
-          {selected.amount && (
-            <div style={{ padding: "14px", background: "var(--color-bg-secondary)", borderRadius: "12px", border: "1px solid var(--color-border)" }}>
-              <p style={{ fontSize: "11px", color: "var(--color-text-muted)" }}>Amount</p>
-              <p style={{ fontSize: "14px", fontWeight: 700, color: "var(--color-text-primary)", marginTop: "2px" }}>R{Number(selected.amount).toLocaleString()}</p>
-            </div>
-          )}
-          {selected.deadline && (
-            <div style={{ padding: "14px", background: "var(--color-bg-secondary)", borderRadius: "12px", border: "1px solid var(--color-border)" }}>
-              <p style={{ fontSize: "11px", color: "var(--color-text-muted)" }}>Deadline</p>
-              <p style={{ fontSize: "14px", fontWeight: 700, color: "var(--color-text-primary)", marginTop: "2px" }}>
-                {new Date(selected.deadline).toLocaleDateString("en-ZA", { day: "numeric", month: "short", year: "numeric" })}
-              </p>
-            </div>
-          )}
-        </div>
-
-        {selected.eligibilityCriteria && (
-          <div style={{ background: "var(--color-bg-secondary)", borderRadius: "12px", padding: "16px", border: "1px solid var(--color-border)" }}>
-            <p style={{ fontSize: "12px", fontWeight: 600, color: "var(--color-text-muted)", textTransform: "uppercase", letterSpacing: "0.04em", marginBottom: "8px" }}>Eligibility</p>
-            <p style={{ fontSize: "14px", color: "var(--color-text-secondary)", lineHeight: 1.6 }}>{selected.eligibilityCriteria}</p>
-          </div>
-        )}
-
-        {selected.description && (
-          <div style={{ background: "var(--color-bg-secondary)", borderRadius: "12px", padding: "16px", border: "1px solid var(--color-border)" }}>
-            <p style={{ fontSize: "12px", fontWeight: 600, color: "var(--color-text-muted)", textTransform: "uppercase", letterSpacing: "0.04em", marginBottom: "8px" }}>About</p>
-            <p style={{ fontSize: "14px", color: "var(--color-text-secondary)", lineHeight: 1.6 }}>{selected.description}</p>
-          </div>
-        )}
-
-        {selected.applicationUrl && (
-          <a
-            href={selected.applicationUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ display: "block", padding: "14px", background: STATUS_COLOR[status] ?? "var(--color-accent)", color: "#fff", borderRadius: "12px", textAlign: "center", fontSize: "14px", fontWeight: 700, textDecoration: "none" }}
-          >
-            Apply now →
-          </a>
-        )}
-      </div>
-    );
-  }
-
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-      <div>
-        <h1 style={{ fontSize: "22px", fontWeight: 800, color: "var(--color-text-primary)" }}>Bursaries</h1>
-        <p style={{ fontSize: "13px", color: "var(--color-text-secondary)", marginTop: "4px" }}>Find funding for your studies</p>
+    <div style={{ background: T.bg, minHeight: "100vh", padding: "28px 24px 48px", fontFamily: "inherit" }}>
+      {/* Header */}
+      <div style={{ marginBottom: 24, display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+        <div>
+          <h1 style={{ margin: "0 0 4px", fontSize: 24, fontWeight: 700, color: T.fg }}>Funding For You</h1>
+          <p style={{ margin: 0, fontSize: 14, color: T.muted }}>Bursaries matched to your profile and interests.</p>
+        </div>
+        <div style={{ marginLeft: "auto", background: T.primary, color: "#fff", borderRadius: 99, padding: "4px 14px", fontSize: 13, fontWeight: 600 }}>
+          {filtered.length} matches
+        </div>
       </div>
 
-      <input
-        value={search} onChange={(e) => setSearch(e.target.value)}
-        placeholder="Search bursaries…"
-        style={{ width: "100%", padding: "10px 14px", fontSize: "14px", background: "var(--color-bg-secondary)", border: "1px solid var(--color-border)", borderRadius: "10px", color: "var(--color-text-primary)", outline: "none", boxSizing: "border-box" }}
-      />
+      <div className="bursaries-layout" style={{ display: "grid", gridTemplateColumns: "220px 1fr", gap: 20 }}>
+        {/* Sidebar filters */}
+        <div style={{ background: T.card, borderRadius: 14, padding: 18, border: `1px solid ${T.border}`, alignSelf: "start" }}>
+          <h4 style={{ margin: "0 0 14px", fontSize: 14, fontWeight: 700, color: T.fg }}>Filter</h4>
 
-      <div style={{ display: "flex", gap: "8px" }}>
-        {(["ALL", "ACTIVE", "CLOSING"] as const).map((f) => (
-          <button
-            key={f}
-            onClick={() => setFilter(f)}
-            style={{
-              padding: "6px 14px", borderRadius: "20px", border: "1px solid var(--color-border)",
-              background: filter === f ? "var(--color-accent)" : "var(--color-bg-secondary)",
-              color: filter === f ? "#fff" : "var(--color-text-secondary)",
-              fontSize: "12px", fontWeight: 500, cursor: "pointer",
-            }}
-          >
-            {f === "CLOSING" ? "Closing soon" : f[0] + f.slice(1).toLowerCase()}
-          </button>
-        ))}
-      </div>
+          <p style={{ margin: "0 0 8px", fontSize: 12, fontWeight: 600, color: T.muted, textTransform: "uppercase", letterSpacing: 0.5 }}>Field</p>
+          {FIELDS.filter((f) => f !== "All").map((f) => (
+            <label key={f} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8, cursor: "pointer" }}>
+              <input
+                type="checkbox"
+                checked={selectedFields.includes(f)}
+                onChange={() => toggleField(f)}
+                style={{ accentColor: T.primary }}
+              />
+              <span style={{ fontSize: 13, color: T.fg }}>{f}</span>
+            </label>
+          ))}
 
-      {loading ? (
-        <p style={{ textAlign: "center", color: "var(--color-text-muted)", padding: "40px 0" }}>Loading bursaries…</p>
-      ) : filtered.length === 0 ? (
-        <p style={{ textAlign: "center", color: "var(--color-text-muted)", padding: "40px 0" }}>No bursaries found</p>
-      ) : (
-        <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+          <div style={{ height: 1, background: T.border, margin: "14px 0" }} />
+
+          <p style={{ margin: "0 0 8px", fontSize: 12, fontWeight: 600, color: T.muted, textTransform: "uppercase", letterSpacing: 0.5 }}>Value</p>
+          {[
+            { value: "all", label: "Any amount" },
+            { value: "under60", label: "Under R60k" },
+            { value: "60to80", label: "R60k – R80k" },
+            { value: "over80", label: "Over R80k" },
+          ].map((o) => (
+            <label key={o.value} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8, cursor: "pointer" }}>
+              <input
+                type="radio"
+                name="value"
+                checked={valueFilter === o.value}
+                onChange={() => setValueFilter(o.value)}
+                style={{ accentColor: T.primary }}
+              />
+              <span style={{ fontSize: 13, color: T.fg }}>{o.label}</span>
+            </label>
+          ))}
+        </div>
+
+        {/* Cards grid */}
+        <div className="bursary-cards" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
           {filtered.map((b) => {
-            const days   = daysUntil(b.deadline);
-            const status = days === null ? "ACTIVE" : days < 0 ? "CLOSED" : days <= 14 ? "CLOSING" : "ACTIVE";
+            const fc = fieldColors[b.field] ?? { bg: T.secondary, color: T.primary };
             return (
-              <button
-                key={b.id}
-                onClick={() => setSelected(b)}
-                style={{
-                  display: "flex", alignItems: "flex-start", justifyContent: "space-between",
-                  padding: "14px 16px", background: "var(--color-bg-secondary)",
-                  border: "1px solid var(--color-border)", borderRadius: "12px",
-                  cursor: "pointer", textAlign: "left",
-                }}
-              >
-                <div style={{ flex: 1, paddingRight: "8px" }}>
-                  <p style={{ fontSize: "14px", fontWeight: 600, color: "var(--color-text-primary)" }}>{b.title}</p>
-                  {b.provider && <p style={{ fontSize: "12px", color: "var(--color-text-muted)", marginTop: "2px" }}>{b.provider}</p>}
-                  <div style={{ display: "flex", gap: "8px", marginTop: "6px", flexWrap: "wrap" }}>
-                    {b.amount && <span style={{ fontSize: "11px", fontWeight: 600, color: "var(--color-text-secondary)" }}>R{Number(b.amount).toLocaleString()}</span>}
-                    {days !== null && days >= 0 && (
-                      <span style={{ fontSize: "11px", fontWeight: 600, color: STATUS_COLOR[status] }}>
-                        {days === 0 ? "Closes today" : `${days}d left`}
-                      </span>
-                    )}
-                  </div>
+              <div key={b.id} style={{ background: T.card, borderRadius: 14, padding: 18, border: `1px solid ${T.border}`, display: "flex", flexDirection: "column", gap: 10 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                  <span style={{ fontSize: 13, fontWeight: 700, color: T.fg }}>{b.provider}</span>
+                  {b.urgent && (
+                    <span style={{ fontSize: 11, fontWeight: 600, background: "#FEE2E2", color: T.coral, borderRadius: 99, padding: "2px 8px" }}>Urgent</span>
+                  )}
                 </div>
-                <span style={{ color: "var(--color-text-muted)", fontSize: "18px", flexShrink: 0 }}>›</span>
-              </button>
+                <p style={{ margin: 0, fontSize: 14, fontWeight: 600, color: T.fg }}>{b.name}</p>
+                <span style={{ fontSize: 11, fontWeight: 600, background: fc.bg, color: fc.color, borderRadius: 99, padding: "3px 10px", alignSelf: "flex-start" }}>{b.field}</span>
+                <div style={{ fontSize: 22, fontWeight: 800, color: T.coral }}>{b.amount}</div>
+                <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12, color: T.muted }}>
+                  <Clock size={13} />
+                  <span>Deadline: {b.deadline}</span>
+                </div>
+                <p style={{ margin: 0, fontSize: 12, color: T.muted }}>{b.eligibility}</p>
+                <button style={{ marginTop: "auto", background: T.primary, color: "#fff", border: "none", borderRadius: 8, padding: "9px 0", fontWeight: 600, fontSize: 13, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 6 }}>
+                  Apply Now <ExternalLink size={13} />
+                </button>
+              </div>
             );
           })}
         </div>
-      )}
+      </div>
+
+      <style>{`
+        @media (max-width: 768px) {
+          .bursaries-layout { grid-template-columns: 1fr !important; }
+          .bursary-cards { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
     </div>
   );
 }

@@ -1,193 +1,128 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import apiClient from "@/api/client";
+import { useState } from "react";
 import { Send } from "lucide-react";
 
-type Message = { role: "user" | "assistant"; content: string };
+const T = {
+  primary:   "#5B4FCF",
+  secondary: "#EEE9FF",
+  coral:     "#F97066",
+  teal:      "#0D9488",
+  sidebar:   "#1E1875",
+  bg:        "#FAFAF9",
+  card:      "#FFFFFF",
+  fg:        "#1A1535",
+  muted:     "#7A7499",
+  border:    "rgba(91,79,207,0.12)",
+};
 
-const STARTERS = [
-  "What careers suit my RIASEC type?",
-  "Which universities offer engineering in Gauteng?",
-  "How do I improve my APS score?",
-  "What bursaries are available for Grade 12?",
-  "What does a software developer do day-to-day?",
+const MOCK_MESSAGES = [
+  {
+    role: "user",
+    text: "What subjects do I need to become a software engineer?",
+  },
+  {
+    role: "ai",
+    text: "To pursue software engineering, you'll need strong foundations in:\n\n• **Mathematics** (at least 70%) — essential for algorithms, data structures, and systems design.\n• **Physical Sciences** — useful but not always required.\n• **IT/Computer Applications Technology (CAT)** — gives you early exposure to programming.\n\nTop universities like UCT and Wits require an APS of 36+. Start practicing coding on platforms like Khan Academy or Scratch now!",
+  },
+  {
+    role: "user",
+    text: "Are there any bursaries available for tech students?",
+  },
+  {
+    role: "ai",
+    text: "Yes! Here are 2 great options for tech learners:\n\n1. **Investec STEM Bursary** — covers up to R80,000/year. Requires Maths 70%+. Deadline: 31 Jul 2026.\n\n2. **MTN Digital Innovation Bursary** — covers up to R65,000/year. Requires Maths & Science 70%+. Deadline: 15 Jul 2026.\n\nBoth are available in the Bursaries section of your app. Would you like tips on writing a strong bursary application?",
+  },
 ];
 
 export function GuidanceChatPage() {
-  const [messages, setMessages]   = useState<Message[]>([]);
-  const [input, setInput]         = useState("");
-  const [loading, setLoading]     = useState(false);
-  const bottomRef                 = useRef<HTMLDivElement>(null);
-  const inputRef                  = useRef<HTMLTextAreaElement>(null);
-
-  useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
-
-  const send = async (text: string) => {
-    if (!text.trim() || loading) return;
-    const userMsg: Message = { role: "user", content: text.trim() };
-    setMessages((prev) => [...prev, userMsg]);
-    setInput("");
-    setLoading(true);
-    try {
-      const history = messages.slice(-8); // send last 8 for context
-      const res = await apiClient.post("/learner/chat/message", {
-        message: text.trim(),
-        history,
-      });
-      const reply: Message = { role: "assistant", content: res.data.data.reply };
-      setMessages((prev) => [...prev, reply]);
-    } catch {
-      setMessages((prev) => [...prev, {
-        role: "assistant",
-        content: "Sorry, I'm having trouble connecting right now. Please try again in a moment.",
-      }]);
-    } finally {
-      setLoading(false);
-      inputRef.current?.focus();
-    }
-  };
-
-  const handleKey = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(input); }
-  };
+  const [input, setInput] = useState("");
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", height: "calc(100svh - 130px)" }}>
-
-      <div style={{ marginBottom: "12px" }}>
-        <h1 style={{ fontSize: "20px", fontWeight: 800, color: "var(--color-text-primary)" }}>Guidance Chat</h1>
-        <p style={{ fontSize: "12px", color: "var(--color-text-muted)", marginTop: "2px" }}>
-          Ask me anything about careers, universities or bursaries
-        </p>
+    <div style={{ background: T.bg, minHeight: "100vh", display: "flex", flexDirection: "column", fontFamily: "inherit" }}>
+      {/* Header */}
+      <div style={{ padding: "20px 24px 16px", borderBottom: `1px solid ${T.border}`, background: T.card }}>
+        <h1 style={{ margin: "0 0 4px", fontSize: 20, fontWeight: 700, color: T.fg }}>Career Guide</h1>
+        <p style={{ margin: 0, fontSize: 13, color: T.muted }}>Ask me anything about careers, bursaries or studies</p>
       </div>
 
-      {/* ── Message feed ── */}
-      <div style={{ flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", gap: "12px", paddingBottom: "8px" }}>
-        {messages.length === 0 && (
-          <div style={{ display: "flex", flexDirection: "column", gap: "24px", paddingTop: "8px" }}>
-            <div style={{ textAlign: "center", padding: "20px 0" }}>
-              <div style={{ fontSize: "40px", marginBottom: "8px" }}>💬</div>
-              <p style={{ fontSize: "14px", fontWeight: 600, color: "var(--color-text-primary)" }}>I'm your career guide</p>
-              <p style={{ fontSize: "12px", color: "var(--color-text-muted)", marginTop: "4px" }}>Powered by AI — here to help you find your path</p>
-            </div>
-            <div>
-              <p style={{ fontSize: "11px", color: "var(--color-text-muted)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "8px" }}>Try asking</p>
-              <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-                {STARTERS.map((s) => (
-                  <button
-                    key={s}
-                    onClick={() => send(s)}
-                    style={{
-                      padding: "10px 14px",
-                      background: "var(--color-bg-secondary)",
-                      border: "1px solid var(--color-border)",
-                      borderRadius: "10px",
-                      cursor: "pointer",
-                      textAlign: "left",
-                      fontSize: "13px",
-                      color: "var(--color-text-secondary)",
-                    }}
-                  >
-                    {s}
-                  </button>
-                ))}
+      {/* Chat area */}
+      <div style={{ flex: 1, overflowY: "auto", padding: "20px 24px", display: "flex", flexDirection: "column", gap: 16 }}>
+        {MOCK_MESSAGES.map((msg, i) => {
+          const isUser = msg.role === "user";
+          return (
+            <div key={i} style={{ display: "flex", justifyContent: isUser ? "flex-end" : "flex-start" }}>
+              {!isUser && (
+                <div style={{ width: 32, height: 32, borderRadius: "50%", background: T.primary, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, flexShrink: 0, marginRight: 10, alignSelf: "flex-end" }}>
+                  AI
+                </div>
+              )}
+              <div
+                style={{
+                  maxWidth: "70%",
+                  background: isUser ? T.primary : T.card,
+                  color: isUser ? "#fff" : T.fg,
+                  border: isUser ? "none" : `1px solid ${T.border}`,
+                  borderRadius: isUser ? "16px 16px 4px 16px" : "16px 16px 16px 4px",
+                  padding: "12px 16px",
+                  fontSize: 14,
+                  lineHeight: 1.6,
+                  whiteSpace: "pre-line",
+                }}
+              >
+                {msg.text}
               </div>
+              {isUser && (
+                <div style={{ width: 32, height: 32, borderRadius: "50%", background: T.secondary, color: T.primary, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700, flexShrink: 0, marginLeft: 10, alignSelf: "flex-end" }}>
+                  TM
+                </div>
+              )}
             </div>
-          </div>
-        )}
+          );
+        })}
+      </div>
 
-        {messages.map((m, i) => (
-          <div
-            key={i}
+      {/* Input bar */}
+      <div style={{ padding: "12px 24px 24px", background: T.card, borderTop: `1px solid ${T.border}` }}>
+        <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+          <input
+            type="text"
+            placeholder="Ask about careers, bursaries, subjects..."
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
             style={{
-              display:       "flex",
-              justifyContent: m.role === "user" ? "flex-end" : "flex-start",
+              flex: 1,
+              padding: "12px 16px",
+              border: `1px solid ${T.border}`,
+              borderRadius: 12,
+              fontSize: 14,
+              color: T.fg,
+              background: T.bg,
+              outline: "none",
+            }}
+          />
+          <button
+            style={{
+              background: T.primary,
+              color: "#fff",
+              border: "none",
+              borderRadius: 12,
+              width: 44,
+              height: 44,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
+              flexShrink: 0,
             }}
           >
-            <div style={{
-              maxWidth:     "85%",
-              padding:      "10px 14px",
-              borderRadius: m.role === "user" ? "16px 16px 4px 16px" : "16px 16px 16px 4px",
-              background:   m.role === "user" ? "var(--color-accent)" : "var(--color-bg-secondary)",
-              border:       m.role === "user" ? "none" : "1px solid var(--color-border)",
-              fontSize:     "14px",
-              lineHeight:   1.5,
-              color:        m.role === "user" ? "#fff" : "var(--color-text-primary)",
-              whiteSpace:   "pre-wrap",
-            }}>
-              {m.content}
-            </div>
-          </div>
-        ))}
-
-        {loading && (
-          <div style={{ display: "flex", justifyContent: "flex-start" }}>
-            <div style={{ padding: "10px 14px", background: "var(--color-bg-secondary)", border: "1px solid var(--color-border)", borderRadius: "16px 16px 16px 4px", display: "flex", gap: "4px", alignItems: "center" }}>
-              {[0, 1, 2].map((i) => (
-                <div key={i} style={{ width: "6px", height: "6px", borderRadius: "50%", background: "var(--color-text-muted)", animation: `bounce 1s ${i * 0.15}s infinite` }} />
-              ))}
-            </div>
-          </div>
-        )}
-        <div ref={bottomRef} />
+            <Send size={18} />
+          </button>
+        </div>
+        <p style={{ margin: "8px 0 0", fontSize: 11, color: T.muted, textAlign: "center" }}>
+          This is a demo — messages are for illustration only.
+        </p>
       </div>
-
-      {/* ── Input ── */}
-      <div style={{
-        display:      "flex",
-        gap:          "8px",
-        alignItems:   "flex-end",
-        padding:      "10px 0 4px",
-        borderTop:    "1px solid var(--color-border)",
-        marginTop:    "8px",
-      }}>
-        <textarea
-          ref={inputRef}
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={handleKey}
-          placeholder="Ask anything…"
-          rows={1}
-          style={{
-            flex:         1,
-            padding:      "10px 14px",
-            fontSize:     "14px",
-            background:   "var(--color-bg-secondary)",
-            border:       "1px solid var(--color-border)",
-            borderRadius: "12px",
-            color:        "var(--color-text-primary)",
-            outline:      "none",
-            resize:       "none",
-            lineHeight:   1.4,
-            maxHeight:    "100px",
-            overflowY:    "auto",
-          }}
-        />
-        <button
-          onClick={() => send(input)}
-          disabled={!input.trim() || loading}
-          style={{
-            width:        "40px",
-            height:       "40px",
-            borderRadius: "50%",
-            background:   input.trim() && !loading ? "var(--color-accent)" : "var(--color-border)",
-            border:       "none",
-            cursor:       input.trim() && !loading ? "pointer" : "not-allowed",
-            display:      "flex",
-            alignItems:   "center",
-            justifyContent: "center",
-            flexShrink:   0,
-            transition:   "background 0.15s",
-          }}
-        >
-          <Send size={16} color="#fff" />
-        </button>
-      </div>
-
-      <style>{`@keyframes bounce { 0%,80%,100%{transform:translateY(0)} 40%{transform:translateY(-4px)} }`}</style>
     </div>
   );
 }
