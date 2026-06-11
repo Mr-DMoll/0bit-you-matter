@@ -15,6 +15,7 @@ const ROLE_ROUTES: Record<string, string> = {
   ADMIN:       "/admin",
   MANAGER:     "/manager",
   USER:        "/user",
+  LEARNER:     "/learner",
 };
 
 const authService = new AuthService();
