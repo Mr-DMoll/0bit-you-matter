@@ -12,6 +12,7 @@ const PROFILE_SELECT = {
   firstName: true, lastName: true, displayName: true,
   avatarUrl: true, phone: true,
   city: true, country: true, language: true, dateOfBirth: true,
+  grade: true, province: true, school: true,
   lastActiveAt: true, createdAt: true,
 } as const;
 
@@ -29,7 +30,7 @@ export const getProfile = catchAsync(async (req: Request, res: Response) => {
 // ── Update profile ─────────────────────────────────────────────────────────────
 
 export const updateProfile = catchAsync(async (req: Request, res: Response) => {
-  const { firstName, lastName, displayName, avatarUrl, phone, city, country, language, dateOfBirth } = req.body;
+  const { firstName, lastName, displayName, avatarUrl, phone, city, country, language, dateOfBirth, grade, province, school } = req.body;
 
   const user = await prisma.user.update({
     where: { id: req.user!.userId },
@@ -43,6 +44,9 @@ export const updateProfile = catchAsync(async (req: Request, res: Response) => {
       country:     country     ?? undefined,
       language:    language    ?? undefined,
       dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : undefined,
+      grade:       grade       !== undefined ? parseInt(grade) : undefined,
+      province:    province    ?? undefined,
+      school:      school      ?? undefined,
     },
     select: PROFILE_SELECT,
   });
