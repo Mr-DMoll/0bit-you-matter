@@ -85,7 +85,7 @@ function LearnerLoginInner() {
         {/* Background photo */}
         <div style={{ position: "absolute", inset: 0 }}>
           <img
-            src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=720&h=900&fit=crop&auto=format&q=80"
+            src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=720&h=900&fit=crop&auto=format&q=80"
             alt=""
             style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 20%", mixBlendMode: "luminosity", opacity: 0.35 }}
           />
@@ -109,12 +109,12 @@ function LearnerLoginInner() {
 
         {/* Top bar: logo + back */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "20px 32px", flexShrink: 0 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <a href="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
             <div style={{ width: 32, height: 32, borderRadius: 10, background: "#5B4FCF", display: "flex", alignItems: "center", justifyContent: "center" }}>
               <Zap size={16} color="white" />
             </div>
             <span style={{ fontWeight: 800, fontSize: "0.95rem", color: "#5B4FCF" }}>You Matter</span>
-          </div>
+          </a>
           <a href="/" style={{ fontSize: "0.8rem", color: "#7A7499", textDecoration: "none", fontWeight: 500 }}>← Back</a>
         </div>
 
