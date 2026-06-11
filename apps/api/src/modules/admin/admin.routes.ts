@@ -7,6 +7,7 @@ import {
   inviteStaffMember,
   updateUserStatus,
   updateUserRole,
+  deleteUser,
   // legacy
   inviteManager,
   listManagers,
@@ -33,8 +34,9 @@ router.post("/staff/invite", inviteStaffMember);
 router.get("/learners", listLearners);
 
 // ── Per-user actions ───────────────────────────────────────────────────────────
-router.patch("/users/:id/status", updateUserStatus);
-router.patch("/users/:id/role",   updateUserRole);
+router.patch("/users/:id/status",  updateUserStatus);
+router.patch("/users/:id/role",    updateUserRole);
+router.delete("/users/:id",        deleteUser);
 
 // ── Legacy routes (kept for backwards compat) ──────────────────────────────────
 router.get("/users",            listStaff);

@@ -65,6 +65,11 @@ export const adminService = {
     return data;
   },
 
+  async deleteUser(id: string) {
+    const { data } = await apiClient.delete(`/admin/users/${id}`);
+    return data;
+  },
+
   // ── Legacy helpers (used by existing pages) ─────────────────────────────────
   async getManagers() {
     return this.getStaff({ role: "MANAGER" });

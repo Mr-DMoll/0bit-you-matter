@@ -283,7 +283,7 @@ function StaffRow({ user, showRole, onStatusChange, onRefetch }: {
   onStatusChange: (id: string, status: string) => Promise<void>;
   onRefetch:      () => void;
 }) {
-  const [confirm, setConfirm] = useState<"suspend" | "activate" | null>(null);
+  const [confirm, setConfirm] = useState<"suspend" | "activate" | "delete" | null>(null);
 
   const name = user.displayName ||
     [user.firstName, user.lastName].filter(Boolean).join(" ") ||
@@ -342,7 +342,7 @@ function StaffRow({ user, showRole, onStatusChange, onRefetch }: {
 
         {/* Actions */}
         <td style={{ padding: "14px 20px" }}>
-          <div style={{ display: "flex", gap: "6px" }}>
+          <div style={{ display: "flex", gap: "6px", alignItems: "center" }}>
             {user.accountStatus === "ACTIVE" && (
               <button onClick={() => setConfirm("suspend")} style={{
                 padding: "4px 12px", fontSize: "12px", fontWeight: 600,
@@ -355,11 +355,17 @@ function StaffRow({ user, showRole, onStatusChange, onRefetch }: {
                 padding: "4px 12px", fontSize: "12px", fontWeight: 600,
                 color: "var(--color-accent)", background: "var(--color-accent-subtle)",
                 border: "1px solid var(--color-accent-border)", borderRadius: "var(--radius-md)", cursor: "pointer",
-              }}>Activate</button>
+              }}>Reactivate</button>
             )}
             {user.accountStatus === "PENDING" && (
               <span style={{ fontSize: "12px", color: "var(--color-text-muted)", fontStyle: "italic" }}>Invite pending</span>
             )}
+            {/* Delete — always available, for all statuses */}
+            <button onClick={() => setConfirm("delete")} style={{
+              padding: "4px 12px", fontSize: "12px", fontWeight: 600,
+              color: "var(--color-danger)", background: "var(--color-danger-subtle)",
+              border: "1px solid var(--color-danger-subtle)", borderRadius: "var(--radius-md)", cursor: "pointer",
+            }}>Delete</button>
           </div>
         </td>
       </tr>
@@ -375,8 +381,17 @@ function StaffRow({ user, showRole, onStatusChange, onRefetch }: {
       {confirm === "activate" && (
         <ConfirmDialog
           title="Reactivate user?" message={`${name} will regain full access.`}
-          confirmLabel="Activate"
+          confirmLabel="Reactivate"
           onConfirm={async () => { await onStatusChange(user.id, "ACTIVE"); setConfirm(null); onRefetch(); }}
+          onCancel={() => setConfirm(null)}
+        />
+      )}
+      {confirm === "delete" && (
+        <ConfirmDialog
+          title="Permanently delete user?"
+          message={`This will hard-delete ${name} (${user.email}) from the database. The email can then be reused. This cannot be undone.`}
+          confirmLabel="Delete permanently" danger
+          onConfirm={async () => { await adminService.deleteUser(user.id); setConfirm(null); onRefetch(); }}
           onCancel={() => setConfirm(null)}
         />
       )}

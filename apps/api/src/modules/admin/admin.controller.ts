@@ -227,6 +227,25 @@ export const updateUserRole = catchAsync(async (req: Request, res: Response) => 
   return res.status(HttpStatus.OK).json({ status: "success", message: "User role updated" });
 });
 
+// ── Hard delete user ──────────────────────────────────────────────────────────
+// For testing only — permanently removes the user so the email can be reused.
+
+export const deleteUser = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  const user = await prisma.user.findUnique({ where: { id } });
+  if (!user) throw new AppError("User not found", HttpStatus.NOT_FOUND);
+  if (user.role === "SUPER_ADMIN")
+    throw new AppError("Cannot delete a Super Admin", HttpStatus.FORBIDDEN);
+  // Prevent self-delete
+  if (user.id === req.user!.userId)
+    throw new AppError("You cannot delete your own account", HttpStatus.FORBIDDEN);
+
+  await prisma.user.delete({ where: { id } });
+
+  return res.status(HttpStatus.OK).json({ status: "success", message: "User permanently deleted" });
+});
+
 // ── Activity log ───────────────────────────────────────────────────────────────
 
 export const adminActivity = catchAsync(async (req: Request, res: Response) => {
