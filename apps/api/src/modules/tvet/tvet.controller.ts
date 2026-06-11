@@ -16,7 +16,10 @@ export const listColleges = catchAsync(async (req: Request, res: Response) => {
 
   const where: any = {};
   if (province)    where.province    = province;
-  if (status)      where.status      = status;
+  if (status) {
+    const statuses = status.split(",").map((s) => s.trim()).filter(Boolean);
+    where.status = statuses.length === 1 ? statuses[0] : { in: statuses };
+  }
   if (collegeType) where.collegeType = collegeType;
   if (search)      where.name        = { contains: search, mode: "insensitive" };
 
