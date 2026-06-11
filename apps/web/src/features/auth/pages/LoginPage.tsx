@@ -11,6 +11,7 @@ const ROLE_ROUTES: Record<string, string> = {
   ADMIN:       "/admin",
   MANAGER:     "/manager",
   USER:        "/user",
+  LEARNER:     "/learner",
 };
 
 const OAUTH_ERRORS: Record<string, string> = {
