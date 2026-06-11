@@ -47,7 +47,7 @@ router.post("/register", register);
  *     security:
  *       - cookieAuth: []
  */
-router.post("/logout", protect, logout);
+router.post("/logout", logout);  // no protect — logout must work even with expired/invalid tokens
 
 /**
  * @openapi

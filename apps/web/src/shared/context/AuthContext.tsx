@@ -2,6 +2,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { authService } from "@/features/auth/services/auth.service";
 import { useRouter } from "next/navigation";
+import { roleHomeRoute } from "@/shared/config/roles.config";
 
 export type UserRole =
   | "SUPER_ADMIN"
@@ -9,7 +10,6 @@ export type UserRole =
   | "MANAGER"
   | "CONTENT_MANAGER"
   | "REVIEWER"
-  | "DATA_VERIFIER"
   | "LEARNER";
 
 export interface AuthUser {
@@ -40,15 +40,7 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const ROLE_ROUTES: Record<string, string> = {
-  SUPER_ADMIN:     "/super-admin",
-  ADMIN:           "/admin",
-  MANAGER:         "/manager",
-  CONTENT_MANAGER: "/content-manager",
-  REVIEWER:        "/reviewer",
-  DATA_VERIFIER:   "/data-verifier",
-  LEARNER:         "/learner",
-};
+// Role → home route is centralised in roles.config.ts — do not duplicate here.
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
@@ -79,15 +71,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (token) localStorage.setItem("auth_token", token);
     setUser(user ?? null);
     if (user) {
-      window.location.href = ROLE_ROUTES[user.role] ?? "/";
+      window.location.href = roleHomeRoute(user.role);
     }
   };
 
   const logout = async () => {
-    await authService.logout();
+    try { await authService.logout(); } catch { /* token may already be expired — ignore */ }
     localStorage.removeItem("auth_token");
     setUser(null);
-    router.push("/login");
+    // caller handles redirect (LearnerShell uses window.location.href, staff uses router.push)
   };
 
   return (

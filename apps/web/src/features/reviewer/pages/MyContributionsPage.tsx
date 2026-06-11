@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import apiClient from "@/api/client";
 import {
   PageHeader, Card, StatCard, Table, TableRow, statusBadge, Badge,
@@ -8,6 +9,7 @@ import {
 } from "@/features/admin/components/AdminShell";
 
 export function MyContributionsPage() {
+  const router                      = useRouter();
   const [reviews, setReviews]       = useState<any[]>([]);
   const [pagination, setPagination] = useState({ total: 0, page: 1, pages: 1 });
   const [loading, setLoading]       = useState(true);
@@ -15,24 +17,35 @@ export function MyContributionsPage() {
 
   useEffect(() => {
     setLoading(true);
-    apiClient.get("/content/reviews", { params: { page } })
-      .then((r) => {
-        setReviews(r.data.data.reviews ?? []);
-        setPagination(r.data.data.pagination ?? { total: 0, page: 1, pages: 1 });
+    // Fetch both APPROVED and REJECTED so the table and stats are complete
+    Promise.all([
+      apiClient.get("/content/reviews", { params: { page, status: "APPROVED", limit: 50 } }),
+      apiClient.get("/content/reviews", { params: { page, status: "REJECTED", limit: 50 } }),
+    ])
+      .then(([approvedRes, rejectedRes]) => {
+        const approvedRows  = approvedRes.data.data.reviews  ?? [];
+        const rejectedRows  = rejectedRes.data.data.reviews  ?? [];
+        const merged        = [...approvedRows, ...rejectedRows].sort(
+          (a, b) => new Date(b.completedAt ?? b.createdAt).getTime() - new Date(a.completedAt ?? a.createdAt).getTime()
+        );
+        setReviews(merged);
+        // Use APPROVED pagination total as the base (both sets combined is approximate)
+        const total = (approvedRes.data.data.pagination?.total ?? 0) + (rejectedRes.data.data.pagination?.total ?? 0);
+        setPagination({ total, page, pages: Math.ceil(total / 50) || 1 });
       })
       .catch(() => {})
       .finally(() => setLoading(false));
   }, [page]);
 
-  const completed = reviews.filter((r) => r.status === "APPROVED" || r.status === "REJECTED");
-  const approved  = completed.filter((r) => r.status === "APPROVED").length;
-  const rejected  = completed.filter((r) => r.status === "REJECTED").length;
+  const completed = reviews;
+  const approved  = reviews.filter((r) => r.status === "APPROVED").length;
+  const rejected  = reviews.filter((r) => r.status === "REJECTED").length;
   const approvalRate = completed.length ? Math.round((approved / completed.length) * 100) : 0;
 
   const avgConfidence = (() => {
-    const scored = reviews.filter((r) => r.confidenceScore);
+    const scored = reviews.filter((r) => r.confidenceRating);
     if (!scored.length) return 0;
-    return (scored.reduce((s, r) => s + r.confidenceScore, 0) / scored.length).toFixed(1);
+    return (scored.reduce((s, r) => s + r.confidenceRating, 0) / scored.length).toFixed(1);
   })();
 
   const avgTurnaround = (() => {
@@ -74,18 +87,18 @@ export function MyContributionsPage() {
 
       <Card noPad>
         {loading ? <Spinner /> : reviews.length === 0 ? <Empty message="No reviews submitted yet" /> : (
-          <Table headers={["Content", "Type", "Decision", "Confidence", "Completed", "Notes"]}>
+          <Table headers={["Content", "Type", "Decision", "Confidence", "Completed", "Notes", ""]}>
             {reviews.map((r) => (
               <TableRow
                 key={r.id}
                 cols={[
                   <span style={{ fontWeight: 500, color: "var(--color-text-primary)" }}>
-                    {r.career?.title ?? r.question?.questionText?.slice(0, 50) ?? "—"}
+                    {r.career?.title ?? r.question?.questionText?.slice(0, 50) ?? r.tvetCollege?.name ?? "—"}
                   </span>,
-                  <Badge label={r.contentType} color="#6366f1" />,
+                  <Badge label={r.contentType?.replace(/_/g, " ")} color="#6366f1" />,
                   statusBadge(r.status),
-                  r.confidenceScore
-                    ? <span style={{ fontSize: "13px", fontWeight: 600, color: "#6366f1" }}>{r.confidenceScore}/5</span>
+                  r.confidenceRating
+                    ? <span style={{ fontSize: "13px", fontWeight: 600, color: "#6366f1" }}>{r.confidenceRating}/5</span>
                     : "—",
                   r.completedAt ? timeAgo(r.completedAt) : "—",
                   r.notes
@@ -93,6 +106,12 @@ export function MyContributionsPage() {
                         {r.notes}
                       </span>
                     : "—",
+                  <button
+                    onClick={() => router.push(`/reviewer/review/${r.id}`)}
+                    style={{ padding: "4px 12px", fontSize: "12px", fontWeight: 600, border: "1px solid var(--color-border)", borderRadius: "var(--radius-sm)", background: "var(--color-bg-secondary)", color: "var(--color-text-muted)", cursor: "pointer" }}
+                  >
+                    Edit →
+                  </button>,
                 ]}
               />
             ))}

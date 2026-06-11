@@ -2,8 +2,7 @@ import { Router } from "express";
 import {
   listGenerationJobs, createGenerationJob, retryGenerationJob,
   listPromptTemplates, createPromptTemplate, updatePromptTemplate,
-  listReviews, assignReview, assignReviewBulk, submitReview,
-  listVerifications, assignVerification, submitVerification,
+  listReviews, getReview, assignReview, assignReviewBulk, submitReview,
   listSources, createSource, updateSource,
 } from "./content.controller.js";
 import { protect }   from "../../middleware/auth.middleware.js";
@@ -15,33 +14,29 @@ router.use(protect);
 
 const contentManagers = [Role.SUPER_ADMIN, Role.ADMIN, Role.CONTENT_MANAGER];
 const reviewerRoles   = [Role.SUPER_ADMIN, Role.ADMIN, Role.CONTENT_MANAGER, Role.REVIEWER];
-const verifierRoles   = [Role.SUPER_ADMIN, Role.ADMIN, Role.CONTENT_MANAGER, Role.DATA_VERIFIER];
-const allStaff        = [Role.SUPER_ADMIN, Role.ADMIN, Role.MANAGER, Role.CONTENT_MANAGER, Role.REVIEWER, Role.DATA_VERIFIER];
+// DATA_VERIFIER removed — REVIEWER is now the single verification authority
+const allStaff        = [Role.SUPER_ADMIN, Role.ADMIN, Role.MANAGER, Role.CONTENT_MANAGER, Role.REVIEWER];
 
 // Generation jobs
-router.get("/jobs",         authorize(contentManagers), listGenerationJobs);
-router.post("/jobs",        authorize(contentManagers), createGenerationJob);
+router.get("/jobs",            authorize(contentManagers), listGenerationJobs);
+router.post("/jobs",           authorize(contentManagers), createGenerationJob);
 router.post("/jobs/:id/retry", authorize(contentManagers), retryGenerationJob);
 
 // Prompt templates
-router.get("/prompts",      authorize(contentManagers), listPromptTemplates);
-router.post("/prompts",     authorize(contentManagers), createPromptTemplate);
-router.patch("/prompts/:id", authorize(contentManagers), updatePromptTemplate);
+router.get("/prompts",         authorize(contentManagers), listPromptTemplates);
+router.post("/prompts",        authorize(contentManagers), createPromptTemplate);
+router.patch("/prompts/:id",   authorize(contentManagers), updatePromptTemplate);
 
-// Reviews
-router.get("/reviews",              authorize(reviewerRoles),   listReviews);
-router.post("/reviews",             authorize(contentManagers), assignReview);
-router.post("/reviews/bulk",        authorize(contentManagers), assignReviewBulk);
-router.patch("/reviews/:id",        authorize(reviewerRoles),   submitReview);
-
-// Verifications
-router.get("/verifications",         authorize(verifierRoles),   listVerifications);
-router.post("/verifications",        authorize(contentManagers), assignVerification);
-router.patch("/verifications/:id",   authorize(verifierRoles),   submitVerification);
+// Reviews — reviewers can list, submit (verify/discard)
+router.get("/reviews",         authorize(reviewerRoles),   listReviews);
+router.get("/reviews/:id",     authorize(reviewerRoles),   getReview);
+router.post("/reviews",        authorize(contentManagers), assignReview);
+router.post("/reviews/bulk",   authorize(contentManagers), assignReviewBulk);
+router.patch("/reviews/:id",   authorize(reviewerRoles),   submitReview);
 
 // Source library
-router.get("/sources",      authorize(allStaff),        listSources);
-router.post("/sources",     authorize(contentManagers), createSource);
-router.patch("/sources/:id", authorize(contentManagers), updateSource);
+router.get("/sources",         authorize(allStaff),        listSources);
+router.post("/sources",        authorize(contentManagers), createSource);
+router.patch("/sources/:id",   authorize(contentManagers), updateSource);
 
 export default router;

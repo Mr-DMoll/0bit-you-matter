@@ -8,6 +8,8 @@ import {
   updateUserStatus,
   updateUserRole,
   deleteUser,
+  getReviewerProfile,
+  updateReviewerProfile,
   // legacy
   inviteManager,
   listManagers,
@@ -25,7 +27,7 @@ router.get("/dashboard", adminDashboard);
 router.get("/activity",  adminActivity);
 
 // ── Staff (all invitable roles) ────────────────────────────────────────────────
-// GET  /admin/staff?role=MANAGER|CONTENT_MANAGER|REVIEWER|DATA_VERIFIER&status=ACTIVE
+// GET  /admin/staff?role=MANAGER|CONTENT_MANAGER|REVIEWER&status=ACTIVE
 // POST /admin/staff/invite  { email, firstName, lastName, role }
 router.get("/staff",         listStaff);
 router.post("/staff/invite", inviteStaffMember);
@@ -37,6 +39,10 @@ router.get("/learners", listLearners);
 router.patch("/users/:id/status",  updateUserStatus);
 router.patch("/users/:id/role",    updateUserRole);
 router.delete("/users/:id",        deleteUser);
+
+// ── Reviewer profile ───────────────────────────────────────────────────────────
+router.get("/reviewers/:id/profile",   getReviewerProfile);
+router.patch("/reviewers/:id/profile", updateReviewerProfile);
 
 // ── Legacy routes (kept for backwards compat) ──────────────────────────────────
 router.get("/users",            listStaff);

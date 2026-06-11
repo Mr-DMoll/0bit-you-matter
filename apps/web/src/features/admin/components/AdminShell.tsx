@@ -304,5 +304,105 @@ export function InviteModal({
   );
 }
 
+// ── Confirm Delete Modal ───────────────────────────────────────────────────────
+export function ConfirmDeleteModal({
+  open,
+  onClose,
+  onConfirm,
+  name,
+  email,
+}: {
+  open:      boolean;
+  onClose:   () => void;
+  onConfirm: () => Promise<void>;
+  name:      string;
+  email:     string;
+}) {
+  const [loading, setLoading] = React.useState(false);
+
+  if (!open) return null;
+
+  const handleConfirm = async () => {
+    setLoading(true);
+    try { await onConfirm(); } finally { setLoading(false); }
+  };
+
+  return (
+    <div style={{
+      position: "fixed", inset: 0, zIndex: 1000,
+      background: "rgba(0,0,0,0.5)", backdropFilter: "blur(4px)",
+      display: "flex", alignItems: "center", justifyContent: "center",
+    }}>
+      {/* Backdrop click closes */}
+      <div style={{ position: "absolute", inset: 0 }} onClick={onClose} />
+
+      <div style={{
+        position: "relative", zIndex: 1,
+        background: "var(--color-card-bg)",
+        border: "1px solid var(--color-card-border)",
+        borderRadius: "var(--radius-lg)",
+        padding: "28px 28px 24px",
+        width: 400, maxWidth: "90vw",
+        boxShadow: "0 24px 64px rgba(0,0,0,0.18)",
+      }}>
+        {/* Icon */}
+        <div style={{
+          width: 44, height: 44, borderRadius: "50%",
+          background: "rgba(239,68,68,0.1)",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          marginBottom: 16,
+        }}>
+          <span style={{ fontSize: 20 }}>🗑️</span>
+        </div>
+
+        <h2 style={{ fontSize: 16, fontWeight: 700, color: "var(--color-text-primary)", margin: "0 0 8px" }}>
+          Delete user?
+        </h2>
+        <p style={{ fontSize: 13, color: "var(--color-text-muted)", margin: "0 0 6px", lineHeight: 1.6 }}>
+          You are about to permanently delete:
+        </p>
+        <div style={{
+          background: "var(--color-bg-subtle)",
+          border: "1px solid var(--color-border)",
+          borderRadius: "var(--radius-sm)",
+          padding: "10px 14px",
+          marginBottom: 16,
+        }}>
+          <p style={{ fontSize: 13, fontWeight: 600, color: "var(--color-text-primary)", margin: "0 0 2px" }}>{name}</p>
+          <p style={{ fontSize: 12, color: "var(--color-text-muted)", margin: 0 }}>{email}</p>
+        </div>
+        <p style={{ fontSize: 12, color: "#ef4444", margin: "0 0 22px", lineHeight: 1.5 }}>
+          This is permanent and cannot be undone. The email address will be freed up for reuse.
+        </p>
+
+        <div style={{ display: "flex", gap: 10 }}>
+          <button
+            onClick={onClose}
+            style={{
+              flex: 1, padding: "9px 0", fontSize: 13, fontWeight: 500,
+              background: "var(--color-bg-subtle)", border: "1px solid var(--color-border)",
+              borderRadius: "var(--radius-sm)", color: "var(--color-text-secondary)", cursor: "pointer",
+            }}
+          >
+            Cancel
+          </button>
+          <button
+            onClick={handleConfirm}
+            disabled={loading}
+            style={{
+              flex: 1, padding: "9px 0", fontSize: 13, fontWeight: 700,
+              background: loading ? "rgba(239,68,68,0.5)" : "#ef4444",
+              border: "none", borderRadius: "var(--radius-sm)",
+              color: "#fff", cursor: loading ? "not-allowed" : "pointer",
+            }}
+          >
+            {loading ? "Deleting…" : "Yes, delete"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // need React in scope for the modal
 import React from "react";

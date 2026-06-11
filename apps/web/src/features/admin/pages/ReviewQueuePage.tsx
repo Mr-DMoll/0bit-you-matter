@@ -430,14 +430,13 @@ function PreviewPanel({ item, onClose, onUpdated }: { item: QueueItem; onClose: 
 function AssignModal({ item, onClose, onAssigned }: { item: QueueItem; onClose: () => void; onAssigned: () => void }) {
   const [reviewers, setReviewers] = useState<any[]>([]);
   const [reviewerId, setReviewerId] = useState(item.review?.reviewer?.id ?? "");
-  const [dueAt, setDueAt] = useState("");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
   const isReassign = !!item.review;
 
   useEffect(() => {
-    apiClient.get("/admin/users", { params: { role: "REVIEWER", status: "ACTIVE" } })
+    apiClient.get("/admin/staff", { params: { role: "REVIEWER", limit: 100 } })
       .then((r) => setReviewers(r.data.data?.users ?? r.data.data ?? []))
       .catch(() => {});
   }, []);
@@ -446,21 +445,21 @@ function AssignModal({ item, onClose, onAssigned }: { item: QueueItem; onClose: 
     if (!reviewerId) { setError("Select a reviewer"); return; }
     setSaving(true); setError("");
     try {
-      // Map our type key → API contentType
       const contentTypeMap: Record<string, string> = {
-        CAREER: "CAREER", PATHWAY: "PATHWAY", BURSARY: "BURSARY", QUESTION: "QUESTION",
+        CAREER: "CAREER", PATHWAY: "PATHWAY", BURSARY: "BURSARY",
+        QUESTION: "ASSESSMENT_QUESTION",
         TVET: "TVET_COLLEGE", PRIVATE: "TVET_COLLEGE",
       };
       const contentType = contentTypeMap[item.type] ?? item.type;
 
       await apiClient.post("/content/reviews", {
         contentType,
-        careerId:   item.type === "CAREER"   ? item.data.id : undefined,
+        careerId:    item.type === "CAREER"                   ? item.data.id : undefined,
+        questionId:  item.type === "QUESTION"                 ? item.data.id : undefined,
+        entityId:    !["CAREER", "QUESTION"].includes(item.type) ? item.data.id : undefined,
         reviewerId,
-        dueAt: dueAt || undefined,
       });
 
-      // Move content status to IN_REVIEW so it's clear it's been picked up
       if (item.type === "CAREER") {
         await apiClient.patch(`/careers/${item.data.id}`, { status: "IN_REVIEW" });
       }
@@ -494,16 +493,14 @@ function AssignModal({ item, onClose, onAssigned }: { item: QueueItem; onClose: 
             <p style={{ fontSize: "13px", color: "#d97706" }}>No active reviewers yet — invite reviewers from the <strong>Reviewers</strong> page first.</p>
           </div>
         ) : (
-          <div style={{ display: "flex", flexDirection: "column", gap: "14px", marginBottom: "22px" }}>
-            <div>
-              <label style={{ display: "block", fontSize: "12px", fontWeight: 600, color: "var(--color-text-muted)", marginBottom: "6px" }}>Reviewer *</label>
-              <Select value={reviewerId} onChange={setReviewerId} options={[{ label: "Select a reviewer…", value: "" }, ...reviewers.map((r) => ({ label: displayName(r) || r.email, value: r.id }))]} />
-            </div>
-            <div>
-              <label style={{ display: "block", fontSize: "12px", fontWeight: 600, color: "var(--color-text-muted)", marginBottom: "6px" }}>Due date <span style={{ fontWeight: 400 }}>(optional)</span></label>
-              <input type="date" value={dueAt} onChange={(e) => setDueAt(e.target.value)}
-                style={{ width: "100%", padding: "8px 12px", fontSize: "13px", background: "var(--color-bg-secondary)", border: "1px solid var(--color-border)", borderRadius: "var(--radius-sm)", color: "var(--color-text-primary)", outline: "none", boxSizing: "border-box" }} />
-            </div>
+          <div style={{ marginBottom: "22px" }}>
+            <label style={{ display: "block", fontSize: "12px", fontWeight: 600, color: "var(--color-text-muted)", marginBottom: "6px" }}>Reviewer *</label>
+            <Select value={reviewerId} onChange={setReviewerId} options={[{ label: "Select a reviewer…", value: "" }, ...reviewers.map((r) => ({ label: displayName(r) || r.email, value: r.id }))]} />
+            {reviewerId && reviewers.find(r => r.id === reviewerId)?.specialisation && (
+              <p style={{ fontSize: "11px", color: "var(--color-text-muted)", marginTop: "5px" }}>
+                🏷 {reviewers.find(r => r.id === reviewerId)?.specialisation}
+              </p>
+            )}
           </div>
         )}
 
@@ -531,12 +528,11 @@ function BulkAssignBar({
 }) {
   const [reviewers,   setReviewers]   = useState<any[]>([]);
   const [reviewerId,  setReviewerId]  = useState("");
-  const [dueAt,       setDueAt]       = useState("");
   const [saving,      setSaving]      = useState(false);
   const [result,      setResult]      = useState("");
 
   useEffect(() => {
-    apiClient.get("/users", { params: { role: "REVIEWER", limit: 100 } })
+    apiClient.get("/admin/staff", { params: { role: "REVIEWER", limit: 100 } })
       .then((r) => setReviewers(r.data?.data?.users ?? []))
       .catch(() => {});
   }, []);
@@ -559,13 +555,13 @@ function BulkAssignBar({
 
       for (const [type, typeItems] of byType) {
         const ids = typeItems.map((i) => i.id);
-        let payload: any = { reviewerId, dueAt: dueAt || undefined };
+        let payload: any = { reviewerId };
 
         if (type === "CAREER")   payload = { ...payload, contentType: "CAREER",   careerIds: ids };
         else if (type === "PATHWAY")  payload = { ...payload, contentType: "PATHWAY",  pathwayIds: ids };
         else if (type === "BURSARY")  payload = { ...payload, contentType: "BURSARY",  bursaryIds: ids };
-        else if (type === "TVET")     payload = { ...payload, contentType: "TVET",     collegeIds: ids };
-        else if (type === "PRIVATE")  payload = { ...payload, contentType: "PRIVATE",  collegeIds: ids };
+        else if (type === "TVET")     payload = { ...payload, contentType: "TVET_COLLEGE", collegeIds: ids };
+        else if (type === "PRIVATE")  payload = { ...payload, contentType: "TVET_COLLEGE", collegeIds: ids };
         else if (type === "QUESTION") payload = { ...payload, contentType: "ASSESSMENT_QUESTION", questionIds: ids };
 
         await apiClient.post("/content/reviews/bulk", payload);
@@ -604,18 +600,6 @@ function BulkAssignBar({
           options={[{ label: "Select reviewer…", value: "" }, ...reviewers.map((r) => ({ label: displayName(r) || r.email, value: r.id }))]}
         />
       </div>
-
-      <input
-        type="date"
-        value={dueAt}
-        onChange={(e) => setDueAt(e.target.value)}
-        placeholder="Due date (optional)"
-        style={{
-          padding: "7px 10px", fontSize: "12px", borderRadius: "var(--radius-sm)",
-          border: "1px solid var(--color-border)", background: "var(--color-bg-secondary)",
-          color: "var(--color-text-primary)", outline: "none", flex: "0 0 auto",
-        }}
-      />
 
       {result ? (
         <span style={{ fontSize: "12px", fontWeight: 600, color: result.startsWith("✓") ? "#22c55e" : "#ef4444" }}>{result}</span>

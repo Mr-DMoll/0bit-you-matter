@@ -56,6 +56,7 @@ export type UserMinAggregateOutputType = {
   dateOfBirth: Date | null
   googleId: string | null
   googleRefreshToken: string | null
+  specialisation: string | null
   grade: number | null
   province: string | null
   school: string | null
@@ -87,6 +88,7 @@ export type UserMaxAggregateOutputType = {
   dateOfBirth: Date | null
   googleId: string | null
   googleRefreshToken: string | null
+  specialisation: string | null
   grade: number | null
   province: string | null
   school: string | null
@@ -118,6 +120,7 @@ export type UserCountAggregateOutputType = {
   dateOfBirth: number
   googleId: number
   googleRefreshToken: number
+  specialisation: number
   grade: number
   province: number
   school: number
@@ -159,6 +162,7 @@ export type UserMinAggregateInputType = {
   dateOfBirth?: true
   googleId?: true
   googleRefreshToken?: true
+  specialisation?: true
   grade?: true
   province?: true
   school?: true
@@ -190,6 +194,7 @@ export type UserMaxAggregateInputType = {
   dateOfBirth?: true
   googleId?: true
   googleRefreshToken?: true
+  specialisation?: true
   grade?: true
   province?: true
   school?: true
@@ -221,6 +226,7 @@ export type UserCountAggregateInputType = {
   dateOfBirth?: true
   googleId?: true
   googleRefreshToken?: true
+  specialisation?: true
   grade?: true
   province?: true
   school?: true
@@ -339,6 +345,7 @@ export type UserGroupByOutputType = {
   dateOfBirth: Date | null
   googleId: string | null
   googleRefreshToken: string | null
+  specialisation: string | null
   grade: number | null
   province: string | null
   school: string | null
@@ -393,6 +400,7 @@ export type UserWhereInput = {
   dateOfBirth?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   googleId?: Prisma.StringNullableFilter<"User"> | string | null
   googleRefreshToken?: Prisma.StringNullableFilter<"User"> | string | null
+  specialisation?: Prisma.StringNullableFilter<"User"> | string | null
   grade?: Prisma.IntNullableFilter<"User"> | number | null
   province?: Prisma.StringNullableFilter<"User"> | string | null
   school?: Prisma.StringNullableFilter<"User"> | string | null
@@ -435,6 +443,7 @@ export type UserOrderByWithRelationInput = {
   dateOfBirth?: Prisma.SortOrderInput | Prisma.SortOrder
   googleId?: Prisma.SortOrderInput | Prisma.SortOrder
   googleRefreshToken?: Prisma.SortOrderInput | Prisma.SortOrder
+  specialisation?: Prisma.SortOrderInput | Prisma.SortOrder
   grade?: Prisma.SortOrderInput | Prisma.SortOrder
   province?: Prisma.SortOrderInput | Prisma.SortOrder
   school?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -480,6 +489,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   language?: Prisma.StringNullableFilter<"User"> | string | null
   dateOfBirth?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   googleRefreshToken?: Prisma.StringNullableFilter<"User"> | string | null
+  specialisation?: Prisma.StringNullableFilter<"User"> | string | null
   grade?: Prisma.IntNullableFilter<"User"> | number | null
   province?: Prisma.StringNullableFilter<"User"> | string | null
   school?: Prisma.StringNullableFilter<"User"> | string | null
@@ -522,6 +532,7 @@ export type UserOrderByWithAggregationInput = {
   dateOfBirth?: Prisma.SortOrderInput | Prisma.SortOrder
   googleId?: Prisma.SortOrderInput | Prisma.SortOrder
   googleRefreshToken?: Prisma.SortOrderInput | Prisma.SortOrder
+  specialisation?: Prisma.SortOrderInput | Prisma.SortOrder
   grade?: Prisma.SortOrderInput | Prisma.SortOrder
   province?: Prisma.SortOrderInput | Prisma.SortOrder
   school?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -561,6 +572,7 @@ export type UserScalarWhereWithAggregatesInput = {
   dateOfBirth?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   googleId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   googleRefreshToken?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  specialisation?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   grade?: Prisma.IntNullableWithAggregatesFilter<"User"> | number | null
   province?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   school?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
@@ -592,6 +604,7 @@ export type UserCreateInput = {
   dateOfBirth?: Date | string | null
   googleId?: string | null
   googleRefreshToken?: string | null
+  specialisation?: string | null
   grade?: number | null
   province?: string | null
   school?: string | null
@@ -632,6 +645,7 @@ export type UserUncheckedCreateInput = {
   dateOfBirth?: Date | string | null
   googleId?: string | null
   googleRefreshToken?: string | null
+  specialisation?: string | null
   grade?: number | null
   province?: string | null
   school?: string | null
@@ -672,6 +686,7 @@ export type UserUpdateInput = {
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialisation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -712,6 +727,7 @@ export type UserUncheckedUpdateInput = {
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialisation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -752,6 +768,7 @@ export type UserCreateManyInput = {
   dateOfBirth?: Date | string | null
   googleId?: string | null
   googleRefreshToken?: string | null
+  specialisation?: string | null
   grade?: number | null
   province?: string | null
   school?: string | null
@@ -783,6 +800,7 @@ export type UserUpdateManyMutationInput = {
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialisation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -812,6 +830,7 @@ export type UserUncheckedUpdateManyInput = {
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialisation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -858,6 +877,7 @@ export type UserCountOrderByAggregateInput = {
   dateOfBirth?: Prisma.SortOrder
   googleId?: Prisma.SortOrder
   googleRefreshToken?: Prisma.SortOrder
+  specialisation?: Prisma.SortOrder
   grade?: Prisma.SortOrder
   province?: Prisma.SortOrder
   school?: Prisma.SortOrder
@@ -893,6 +913,7 @@ export type UserMaxOrderByAggregateInput = {
   dateOfBirth?: Prisma.SortOrder
   googleId?: Prisma.SortOrder
   googleRefreshToken?: Prisma.SortOrder
+  specialisation?: Prisma.SortOrder
   grade?: Prisma.SortOrder
   province?: Prisma.SortOrder
   school?: Prisma.SortOrder
@@ -924,6 +945,7 @@ export type UserMinOrderByAggregateInput = {
   dateOfBirth?: Prisma.SortOrder
   googleId?: Prisma.SortOrder
   googleRefreshToken?: Prisma.SortOrder
+  specialisation?: Prisma.SortOrder
   grade?: Prisma.SortOrder
   province?: Prisma.SortOrder
   school?: Prisma.SortOrder
@@ -1210,6 +1232,7 @@ export type UserCreateWithoutInviteesInput = {
   dateOfBirth?: Date | string | null
   googleId?: string | null
   googleRefreshToken?: string | null
+  specialisation?: string | null
   grade?: number | null
   province?: string | null
   school?: string | null
@@ -1249,6 +1272,7 @@ export type UserUncheckedCreateWithoutInviteesInput = {
   dateOfBirth?: Date | string | null
   googleId?: string | null
   googleRefreshToken?: string | null
+  specialisation?: string | null
   grade?: number | null
   province?: string | null
   school?: string | null
@@ -1293,6 +1317,7 @@ export type UserCreateWithoutInvitedByInput = {
   dateOfBirth?: Date | string | null
   googleId?: string | null
   googleRefreshToken?: string | null
+  specialisation?: string | null
   grade?: number | null
   province?: string | null
   school?: string | null
@@ -1332,6 +1357,7 @@ export type UserUncheckedCreateWithoutInvitedByInput = {
   dateOfBirth?: Date | string | null
   googleId?: string | null
   googleRefreshToken?: string | null
+  specialisation?: string | null
   grade?: number | null
   province?: string | null
   school?: string | null
@@ -1381,6 +1407,7 @@ export type UserCreateWithoutManagedLearnersInput = {
   dateOfBirth?: Date | string | null
   googleId?: string | null
   googleRefreshToken?: string | null
+  specialisation?: string | null
   grade?: number | null
   province?: string | null
   school?: string | null
@@ -1420,6 +1447,7 @@ export type UserUncheckedCreateWithoutManagedLearnersInput = {
   dateOfBirth?: Date | string | null
   googleId?: string | null
   googleRefreshToken?: string | null
+  specialisation?: string | null
   grade?: number | null
   province?: string | null
   school?: string | null
@@ -1464,6 +1492,7 @@ export type UserCreateWithoutManagerInput = {
   dateOfBirth?: Date | string | null
   googleId?: string | null
   googleRefreshToken?: string | null
+  specialisation?: string | null
   grade?: number | null
   province?: string | null
   school?: string | null
@@ -1503,6 +1532,7 @@ export type UserUncheckedCreateWithoutManagerInput = {
   dateOfBirth?: Date | string | null
   googleId?: string | null
   googleRefreshToken?: string | null
+  specialisation?: string | null
   grade?: number | null
   province?: string | null
   school?: string | null
@@ -1563,6 +1593,7 @@ export type UserUpdateWithoutInviteesInput = {
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialisation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1602,6 +1633,7 @@ export type UserUncheckedUpdateWithoutInviteesInput = {
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialisation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1660,6 +1692,7 @@ export type UserScalarWhereInput = {
   dateOfBirth?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   googleId?: Prisma.StringNullableFilter<"User"> | string | null
   googleRefreshToken?: Prisma.StringNullableFilter<"User"> | string | null
+  specialisation?: Prisma.StringNullableFilter<"User"> | string | null
   grade?: Prisma.IntNullableFilter<"User"> | number | null
   province?: Prisma.StringNullableFilter<"User"> | string | null
   school?: Prisma.StringNullableFilter<"User"> | string | null
@@ -1702,6 +1735,7 @@ export type UserUpdateWithoutManagedLearnersInput = {
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialisation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1741,6 +1775,7 @@ export type UserUncheckedUpdateWithoutManagedLearnersInput = {
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialisation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1796,6 +1831,7 @@ export type UserCreateWithoutAuditLogsInput = {
   dateOfBirth?: Date | string | null
   googleId?: string | null
   googleRefreshToken?: string | null
+  specialisation?: string | null
   grade?: number | null
   province?: string | null
   school?: string | null
@@ -1835,6 +1871,7 @@ export type UserUncheckedCreateWithoutAuditLogsInput = {
   dateOfBirth?: Date | string | null
   googleId?: string | null
   googleRefreshToken?: string | null
+  specialisation?: string | null
   grade?: number | null
   province?: string | null
   school?: string | null
@@ -1890,6 +1927,7 @@ export type UserUpdateWithoutAuditLogsInput = {
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialisation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1929,6 +1967,7 @@ export type UserUncheckedUpdateWithoutAuditLogsInput = {
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialisation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1968,6 +2007,7 @@ export type UserCreateWithoutNotificationsInput = {
   dateOfBirth?: Date | string | null
   googleId?: string | null
   googleRefreshToken?: string | null
+  specialisation?: string | null
   grade?: number | null
   province?: string | null
   school?: string | null
@@ -2007,6 +2047,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   dateOfBirth?: Date | string | null
   googleId?: string | null
   googleRefreshToken?: string | null
+  specialisation?: string | null
   grade?: number | null
   province?: string | null
   school?: string | null
@@ -2062,6 +2103,7 @@ export type UserUpdateWithoutNotificationsInput = {
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialisation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2101,6 +2143,7 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialisation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2140,6 +2183,7 @@ export type UserCreateWithoutAssessmentSessionsInput = {
   dateOfBirth?: Date | string | null
   googleId?: string | null
   googleRefreshToken?: string | null
+  specialisation?: string | null
   grade?: number | null
   province?: string | null
   school?: string | null
@@ -2179,6 +2223,7 @@ export type UserUncheckedCreateWithoutAssessmentSessionsInput = {
   dateOfBirth?: Date | string | null
   googleId?: string | null
   googleRefreshToken?: string | null
+  specialisation?: string | null
   grade?: number | null
   province?: string | null
   school?: string | null
@@ -2234,6 +2279,7 @@ export type UserUpdateWithoutAssessmentSessionsInput = {
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialisation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2273,6 +2319,7 @@ export type UserUncheckedUpdateWithoutAssessmentSessionsInput = {
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialisation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2312,6 +2359,7 @@ export type UserCreateWithoutLearnerProfileInput = {
   dateOfBirth?: Date | string | null
   googleId?: string | null
   googleRefreshToken?: string | null
+  specialisation?: string | null
   grade?: number | null
   province?: string | null
   school?: string | null
@@ -2351,6 +2399,7 @@ export type UserUncheckedCreateWithoutLearnerProfileInput = {
   dateOfBirth?: Date | string | null
   googleId?: string | null
   googleRefreshToken?: string | null
+  specialisation?: string | null
   grade?: number | null
   province?: string | null
   school?: string | null
@@ -2406,6 +2455,7 @@ export type UserUpdateWithoutLearnerProfileInput = {
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialisation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2445,6 +2495,7 @@ export type UserUncheckedUpdateWithoutLearnerProfileInput = {
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialisation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2484,6 +2535,7 @@ export type UserCreateWithoutReviewAssignmentsInput = {
   dateOfBirth?: Date | string | null
   googleId?: string | null
   googleRefreshToken?: string | null
+  specialisation?: string | null
   grade?: number | null
   province?: string | null
   school?: string | null
@@ -2523,6 +2575,7 @@ export type UserUncheckedCreateWithoutReviewAssignmentsInput = {
   dateOfBirth?: Date | string | null
   googleId?: string | null
   googleRefreshToken?: string | null
+  specialisation?: string | null
   grade?: number | null
   province?: string | null
   school?: string | null
@@ -2578,6 +2631,7 @@ export type UserUpdateWithoutReviewAssignmentsInput = {
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialisation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2617,6 +2671,7 @@ export type UserUncheckedUpdateWithoutReviewAssignmentsInput = {
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialisation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2656,6 +2711,7 @@ export type UserCreateWithoutVerificationItemsInput = {
   dateOfBirth?: Date | string | null
   googleId?: string | null
   googleRefreshToken?: string | null
+  specialisation?: string | null
   grade?: number | null
   province?: string | null
   school?: string | null
@@ -2695,6 +2751,7 @@ export type UserUncheckedCreateWithoutVerificationItemsInput = {
   dateOfBirth?: Date | string | null
   googleId?: string | null
   googleRefreshToken?: string | null
+  specialisation?: string | null
   grade?: number | null
   province?: string | null
   school?: string | null
@@ -2750,6 +2807,7 @@ export type UserUpdateWithoutVerificationItemsInput = {
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialisation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2789,6 +2847,7 @@ export type UserUncheckedUpdateWithoutVerificationItemsInput = {
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialisation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2828,6 +2887,7 @@ export type UserCreateWithoutGenerationJobsInput = {
   dateOfBirth?: Date | string | null
   googleId?: string | null
   googleRefreshToken?: string | null
+  specialisation?: string | null
   grade?: number | null
   province?: string | null
   school?: string | null
@@ -2867,6 +2927,7 @@ export type UserUncheckedCreateWithoutGenerationJobsInput = {
   dateOfBirth?: Date | string | null
   googleId?: string | null
   googleRefreshToken?: string | null
+  specialisation?: string | null
   grade?: number | null
   province?: string | null
   school?: string | null
@@ -2922,6 +2983,7 @@ export type UserUpdateWithoutGenerationJobsInput = {
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialisation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2961,6 +3023,7 @@ export type UserUncheckedUpdateWithoutGenerationJobsInput = {
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialisation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3000,6 +3063,7 @@ export type UserCreateManyInvitedByInput = {
   dateOfBirth?: Date | string | null
   googleId?: string | null
   googleRefreshToken?: string | null
+  specialisation?: string | null
   grade?: number | null
   province?: string | null
   school?: string | null
@@ -3030,6 +3094,7 @@ export type UserCreateManyManagerInput = {
   dateOfBirth?: Date | string | null
   googleId?: string | null
   googleRefreshToken?: string | null
+  specialisation?: string | null
   grade?: number | null
   province?: string | null
   school?: string | null
@@ -3060,6 +3125,7 @@ export type UserUpdateWithoutInvitedByInput = {
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialisation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3099,6 +3165,7 @@ export type UserUncheckedUpdateWithoutInvitedByInput = {
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialisation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3138,6 +3205,7 @@ export type UserUncheckedUpdateManyWithoutInvitedByInput = {
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialisation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3168,6 +3236,7 @@ export type UserUpdateWithoutManagerInput = {
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialisation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3207,6 +3276,7 @@ export type UserUncheckedUpdateWithoutManagerInput = {
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialisation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3246,6 +3316,7 @@ export type UserUncheckedUpdateManyWithoutManagerInput = {
   dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialisation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3370,6 +3441,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   dateOfBirth?: boolean
   googleId?: boolean
   googleRefreshToken?: boolean
+  specialisation?: boolean
   grade?: boolean
   province?: boolean
   school?: boolean
@@ -3413,6 +3485,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   dateOfBirth?: boolean
   googleId?: boolean
   googleRefreshToken?: boolean
+  specialisation?: boolean
   grade?: boolean
   province?: boolean
   school?: boolean
@@ -3446,6 +3519,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   dateOfBirth?: boolean
   googleId?: boolean
   googleRefreshToken?: boolean
+  specialisation?: boolean
   grade?: boolean
   province?: boolean
   school?: boolean
@@ -3479,6 +3553,7 @@ export type UserSelectScalar = {
   dateOfBirth?: boolean
   googleId?: boolean
   googleRefreshToken?: boolean
+  specialisation?: boolean
   grade?: boolean
   province?: boolean
   school?: boolean
@@ -3488,7 +3563,7 @@ export type UserSelectScalar = {
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "password" | "role" | "accountStatus" | "firstName" | "lastName" | "displayName" | "avatarUrl" | "phone" | "verificationCode" | "verificationExpires" | "passwordResetToken" | "passwordResetExpires" | "lastActiveAt" | "city" | "country" | "language" | "dateOfBirth" | "googleId" | "googleRefreshToken" | "grade" | "province" | "school" | "invitedById" | "managerId" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "password" | "role" | "accountStatus" | "firstName" | "lastName" | "displayName" | "avatarUrl" | "phone" | "verificationCode" | "verificationExpires" | "passwordResetToken" | "passwordResetExpires" | "lastActiveAt" | "city" | "country" | "language" | "dateOfBirth" | "googleId" | "googleRefreshToken" | "specialisation" | "grade" | "province" | "school" | "invitedById" | "managerId" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   invitedBy?: boolean | Prisma.User$invitedByArgs<ExtArgs>
   invitees?: boolean | Prisma.User$inviteesArgs<ExtArgs>
@@ -3549,6 +3624,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     dateOfBirth: Date | null
     googleId: string | null
     googleRefreshToken: string | null
+    specialisation: string | null
     grade: number | null
     province: string | null
     school: string | null
@@ -4011,6 +4087,7 @@ export interface UserFieldRefs {
   readonly dateOfBirth: Prisma.FieldRef<"User", 'DateTime'>
   readonly googleId: Prisma.FieldRef<"User", 'String'>
   readonly googleRefreshToken: Prisma.FieldRef<"User", 'String'>
+  readonly specialisation: Prisma.FieldRef<"User", 'String'>
   readonly grade: Prisma.FieldRef<"User", 'Int'>
   readonly province: Prisma.FieldRef<"User", 'String'>
   readonly school: Prisma.FieldRef<"User", 'String'>

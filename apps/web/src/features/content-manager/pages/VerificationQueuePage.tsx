@@ -23,7 +23,7 @@ export function VerificationQueuePage() {
     if (status) params.status = status;
     Promise.all([
       apiClient.get("/content/verifications", { params }),
-      apiClient.get("/admin/staff", { params: { role: "DATA_VERIFIER" } }),
+      apiClient.get("/admin/staff", { params: { role: "REVIEWER" } }),
     ])
       .then(([vRes, uRes]) => {
         setVerifications(vRes.data.data.verifications ?? []);

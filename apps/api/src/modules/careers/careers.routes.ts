@@ -10,8 +10,9 @@ import { Role }      from "@repo/types";
 
 const router = Router();
 
-const staff = [Role.SUPER_ADMIN, Role.ADMIN, Role.MANAGER, Role.CONTENT_MANAGER, Role.REVIEWER, Role.DATA_VERIFIER];
-const editors = [Role.SUPER_ADMIN, Role.ADMIN, Role.CONTENT_MANAGER];
+const staff   = [Role.SUPER_ADMIN, Role.ADMIN, Role.MANAGER, Role.CONTENT_MANAGER, Role.REVIEWER];
+// Reviewers can edit content they're reviewing — they are the verification authority
+const editors = [Role.SUPER_ADMIN, Role.ADMIN, Role.CONTENT_MANAGER, Role.REVIEWER];
 
 // Public — learners browse careers (no auth required for read)
 router.get("/clusters",       listClusters);

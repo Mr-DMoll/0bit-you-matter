@@ -5,14 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/shared/context/AuthContext";
 import { BRAND } from "@/shared/config/branding.config";
-
-const ROLE_ROUTES: Record<string, string> = {
-  SUPER_ADMIN: "/super-admin",
-  ADMIN:       "/admin",
-  MANAGER:     "/manager",
-  USER:        "/user",
-  LEARNER:     "/learner",
-};
+import { roleHomeRoute } from "@/shared/config/roles.config";
 
 const OAUTH_ERRORS: Record<string, string> = {
   google_denied:  "Google sign-in was cancelled.",
@@ -47,10 +40,10 @@ export default function LoginPage() {
   const [error,    setError]    = useState("");
   const [loading,  setLoading]  = useState(false);
 
-  // Redirect as soon as user is set
+  // Redirect as soon as user is set — uses the shared role map so no role is ever missed
   useEffect(() => {
     if (!isLoading && user) {
-      router.push(ROLE_ROUTES[user.role] ?? "/");
+      router.push(roleHomeRoute(user.role));
     }
   }, [user, isLoading, router]);
 

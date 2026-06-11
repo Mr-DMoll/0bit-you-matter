@@ -2264,6 +2264,7 @@ export const UserScalarFieldEnum = {
   dateOfBirth: 'dateOfBirth',
   googleId: 'googleId',
   googleRefreshToken: 'googleRefreshToken',
+  specialisation: 'specialisation',
   grade: 'grade',
   province: 'province',
   school: 'school',

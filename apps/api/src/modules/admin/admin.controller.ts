@@ -7,7 +7,8 @@ import { sendInviteEmail } from "../../services/mail.service.js";
 
 // Use string literals — not the Role enum — so this works even if @repo/types
 // hasn't been rebuilt yet after adding new enum values.
-const INVITABLE_ROLES = ["MANAGER", "CONTENT_MANAGER", "REVIEWER", "DATA_VERIFIER"] as const;
+// DATA_VERIFIER removed — reviewers are the single verification authority
+const INVITABLE_ROLES = ["MANAGER", "CONTENT_MANAGER", "REVIEWER"] as const;
 type InvitableRoleStr = typeof INVITABLE_ROLES[number];
 
 // ── Admin dashboard ────────────────────────────────────────────────────────────
@@ -25,8 +26,8 @@ export const adminDashboard = catchAsync(async (_req: Request, res: Response) =>
     prisma.user.count({ where: { role: "LEARNER",         accountStatus: { not: "DELETED" } } }),
     prisma.user.count({ where: { role: "MANAGER",         accountStatus: { not: "DELETED" } } }),
     prisma.user.count({ where: { role: "CONTENT_MANAGER", accountStatus: { not: "DELETED" } } }),
-    prisma.user.count({ where: { role: "REVIEWER",        accountStatus: { not: "DELETED" } } }),
-    prisma.user.count({ where: { role: "DATA_VERIFIER",   accountStatus: { not: "DELETED" } } }),
+    prisma.user.count({ where: { role: "REVIEWER", accountStatus: { not: "DELETED" } } }),
+    Promise.resolve(0), // DATA_VERIFIER removed
     prisma.user.count({ where: { accountStatus: "PENDING", role: { in: [...INVITABLE_ROLES] as any } } }),
     prisma.auditLog.findMany({
       orderBy: { createdAt: "desc" },
@@ -75,6 +76,7 @@ export const listStaff = catchAsync(async (req: Request, res: Response) => {
         id: true, email: true, role: true,
         firstName: true, lastName: true, displayName: true,
         accountStatus: true, createdAt: true, lastActiveAt: true,
+        specialisation: true,
       },
       orderBy: { createdAt: "desc" },
       skip,
@@ -273,6 +275,57 @@ export const adminActivity = catchAsync(async (req: Request, res: Response) => {
     status: "success",
     data:   { logs, pagination: { total, page, pages: Math.ceil(total / limit) } },
   });
+});
+
+// ── Reviewer profile ───────────────────────────────────────────────────────────
+// GET  /admin/reviewers/:id/profile
+// PATCH /admin/reviewers/:id/profile  { specialisation }
+
+export const getReviewerProfile = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  const user = await prisma.user.findUnique({
+    where: { id },
+    select: {
+      id: true, email: true, role: true,
+      firstName: true, lastName: true, displayName: true, avatarUrl: true,
+      accountStatus: true, createdAt: true, lastActiveAt: true,
+      specialisation: true,
+    },
+  });
+  if (!user) throw new AppError("User not found", HttpStatus.NOT_FOUND);
+
+  // Stats: reviews done, verified vs discarded
+  const [totalReviews, verifiedCount, discardedCount, pendingCount] = await Promise.all([
+    prisma.contentReview.count({ where: { reviewerId: id } }),
+    prisma.auditLog.count({ where: { userId: id, action: "CONTENT_VERIFIED" } }),
+    prisma.auditLog.count({ where: { userId: id, action: "CONTENT_DISCARDED" } }),
+    prisma.contentReview.count({ where: { reviewerId: id, status: { in: ["PENDING", "IN_PROGRESS"] } } }),
+  ]);
+
+  return res.status(HttpStatus.OK).json({
+    status: "success",
+    data: {
+      user,
+      stats: { totalReviews, verifiedCount, discardedCount, pendingCount },
+    },
+  });
+});
+
+export const updateReviewerProfile = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { specialisation } = req.body;
+
+  const user = await prisma.user.findUnique({ where: { id } });
+  if (!user) throw new AppError("User not found", HttpStatus.NOT_FOUND);
+
+  const updated = await prisma.user.update({
+    where: { id },
+    data:  { specialisation: specialisation ?? null },
+    select: { id: true, specialisation: true },
+  });
+
+  return res.status(HttpStatus.OK).json({ status: "success", data: { user: updated } });
 });
 
 // ── Legacy compatibility — kept so existing invite routes still work ───────────

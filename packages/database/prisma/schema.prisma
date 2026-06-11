@@ -59,6 +59,7 @@ enum ContentType {
   UNIVERSITY_PROGRAMME
   UNIVERSITY_PROGRAMMES_BULK
   TVET_PROGRAMMES_BULK
+  TVET_COLLEGE
   PATHWAY
   BURSARY
   ASSESSMENT_QUESTION
@@ -124,6 +125,9 @@ model User {
   // Google OAuth
   googleId           String? @unique
   googleRefreshToken String?
+
+  // Reviewer-specific
+  specialisation String? // e.g. "Educational Psychologist, STEM careers"
 
   // Learner-specific
   grade    Int?    // 9–12, or 13 for post-matric

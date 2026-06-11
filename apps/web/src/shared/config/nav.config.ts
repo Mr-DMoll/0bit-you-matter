@@ -48,8 +48,7 @@ export const NAV_CONFIG: Record<string, NavSection[]> = {
       items: [
         { href: "/admin/learners",       label: "Learners",       icon: "GraduationCap" },
         { href: "/admin/managers",       label: "Managers",       icon: "UsersRound"    },
-        { href: "/admin/reviewers",      label: "Reviewers",      icon: "PenLine"       },
-        { href: "/admin/data-verifiers", label: "Data Verifiers", icon: "BadgeCheck"    },
+        { href: "/admin/reviewers", label: "Reviewers", icon: "PenLine" },
       ],
     },
     {
@@ -158,23 +157,6 @@ export const NAV_CONFIG: Record<string, NavSection[]> = {
         { href: "/reviewer",               label: "Review Queue",     icon: "ClipboardList" },
         { href: "/reviewer/contributions", label: "My Contributions", icon: "Trophy"        },
         { href: "/reviewer/notifications", label: "Notifications",    icon: "Bell"          },
-      ],
-    },
-  ],
-
-  // ── Data Verifier ─────────────────────────────────────────────────────────
-  DATA_VERIFIER: [
-    {
-      title: "Queues",
-      items: [
-        { href: "/data-verifier",                label: "APS Queue",      icon: "ClipboardList"  },
-        { href: "/data-verifier/deadline-queue", label: "Deadline Queue", icon: "CalendarClock"  },
-        { href: "/data-verifier/bursary-queue",  label: "Bursary Queue",  icon: "Coins"          },
-      ],
-    },
-    {
-      items: [
-        { href: "/data-verifier/source-library", label: "Source Library", icon: "BookMarked" },
       ],
     },
   ],

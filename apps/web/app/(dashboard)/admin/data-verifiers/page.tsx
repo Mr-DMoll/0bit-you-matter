@@ -1,5 +1,9 @@
 "use client";
-import { StaffDirectoryPage } from "@/features/admin/pages/StaffDirectoryPage";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+
 export default function Page() {
-  return <StaffDirectoryPage role="DATA_VERIFIER" title="Data Verifiers" subtitle="Manage verifier accounts — verification queue status, throughput, overdue items" />;
+  const router = useRouter();
+  useEffect(() => { router.replace("/admin/reviewers"); }, [router]);
+  return null;
 }

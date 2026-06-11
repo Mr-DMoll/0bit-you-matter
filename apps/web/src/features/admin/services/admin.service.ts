@@ -23,7 +23,7 @@ export interface LearnerUser extends StaffUser {
 // Legacy alias
 export type TeamUser = StaffUser;
 
-export type InvitableRole = "MANAGER" | "CONTENT_MANAGER" | "REVIEWER" | "DATA_VERIFIER";
+export type InvitableRole = "MANAGER" | "CONTENT_MANAGER" | "REVIEWER";
 
 export const adminService = {
   // ── Dashboard ───────────────────────────────────────────────────────────────

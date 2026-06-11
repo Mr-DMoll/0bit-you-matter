@@ -5,7 +5,7 @@ import { authorize } from "../../middleware/role.middleware.js";
 import { Role }      from "@repo/types";
 
 const router = Router();
-const editors = [Role.SUPER_ADMIN, Role.ADMIN, Role.CONTENT_MANAGER, Role.DATA_VERIFIER];
+const editors = [Role.SUPER_ADMIN, Role.ADMIN, Role.CONTENT_MANAGER, Role.REVIEWER];
 
 // Public / learner reads
 router.get("/",                       listPathways);
