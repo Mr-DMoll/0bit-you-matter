@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import { Search, MapPin } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Search, MapPin, ExternalLink, BookOpen, Loader2 } from "lucide-react";
+import apiClient from "@/api/client";
 
 const T = {
   primary:   "#5B4FCF",
@@ -16,196 +17,270 @@ const T = {
   border:    "rgba(91,79,207,0.12)",
 };
 
-const UNIVERSITIES = [
-  {
-    name: "University of Cape Town (UCT)",
-    location: "Cape Town, Western Cape",
-    aps: "36–42",
-    programmes: ["BSc Computer Science", "Medicine", "Engineering", "Commerce"],
-  },
-  {
-    name: "University of the Witwatersrand (Wits)",
-    location: "Johannesburg, Gauteng",
-    aps: "35–42",
-    programmes: ["BSc Engineering", "Law", "Health Sciences", "Commerce"],
-  },
-  {
-    name: "University of Pretoria (UP)",
-    location: "Pretoria, Gauteng",
-    aps: "32–40",
-    programmes: ["IT & Computer Science", "Veterinary Science", "Engineering", "Education"],
-  },
-  {
-    name: "Stellenbosch University",
-    location: "Stellenbosch, Western Cape",
-    aps: "34–42",
-    programmes: ["AgriSciences", "Engineering", "Medicine", "Business Science"],
-  },
-  {
-    name: "University of Johannesburg (UJ)",
-    location: "Johannesburg, Gauteng",
-    aps: "28–36",
-    programmes: ["BSc IT", "Engineering", "Business", "Design"],
-  },
-  {
-    name: "University of KwaZulu-Natal (UKZN)",
-    location: "Durban, KwaZulu-Natal",
-    aps: "28–36",
-    programmes: ["Medicine", "Engineering", "Law", "Education"],
-  },
-];
+// ── Types ──────────────────────────────────────────────────────────────────────
 
-const TVET_COLLEGES = [
-  {
-    name: "Ekurhuleni West TVET College",
-    location: "Ekurhuleni, Gauteng",
-    aps: "N/A",
-    programmes: ["N4–N6 IT", "Engineering Studies", "Business Studies", "Electrical"],
-  },
-  {
-    name: "False Bay TVET College",
-    location: "Cape Town, Western Cape",
-    aps: "N/A",
-    programmes: ["IT & Computer Science", "Engineering", "Tourism", "Finance"],
-  },
-  {
-    name: "Tshwane South TVET College",
-    location: "Pretoria, Gauteng",
-    aps: "N/A",
-    programmes: ["Information Technology", "Electrical Engineering", "Civil Engineering"],
-  },
-];
+interface University {
+  id:           string;
+  name:         string;
+  abbreviation: string | null;
+  province:     string;
+  type:         string | null;
+  website:      string | null;
+  logoUrl:      string | null;
+  status:       string;
+  _count:       { programmes: number };
+}
 
-const PRIVATE_COLLEGES = [
-  {
-    name: "IIE Rosebank College",
-    location: "Johannesburg, Gauteng",
-    aps: "26–32",
-    programmes: ["BCom", "IT", "Media", "Law"],
-  },
-  {
-    name: "Boston City Campus",
-    location: "Nationwide",
-    aps: "20–28",
-    programmes: ["Business Management", "IT", "Marketing", "Human Resources"],
-  },
-  {
-    name: "Richfield Graduate Institute",
-    location: "Durban, KwaZulu-Natal",
-    aps: "20–28",
-    programmes: ["BCom Accounting", "IT", "Business Administration"],
-  },
-];
+// ── Helpers ────────────────────────────────────────────────────────────────────
 
-const TABS = ["Universities", "TVET Colleges", "Private Colleges"];
+const TYPE_LABEL: Record<string, string> = {
+  traditional:              "Traditional University",
+  comprehensive:            "Comprehensive University",
+  university_of_technology: "University of Technology",
+};
+
+const TYPE_COLOR: Record<string, string> = {
+  traditional:              "#5B4FCF",
+  comprehensive:            "#0D9488",
+  university_of_technology: "#F97066",
+};
+
+function typeLabel(type: string | null) {
+  return type ? (TYPE_LABEL[type] ?? type) : "University";
+}
+
+function typeColor(type: string | null) {
+  return type ? (TYPE_COLOR[type] ?? T.primary) : T.primary;
+}
+
+// ── Page ───────────────────────────────────────────────────────────────────────
 
 export function UniversitiesPage() {
-  const [tab, setTab] = useState("Universities");
-  const [search, setSearch] = useState("");
+  const [universities, setUniversities] = useState<University[]>([]);
+  const [loading,      setLoading]      = useState(true);
+  const [error,        setError]        = useState("");
+  const [search,       setSearch]       = useState("");
+  const [province,     setProvince]     = useState("");
 
-  const dataMap: Record<string, typeof UNIVERSITIES> = {
-    "Universities": UNIVERSITIES,
-    "TVET Colleges": TVET_COLLEGES,
-    "Private Colleges": PRIVATE_COLLEGES,
-  };
+  useEffect(() => {
+    setLoading(true);
+    setError("");
 
-  const data = (dataMap[tab] ?? []).filter((u) =>
-    u.name.toLowerCase().includes(search.toLowerCase()) ||
-    u.location.toLowerCase().includes(search.toLowerCase())
-  );
+    const params = new URLSearchParams({ status: "APPROVED,VERIFIED" });
+    if (province) params.set("province", province);
+
+    apiClient
+      .get(`/universities?${params.toString()}`)
+      .then((res) => {
+        setUniversities(res.data?.data?.universities ?? []);
+      })
+      .catch(() => setError("Could not load universities. Please try again."))
+      .finally(() => setLoading(false));
+  }, [province]);
+
+  const filtered = universities.filter((u) => {
+    const q = search.toLowerCase();
+    return (
+      u.name.toLowerCase().includes(q) ||
+      (u.abbreviation?.toLowerCase().includes(q) ?? false) ||
+      u.province.toLowerCase().includes(q)
+    );
+  });
+
+  const provinces = Array.from(new Set(universities.map((u) => u.province))).sort();
 
   return (
     <div style={{ background: T.bg, minHeight: "100vh", padding: "28px 24px 48px", fontFamily: "inherit" }}>
+
       {/* Header */}
       <div style={{ marginBottom: 20 }}>
-        <h1 style={{ margin: "0 0 6px", fontSize: 24, fontWeight: 700, color: T.fg }}>Universities &amp; Colleges</h1>
-        <p style={{ margin: "0 0 16px", fontSize: 14, color: T.muted }}>Find the right institution for your career path.</p>
+        <h1 style={{ margin: "0 0 6px", fontSize: 24, fontWeight: 700, color: T.fg }}>Universities</h1>
+        <p style={{ margin: "0 0 16px", fontSize: 14, color: T.muted }}>
+          Explore institutions to find the right fit for your career path.
+        </p>
 
-        <div style={{ position: "relative", maxWidth: 420 }}>
-          <Search size={16} color={T.muted} style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)" }} />
-          <input
-            type="text"
-            placeholder="Search institutions..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
+        <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+          {/* Search */}
+          <div style={{ position: "relative", flex: "1 1 280px", maxWidth: 420 }}>
+            <Search size={16} color={T.muted} style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)" }} />
+            <input
+              type="text"
+              placeholder="Search by name or province…"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              style={{
+                width: "100%", padding: "10px 12px 10px 36px",
+                border: `1px solid ${T.border}`, borderRadius: 10,
+                fontSize: 14, color: T.fg, background: T.card,
+                outline: "none", boxSizing: "border-box",
+              }}
+            />
+          </div>
+
+          {/* Province filter */}
+          <select
+            value={province}
+            onChange={(e) => setProvince(e.target.value)}
             style={{
-              width: "100%",
-              padding: "10px 12px 10px 36px",
-              border: `1px solid ${T.border}`,
-              borderRadius: 10,
-              fontSize: 14,
-              color: T.fg,
-              background: T.card,
-              outline: "none",
-              boxSizing: "border-box",
+              padding: "10px 14px", border: `1px solid ${T.border}`,
+              borderRadius: 10, fontSize: 14,
+              color: province ? T.fg : T.muted,
+              background: T.card, outline: "none", cursor: "pointer", minWidth: 180,
             }}
-          />
+          >
+            <option value="">All provinces</option>
+            {provinces.map((p) => (
+              <option key={p} value={p}>{p}</option>
+            ))}
+          </select>
         </div>
       </div>
 
-      {/* Note banner */}
-      <div style={{ background: T.secondary, borderRadius: 10, padding: "10px 14px", marginBottom: 20, fontSize: 13, color: T.primary }}>
-        ℹ️ Showing minimum APS and key programmes to help you plan your path.
-      </div>
+      {/* Loading */}
+      {loading && (
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "80px 0", gap: 12 }}>
+          <Loader2 size={22} color={T.primary} style={{ animation: "spin 0.8s linear infinite" }} />
+          <span style={{ color: T.muted, fontSize: 14 }}>Loading universities…</span>
+          <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+        </div>
+      )}
 
-      {/* Tabs */}
-      <div style={{ display: "flex", gap: 4, marginBottom: 20, background: T.card, borderRadius: 10, padding: 4, border: `1px solid ${T.border}`, alignSelf: "flex-start", width: "fit-content" }}>
-        {TABS.map((t) => (
-          <button
-            key={t}
-            onClick={() => setTab(t)}
-            style={{
-              background: tab === t ? T.primary : "none",
-              color: tab === t ? "#fff" : T.muted,
-              border: "none",
-              borderRadius: 8,
-              padding: "8px 18px",
-              fontSize: 13,
-              fontWeight: 600,
-              cursor: "pointer",
-            }}
-          >
-            {t}
-          </button>
-        ))}
-      </div>
+      {/* Error */}
+      {!loading && error && (
+        <div style={{
+          background: "#FEF2F2", borderRadius: 12, padding: "16px 20px",
+          border: "1px solid #FECACA", color: "#DC2626", fontSize: 14,
+        }}>
+          {error}
+        </div>
+      )}
 
-      {/* University cards grid */}
-      <div className="uni-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 14 }}>
-        {data.map((u, i) => (
-          <div key={i} style={{ background: T.card, borderRadius: 14, padding: 20, border: `1px solid ${T.border}`, display: "flex", flexDirection: "column", gap: 10 }}>
-            <h3 style={{ margin: 0, fontSize: 15, fontWeight: 700, color: T.fg, lineHeight: 1.3 }}>{u.name}</h3>
-            <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12, color: T.muted }}>
-              <MapPin size={13} />
-              <span>{u.location}</span>
-            </div>
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <span style={{ fontSize: 12, fontWeight: 600, color: T.muted }}>APS:</span>
-              <span style={{ fontSize: 13, fontWeight: 700, color: T.primary, background: T.secondary, borderRadius: 99, padding: "2px 10px" }}>{u.aps}</span>
-            </div>
-            <div>
-              <p style={{ margin: "0 0 6px", fontSize: 11, fontWeight: 600, color: T.muted, textTransform: "uppercase", letterSpacing: 0.5 }}>Top Programmes</p>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-                {u.programmes.map((p) => (
-                  <span key={p} style={{ fontSize: 11, background: T.secondary, color: T.primary, borderRadius: 6, padding: "3px 8px" }}>{p}</span>
-                ))}
-              </div>
-            </div>
-            <button style={{ marginTop: "auto", background: "none", color: T.primary, border: `1.5px solid ${T.primary}`, borderRadius: 8, padding: "8px 0", fontWeight: 600, fontSize: 13, cursor: "pointer" }}>
-              View Details
-            </button>
-          </div>
-        ))}
-      </div>
+      {/* Empty */}
+      {!loading && !error && filtered.length === 0 && (
+        <div style={{ textAlign: "center", padding: "80px 0" }}>
+          <p style={{ fontSize: 36, marginBottom: 12 }}>🏛️</p>
+          <p style={{ fontWeight: 700, fontSize: 16, color: T.fg, marginBottom: 6 }}>No universities found</p>
+          <p style={{ color: T.muted, fontSize: 14 }}>
+            {search || province
+              ? "Try clearing the search or province filter."
+              : "No approved universities have been added yet."}
+          </p>
+        </div>
+      )}
+
+      {/* Count */}
+      {!loading && !error && filtered.length > 0 && (
+        <p style={{ fontSize: 13, color: T.muted, marginBottom: 14 }}>
+          Showing <strong style={{ color: T.fg }}>{filtered.length}</strong>{" "}
+          institution{filtered.length !== 1 ? "s" : ""}
+        </p>
+      )}
+
+      {/* Grid */}
+      {!loading && !error && filtered.length > 0 && (
+        <div className="uni-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 14 }}>
+          {filtered.map((u) => <UniCard key={u.id} uni={u} />)}
+        </div>
+      )}
 
       <style>{`
-        @media (max-width: 900px) {
-          .uni-grid { grid-template-columns: 1fr 1fr !important; }
-        }
-        @media (max-width: 600px) {
-          .uni-grid { grid-template-columns: 1fr !important; }
-        }
+        @media (max-width: 900px) { .uni-grid { grid-template-columns: 1fr 1fr !important; } }
+        @media (max-width: 600px) { .uni-grid { grid-template-columns: 1fr !important; } }
       `}</style>
+    </div>
+  );
+}
+
+// ── Card ───────────────────────────────────────────────────────────────────────
+
+function UniCard({ uni }: { uni: University }) {
+  const color  = typeColor(uni.type);
+  const label  = typeLabel(uni.type);
+  const abbrev = uni.abbreviation ? ` (${uni.abbreviation})` : "";
+
+  return (
+    <div
+      style={{
+        background: T.card, borderRadius: 14, padding: 20,
+        border: `1px solid ${T.border}`, display: "flex",
+        flexDirection: "column", gap: 12,
+      }}
+      onMouseEnter={(e) => (e.currentTarget.style.boxShadow = "0 4px 20px rgba(91,79,207,0.1)")}
+      onMouseLeave={(e) => (e.currentTarget.style.boxShadow = "none")}
+    >
+      {/* Logo / initial + name */}
+      <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
+        {uni.logoUrl ? (
+          <img
+            src={uni.logoUrl} alt={uni.name}
+            style={{ width: 48, height: 48, borderRadius: 10, objectFit: "contain", background: "#F3F4F6", padding: 4, flexShrink: 0 }}
+          />
+        ) : (
+          <div style={{
+            width: 48, height: 48, borderRadius: 10, flexShrink: 0,
+            background: `${color}18`,
+            display: "flex", alignItems: "center", justifyContent: "center",
+            fontWeight: 800, fontSize: 20, color,
+          }}>
+            {(uni.abbreviation ?? uni.name).charAt(0)}
+          </div>
+        )}
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <h3 style={{ margin: "0 0 5px", fontSize: 14, fontWeight: 700, color: T.fg, lineHeight: 1.3 }}>
+            {uni.name}{abbrev}
+          </h3>
+          <span style={{
+            fontSize: 11, fontWeight: 600, color,
+            background: `${color}14`, borderRadius: 99, padding: "2px 8px",
+          }}>
+            {label}
+          </span>
+        </div>
+      </div>
+
+      {/* Province */}
+      <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12, color: T.muted }}>
+        <MapPin size={13} />
+        <span>{uni.province}</span>
+      </div>
+
+      {/* Programmes */}
+      <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12, color: T.muted }}>
+        <BookOpen size={13} />
+        <span>
+          {uni.type === "university_of_technology" ? "Diplomas & BTech" : "Degrees & qualifications"}
+          {uni._count.programmes > 0 && (
+            <span style={{ marginLeft: 4, color: T.primary, fontWeight: 600 }}>
+              · {uni._count.programmes} programme{uni._count.programmes !== 1 ? "s" : ""}
+            </span>
+          )}
+        </span>
+      </div>
+
+      {/* Actions */}
+      <div style={{ display: "flex", gap: 8, marginTop: "auto" }}>
+        <button style={{
+          flex: 1, background: "none", color: T.primary,
+          border: `1.5px solid ${T.primary}`, borderRadius: 8,
+          padding: "8px 0", fontWeight: 600, fontSize: 13, cursor: "pointer",
+        }}>
+          View Programmes
+        </button>
+        {uni.website && (
+          <a
+            href={uni.website}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: "flex", alignItems: "center", justifyContent: "center",
+              width: 38, borderRadius: 8, border: `1.5px solid ${T.border}`,
+              color: T.muted, textDecoration: "none", flexShrink: 0,
+            }}
+          >
+            <ExternalLink size={14} />
+          </a>
+        )}
+      </div>
     </div>
   );
 }

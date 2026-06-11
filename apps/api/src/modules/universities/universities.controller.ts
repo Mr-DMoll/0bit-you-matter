@@ -15,7 +15,10 @@ export const listUniversities = catchAsync(async (req: Request, res: Response) =
 
   const where: any = {};
   if (province) where.province = province;
-  if (status)   where.status   = status;
+  if (status) {
+    const statuses = status.split(",").map((s) => s.trim()).filter(Boolean);
+    where.status = statuses.length === 1 ? statuses[0] : { in: statuses };
+  }
 
   const [universities, total] = await Promise.all([
     prisma.university.findMany({
