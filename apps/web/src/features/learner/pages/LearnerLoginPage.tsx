@@ -85,7 +85,7 @@ function LearnerLoginInner() {
         {/* Background photo */}
         <div style={{ position: "absolute", inset: 0 }}>
           <img
-            src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=720&h=900&fit=crop&auto=format&q=80"
+            src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=720&h=900&fit=crop&auto=format&q=80"
             alt=""
             style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 20%", mixBlendMode: "luminosity", opacity: 0.35 }}
           />
