@@ -14,6 +14,7 @@ export function MyContributionsPage() {
   const [pagination, setPagination] = useState({ total: 0, page: 1, pages: 1 });
   const [loading, setLoading]       = useState(true);
   const [page, setPage]             = useState(1);
+  const [typeFilter, setTypeFilter] = useState<string>("");
 
   useEffect(() => {
     setLoading(true);
@@ -41,6 +42,21 @@ export function MyContributionsPage() {
   const approved  = reviews.filter((r) => r.status === "APPROVED").length;
   const rejected  = reviews.filter((r) => r.status === "REJECTED").length;
   const approvalRate = completed.length ? Math.round((approved / completed.length) * 100) : 0;
+
+  // Dynamic type filter — only shown when reviewer has reviewed more than 1 content type
+  const distinctTypes = [...new Set(reviews.map((r) => r.contentType).filter(Boolean))];
+  const showTypeFilter = distinctTypes.length > 1;
+  const displayedReviews = typeFilter ? reviews.filter((r) => r.contentType === typeFilter) : reviews;
+
+  // Colour map for type pills
+  const TYPE_COLOURS: Record<string, string> = {
+    CAREER:              "#6366f1",
+    PATHWAY:             "#0ea5e9",
+    BURSARY:             "#f59e0b",
+    TVET_COLLEGE:        "#22c55e",
+    ASSESSMENT_QUESTION: "#ec4899",
+    UNIVERSITY_PROGRAMME:"#8b5cf6",
+  };
 
   const avgConfidence = (() => {
     const scored = reviews.filter((r) => r.confidenceRating);
@@ -85,15 +101,62 @@ export function MyContributionsPage() {
         </Card>
       )}
 
+      {/* Dynamic type filter — only rendered when reviewer has reviewed 2+ types */}
+      {!loading && showTypeFilter && (
+        <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", alignItems: "center" }}>
+          <span style={{ fontSize: 12, fontWeight: 600, color: "var(--color-text-muted)", marginRight: 4 }}>Filter by type:</span>
+          {/* "All" pill */}
+          <button
+            onClick={() => setTypeFilter("")}
+            style={{
+              padding: "5px 14px", borderRadius: 999, fontSize: 12, fontWeight: 600, cursor: "pointer", transition: "all 0.15s",
+              border: `1.5px solid ${!typeFilter ? "rgba(99,102,241,0.5)" : "var(--color-border)"}`,
+              background: !typeFilter ? "rgba(99,102,241,0.1)" : "transparent",
+              color: !typeFilter ? "#6366f1" : "var(--color-text-muted)",
+            }}
+          >
+            All
+          </button>
+          {distinctTypes.map((type) => {
+            const active = typeFilter === type;
+            const col    = TYPE_COLOURS[type] ?? "#6366f1";
+            const count  = reviews.filter((r) => r.contentType === type).length;
+            return (
+              <button
+                key={type}
+                onClick={() => setTypeFilter(active ? "" : type)}
+                style={{
+                  padding: "5px 14px", borderRadius: 999, fontSize: 12, fontWeight: 600, cursor: "pointer", transition: "all 0.15s",
+                  border: `1.5px solid ${active ? col + "80" : "var(--color-border)"}`,
+                  background: active ? col + "18" : "transparent",
+                  color: active ? col : "var(--color-text-muted)",
+                  display: "flex", alignItems: "center", gap: 6,
+                }}
+              >
+                {type.replace(/_/g, " ")}
+                <span style={{
+                  fontSize: 11, fontWeight: 700, minWidth: 18, height: 18,
+                  background: active ? col + "30" : "var(--color-bg-secondary)",
+                  color: active ? col : "var(--color-text-muted)",
+                  borderRadius: 999, display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "0 5px",
+                }}>
+                  {count}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      )}
+
       <Card noPad>
         {loading ? <Spinner /> : reviews.length === 0 ? <Empty message="No reviews submitted yet" /> : (
           <Table headers={["Content", "Type", "Decision", "Confidence", "Completed", "Notes", ""]}>
-            {reviews.map((r) => (
+            {displayedReviews.map((r) => (
               <TableRow
                 key={r.id}
                 cols={[
                   <span style={{ fontWeight: 500, color: "var(--color-text-primary)" }}>
-                    {r.career?.title ?? r.question?.questionText?.slice(0, 50) ?? r.tvetCollege?.name ?? "—"}
+                    {r.career?.title ?? r.question?.questionText?.slice(0, 50) ?? r.tvetCollege?.name ?? r.bursary?.name ?? r.pathway?.title ?? "—"}
                   </span>,
                   <Badge label={r.contentType?.replace(/_/g, " ")} color="#6366f1" />,
                   statusBadge(r.status),

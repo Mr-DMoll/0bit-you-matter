@@ -187,15 +187,37 @@ export async function runContentGenerationAgent(jobId: string): Promise<void> {
     const systemPrompt = job.promptTemplate?.systemPrompt
       ?? `${DEFAULT_SYSTEM[contentType]}\n\nOutput schema (return ONLY valid JSON, no markdown):\n${OUTPUT_SCHEMA[contentType]}`;
 
+    const LARGE_OUTPUT = ["UNIVERSITY_PROGRAMMES_BULK", "TVET_PROGRAMMES_BULK", "ASSESSMENT_QUESTIONS_BULK"];
+    const MEDIUM_OUTPUT = ["PATHWAY", "CAREER"];
+    const max_tokens = LARGE_OUTPUT.includes(contentType) ? 8192
+      : MEDIUM_OUTPUT.includes(contentType) ? 4096
+      : 2048;
+
     const message = await anthropic.messages.create({
       model:      "claude-opus-4-8",
-      max_tokens: ["UNIVERSITY_PROGRAMMES_BULK", "TVET_PROGRAMMES_BULK", "ASSESSMENT_QUESTIONS_BULK"].includes(contentType) ? 8192 : 2048,
+      max_tokens,
       system:     systemPrompt,
       messages:   [{ role: "user", content: filledPrompt }],
     });
 
-    const raw    = (message.content[0] as any).text as string;
-    const parsed = JSON.parse(raw.replace(/^```json\n?/, "").replace(/\n?```$/, "").trim());
+    const raw = (message.content[0] as any).text as string;
+    // Strip markdown code fences (```json ... ``` or ``` ... ```)
+    const cleaned = raw.replace(/^```(?:json)?\s*/i, "").replace(/\s*```\s*$/i, "").trim();
+    let parsed: any;
+    try {
+      parsed = JSON.parse(cleaned);
+    } catch (parseErr) {
+      // If truncated, try to extract the largest valid JSON object/array from the response
+      const objMatch = cleaned.match(/(\{[\s\S]*\})/);
+      const arrMatch = cleaned.match(/(\[[\s\S]*\])/);
+      const candidate = (objMatch?.[1] ?? "") || (arrMatch?.[1] ?? "");
+      if (!candidate) throw new Error(`Claude returned invalid JSON. Raw (first 500 chars): ${cleaned.slice(0, 500)}`);
+      try {
+        parsed = JSON.parse(candidate);
+      } catch {
+        throw new Error(`Claude returned unparseable JSON. Raw (first 500 chars): ${cleaned.slice(0, 500)}`);
+      }
+    }
 
     let outputCareerId: string | undefined;
 

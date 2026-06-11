@@ -523,9 +523,36 @@ export function AdminAssessmentBankPage() {
   const [typeFilter, setTypeFilter] = useState("");
   const [status, setStatus]         = useState("");
   const [page, setPage]             = useState(1);
-  const [selected, setSelected]       = useState<any | null>(null);
+  const [selected, setSelected]         = useState<any | null>(null);
   const [previewType, setPreviewType]   = useState<string | null>(null);
   const [bulkAssignType, setBulkAssignType] = useState<string | null>(null);
+
+  // True per-type totals fetched independently of pagination
+  const [typeTotals,  setTypeTotals]  = useState<Record<string, number>>({});
+  const [statusTotals, setStatusTotals] = useState<Record<string, number>>({});
+
+  const loadTotals = useCallback(async () => {
+    // Fetch counts for each type in parallel using limit=1 (just need pagination.total)
+    const types = Object.keys(TYPE_CFG);
+    const [typeResults, statusResults] = await Promise.all([
+      Promise.all(types.map((t) =>
+        apiClient.get("/assessments/questions", { params: { type: t, limit: 1 } })
+          .then((r) => ({ type: t, count: r.data.data.pagination?.total ?? 0 }))
+          .catch(() => ({ type: t, count: 0 }))
+      )),
+      Promise.all(["AI_GENERATED", "IN_REVIEW", "APPROVED", "VERIFIED"].map((s) =>
+        apiClient.get("/assessments/questions", { params: { status: s, limit: 1 } })
+          .then((r) => ({ status: s, count: r.data.data.pagination?.total ?? 0 }))
+          .catch(() => ({ status: s, count: 0 }))
+      )),
+    ]);
+    const tt: Record<string, number> = {};
+    typeResults.forEach(({ type, count }) => { tt[type] = count; });
+    setTypeTotals(tt);
+    const st: Record<string, number> = {};
+    statusResults.forEach(({ status: s, count }) => { st[s] = count; });
+    setStatusTotals(st);
+  }, []);
 
   const load = useCallback(() => {
     setLoading(true);
@@ -538,10 +565,17 @@ export function AdminAssessmentBankPage() {
       .finally(() => setLoading(false));
   }, [page, typeFilter, status]);
 
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => { load(); loadTotals(); }, [load]);
 
-  const countByType = (t: string) => questions.filter((q) => q.assessmentType === t).length;
-  const countByStatus = (s: string) => questions.filter((q) => q.status === s).length;
+  // For stat cards + type filter badges: use true totals (not paginated slice)
+  const countByType   = (t: string) => typeTotals[t] ?? 0;
+  const countByStatus = (s: string) => statusTotals[s] ?? 0;
+
+  // For bulk assign count: use current page's data (already filtered by type if tab active)
+  const bulkUnassignedCount = (t: string) =>
+    typeFilter === t
+      ? questions.filter((q) => q.status === "AI_GENERATED").length
+      : questions.filter((q) => q.assessmentType === t && q.status === "AI_GENERATED").length;
 
   const previewQuestions = previewType
     ? questions.filter((q) => q.assessmentType === previewType && ["APPROVED", "VERIFIED", "AI_GENERATED"].includes(q.status))
@@ -701,7 +735,7 @@ export function AdminAssessmentBankPage() {
           assessmentType={bulkAssignType}
           unassignedCount={questions.filter((q) => q.assessmentType === bulkAssignType && q.status === "AI_GENERATED").length}
           onClose={() => setBulkAssignType(null)}
-          onAssigned={() => { setBulkAssignType(null); load(); }}
+          onAssigned={() => { setBulkAssignType(null); load(); loadTotals(); }}
         />
       )}
 

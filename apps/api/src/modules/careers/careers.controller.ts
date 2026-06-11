@@ -34,8 +34,16 @@ export const listCareers = catchAsync(async (req: Request, res: Response) => {
   const clusterId = req.query.clusterId as string | undefined;
   const search    = req.query.search as string | undefined;
 
+  const role     = (req as any).user?.role;
+  const isPublic = !role || role === "LEARNER";
+
   const where: any = {};
-  if (status)    where.status    = status;
+  if (isPublic) {
+    // Learners only see reviewer-verified or admin-approved careers
+    where.status = status ? status : { in: ["APPROVED", "VERIFIED"] };
+  } else {
+    if (status) where.status = status;
+  }
   if (clusterId) where.clusterId = clusterId;
   if (search)    where.title     = { contains: search, mode: "insensitive" };
 

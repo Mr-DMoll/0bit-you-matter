@@ -174,6 +174,23 @@ function GenerateTab({ clusters, templates, universities, tvetColleges, onQueued
   const [submitting, setSubmitting]   = useState(false);
   const [success, setSuccess]         = useState("");
   const [error, setError]             = useState("");
+  const [seeding, setSeeding]         = useState(false);
+
+  const handleSeedPathways = async () => {
+    setSeeding(true);
+    setError(""); setSuccess("");
+    try {
+      const res = await apiClient.post("/content/jobs/seed-pathways", {}, { params: { limit: 10 } });
+      const d = res.data.data;
+      setSuccess(`🌱 Seeded ${d.seeded} careers with UNIVERSITY + TVET pathways (status: VERIFIED). ${d.careers.join(", ")}`);
+      setTimeout(() => setSuccess(""), 15000);
+      onQueued();
+    } catch (e: any) {
+      setError(e?.response?.data?.message ?? "Seed failed");
+    } finally {
+      setSeeding(false);
+    }
+  };
 
   const handleTypeChange = (v: string) => { setContentType(v); setTemplateId(""); setParams({}); setError(""); };
 
@@ -181,7 +198,7 @@ function GenerateTab({ clusters, templates, universities, tvetColleges, onQueued
 
   const validate = () => {
     if (contentType === "CAREER" && !params.clusterId) return "Please select a cluster";
-    if (contentType === "CAREER" && !params.title) return "Please select or type a career title";
+    if (contentType === "CAREER" && !(params.titles ?? []).length) return "Please select at least one career title";
     if (contentType === "UNIVERSITY_PROGRAMMES_BULK" && !params.universityId) return "Please select a university";
     if (contentType === "UNIVERSITY_PROGRAMME" && !params.universityId) return "Please select a university";
     if (contentType === "UNIVERSITY_PROGRAMME" && !params.name) return "Programme name is required";
@@ -198,12 +215,24 @@ function GenerateTab({ clusters, templates, universities, tvetColleges, onQueued
     if (err) { setError(err); return; }
     setError(""); setSuccess(""); setSubmitting(true);
     try {
-      await apiClient.post("/content/jobs", {
-        contentType,
-        promptTemplateId: templateId || undefined,
-        parameters: params,
-      });
-      setSuccess("Job queued! Check the Queue tab to track progress.");
+      if (contentType === "CAREER") {
+        const titles: string[] = params.titles ?? [];
+        for (const title of titles) {
+          await apiClient.post("/content/jobs", {
+            contentType,
+            promptTemplateId: templateId || undefined,
+            parameters: { clusterId: params.clusterId, clusterName: params.clusterName, clusterSlug: params.clusterSlug, title },
+          });
+        }
+        setSuccess(`${titles.length} career job${titles.length > 1 ? "s" : ""} queued! Check the Queue tab to track progress.`);
+      } else {
+        await apiClient.post("/content/jobs", {
+          contentType,
+          promptTemplateId: templateId || undefined,
+          parameters: params,
+        });
+        setSuccess("Job queued! Check the Queue tab to track progress.");
+      }
       setParams(contentType === "ASSESSMENT_QUESTION" ? { type: "INTEREST" } : {});
       setTemplateId("");
       onQueued();
@@ -230,6 +259,23 @@ function GenerateTab({ clusters, templates, universities, tvetColleges, onQueued
         )}
 
         <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+
+          {/* Dev shortcut — seed test pathways */}
+          <div style={{ padding: "10px 14px", background: "rgba(245,158,11,0.06)", border: "1px solid rgba(245,158,11,0.2)", borderRadius: "var(--radius-sm)", display: "flex", alignItems: "center", gap: 12 }}>
+            <span style={{ fontSize: "18px" }}>🌱</span>
+            <div style={{ flex: 1 }}>
+              <p style={{ margin: 0, fontSize: "12px", fontWeight: 700, color: "#d97706" }}>Test data shortcut</p>
+              <p style={{ margin: 0, fontSize: "11px", color: "var(--color-text-muted)" }}>Creates pre-verified UNIVERSITY + TVET pathways for up to 10 careers — instant, no AI needed</p>
+            </div>
+            <button
+              onClick={handleSeedPathways}
+              disabled={seeding}
+              style={{ padding: "6px 14px", borderRadius: "var(--radius-sm)", border: "1px solid rgba(245,158,11,0.4)", background: "rgba(245,158,11,0.1)", color: "#d97706", fontSize: "12px", fontWeight: 600, cursor: "pointer", whiteSpace: "nowrap", opacity: seeding ? 0.6 : 1 }}
+            >
+              {seeding ? "Seeding…" : "Seed pathways"}
+            </button>
+          </div>
+
           <Field label="Content type *">
             <Select value={contentType} onChange={handleTypeChange} options={CONTENT_TYPES} />
           </Field>
@@ -242,7 +288,7 @@ function GenerateTab({ clusters, templates, universities, tvetColleges, onQueued
                   value={params.clusterId ?? ""}
                   onChange={(v) => {
                     const cluster = clusters.find((c) => c.id === v);
-                    setParams({ clusterId: v, clusterName: cluster?.name, clusterSlug: cluster?.slug, title: "" });
+                    setParams({ clusterId: v, clusterName: cluster?.name, clusterSlug: cluster?.slug, titles: [] });
                   }}
                   options={[
                     { label: "Select a cluster…", value: "" },
@@ -251,39 +297,111 @@ function GenerateTab({ clusters, templates, universities, tvetColleges, onQueued
                 />
               </Field>
 
-              {params.clusterId && (
-                <Field label="Career title *" hint="Choose from the list — or type your own below">
-                  {/* Preset picker */}
-                  {SA_CAREERS[params.clusterSlug ?? ""] && (
-                    <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginBottom: "8px" }}>
-                      {SA_CAREERS[params.clusterSlug ?? ""].map((title) => (
-                        <button
-                          key={title}
-                          onClick={() => setParams({ ...params, title })}
-                          style={{
-                            padding: "4px 10px",
-                            borderRadius: "999px",
-                            border: `1px solid ${params.title === title ? "var(--color-accent)" : "var(--color-border)"}`,
-                            background: params.title === title ? "var(--color-accent)" : "var(--color-bg-secondary)",
-                            color: params.title === title ? "#fff" : "var(--color-text-secondary)",
-                            fontSize: "12px",
-                            cursor: "pointer",
-                            transition: "all 0.12s",
-                          }}
-                        >
-                          {title}
-                        </button>
-                      ))}
+              {params.clusterId && (() => {
+                const selectedTitles: string[] = params.titles ?? [];
+                const presetList: string[] = SA_CAREERS[params.clusterSlug ?? ""] ?? [];
+                const toggleTitle = (title: string) => {
+                  const next = selectedTitles.includes(title)
+                    ? selectedTitles.filter((t) => t !== title)
+                    : [...selectedTitles, title];
+                  setParams({ ...params, titles: next });
+                };
+                return (
+                  <Field label="Career titles *" hint="Select one or more — each will be queued as a separate AI generation job">
+                    {presetList.length > 0 && (
+                      <>
+                        {/* Select all / Clear row */}
+                        <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "8px" }}>
+                          <button onClick={() => setParams({ ...params, titles: [...presetList] })} style={{ fontSize: "12px", color: "var(--color-accent)", background: "none", border: "none", cursor: "pointer", textDecoration: "underline", padding: 0 }}>Select all</button>
+                          <button onClick={() => setParams({ ...params, titles: [] })} style={{ fontSize: "12px", color: "var(--color-text-muted)", background: "none", border: "none", cursor: "pointer", textDecoration: "underline", padding: 0 }}>Clear</button>
+                          {selectedTitles.length > 0 && (
+                            <span style={{ marginLeft: "auto", fontSize: "12px", fontWeight: 700, color: "var(--color-accent)" }}>
+                              {selectedTitles.length} selected
+                            </span>
+                          )}
+                        </div>
+                        <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginBottom: "10px" }}>
+                          {presetList.map((title) => {
+                            const isSelected = selectedTitles.includes(title);
+                            return (
+                              <button
+                                key={title}
+                                onClick={() => toggleTitle(title)}
+                                style={{
+                                  padding: "4px 10px",
+                                  borderRadius: "999px",
+                                  border: `1px solid ${isSelected ? "var(--color-accent)" : "var(--color-border)"}`,
+                                  background: isSelected ? "var(--color-accent)" : "var(--color-bg-secondary)",
+                                  color: isSelected ? "#fff" : "var(--color-text-secondary)",
+                                  fontSize: "12px",
+                                  cursor: "pointer",
+                                  transition: "all 0.12s",
+                                  fontWeight: isSelected ? 600 : 400,
+                                }}
+                              >
+                                {isSelected ? "✓ " : ""}{title}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </>
+                    )}
+                    {/* Add custom title */}
+                    <div style={{ display: "flex", gap: "8px" }}>
+                      <input
+                        id="custom-title-input"
+                        placeholder="Add a custom career title…"
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            const val = (e.currentTarget.value ?? "").trim();
+                            if (val && !selectedTitles.includes(val)) {
+                              setParams({ ...params, titles: [...selectedTitles, val] });
+                              e.currentTarget.value = "";
+                            }
+                          }
+                        }}
+                        style={{ flex: 1, padding: "8px 12px", fontSize: "13px", background: "var(--color-bg-secondary)", border: "1px solid var(--color-border)", borderRadius: "var(--radius-sm)", color: "var(--color-text-primary)", outline: "none", boxSizing: "border-box" }}
+                      />
+                      <button
+                        onClick={() => {
+                          const input = document.getElementById("custom-title-input") as HTMLInputElement;
+                          const val = (input?.value ?? "").trim();
+                          if (val && !selectedTitles.includes(val)) {
+                            setParams({ ...params, titles: [...selectedTitles, val] });
+                            input.value = "";
+                          }
+                        }}
+                        style={{ padding: "8px 14px", borderRadius: "var(--radius-sm)", border: "1px solid var(--color-border)", background: "var(--color-bg-secondary)", color: "var(--color-text-secondary)", fontSize: "12px", cursor: "pointer" }}
+                      >
+                        Add
+                      </button>
                     </div>
-                  )}
-                  {/* Or type custom */}
-                  <TextInput
-                    value={params.title ?? ""}
-                    onChange={(v) => setParams({ ...params, title: v })}
-                    placeholder="Or type a custom career title…"
-                  />
-                </Field>
-              )}
+                    {/* Show custom titles that aren't in the preset list */}
+                    {selectedTitles.filter((t) => !presetList.includes(t)).length > 0 && (
+                      <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginTop: "8px" }}>
+                        {selectedTitles.filter((t) => !presetList.includes(t)).map((title) => (
+                          <button
+                            key={title}
+                            onClick={() => toggleTitle(title)}
+                            style={{
+                              padding: "4px 10px",
+                              borderRadius: "999px",
+                              border: "1px solid var(--color-accent)",
+                              background: "var(--color-accent)",
+                              color: "#fff",
+                              fontSize: "12px",
+                              cursor: "pointer",
+                              fontWeight: 600,
+                            }}
+                          >
+                            ✓ {title} ×
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </Field>
+                );
+              })()}
             </>
           )}
 
@@ -495,7 +613,10 @@ function GenerateTab({ clusters, templates, universities, tvetColleges, onQueued
 
           <div style={{ paddingTop: "4px" }}>
             <Btn
-              label={submitting ? "Queuing…"
+              label={submitting
+                ? `Queuing${contentType === "CAREER" && (params.titles ?? []).length > 1 ? ` (${(params.titles ?? []).length})…` : "…"}`
+                : contentType === "CAREER" && (params.titles ?? []).length > 0
+                  ? `Queue ${(params.titles ?? []).length} career job${(params.titles ?? []).length > 1 ? "s" : ""}`
                 : contentType === "UNIVERSITY_PROGRAMMES_BULK" ? "Generate all programmes"
                 : contentType === "ASSESSMENT_QUESTIONS_BULK" ? `Generate ${params.count ?? 25} questions`
                 : "Queue generation job"}
@@ -546,6 +667,25 @@ function GenerateTab({ clusters, templates, universities, tvetColleges, onQueued
 // ── Queue tab ─────────────────────────────────────────────────────────────────
 
 function QueueTab({ jobs, pagination, loading, status, setStatus, page, setPage, onRefresh, onRetry, retrying }: any) {
+  const [retryingAll, setRetryingAll] = useState(false);
+  const [retryAllMsg, setRetryAllMsg] = useState("");
+
+  const handleRetryAll = async () => {
+    if (!confirm("Re-queue ALL failed jobs? This may take a while.")) return;
+    setRetryingAll(true);
+    setRetryAllMsg("");
+    try {
+      const res = await apiClient.post("/content/jobs/retry-all", {}, { params: { contentType: status || undefined } });
+      setRetryAllMsg(`✓ ${res.data.data.message}`);
+      onRefresh();
+      setTimeout(() => setRetryAllMsg(""), 8000);
+    } catch (e: any) {
+      setRetryAllMsg(`✗ ${e?.response?.data?.message ?? "Failed"}`);
+    } finally {
+      setRetryingAll(false);
+    }
+  };
+
   const countByStatus = (s: string) => jobs.filter((j: any) => j.status === s).length;
 
   return (
@@ -558,7 +698,12 @@ function QueueTab({ jobs, pagination, loading, status, setStatus, page, setPage,
         <StatCard label="Failed"      value={countByStatus("FAILED")}     accent="#ef4444" />
       </div>
 
-      <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+      {retryAllMsg && (
+        <div style={{ padding: "10px 14px", background: retryAllMsg.startsWith("✓") ? "rgba(34,197,94,0.08)" : "rgba(239,68,68,0.06)", border: `1px solid ${retryAllMsg.startsWith("✓") ? "rgba(34,197,94,0.25)" : "rgba(239,68,68,0.2)"}`, borderRadius: "var(--radius-sm)", fontSize: "13px", color: retryAllMsg.startsWith("✓") ? "#22c55e" : "#ef4444" }}>
+          {retryAllMsg}
+        </div>
+      )}
+      <div style={{ display: "flex", gap: "10px", alignItems: "center", flexWrap: "wrap" }}>
         <Select value={status} onChange={(v) => { setStatus(v); setPage(1); }} options={[
           { label: "All statuses", value: "" },
           { label: "Queued",       value: "QUEUED" },
@@ -567,6 +712,9 @@ function QueueTab({ jobs, pagination, loading, status, setStatus, page, setPage,
           { label: "Failed",       value: "FAILED" },
         ]} />
         <Btn label="Refresh" onClick={onRefresh} variant="ghost" small />
+        {(pagination.total > 0) && (
+          <Btn label={retryingAll ? "Re-queuing…" : "↺ Retry all failed"} onClick={handleRetryAll} variant="ghost" small />
+        )}
       </div>
 
       <Card noPad>

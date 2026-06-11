@@ -1,2 +1,2 @@
-import { MyRoadmapPage } from "@/features/learner/pages/MyRoadmapPage";
-export default function Page() { return <MyRoadmapPage />; }
+import { RoadmapPage } from "@/features/learner/pages/RoadmapPage";
+export default function Page() { return <RoadmapPage />; }

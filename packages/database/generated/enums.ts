@@ -110,6 +110,7 @@ export type GenerationJobStatus = (typeof GenerationJobStatus)[keyof typeof Gene
 export const ReviewStatus = {
   PENDING: 'PENDING',
   IN_PROGRESS: 'IN_PROGRESS',
+  DRAFT: 'DRAFT',
   APPROVED: 'APPROVED',
   REJECTED: 'REJECTED'
 } as const

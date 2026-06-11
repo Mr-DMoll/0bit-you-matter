@@ -1,6 +1,6 @@
 import { Router } from "express";
 import {
-  listGenerationJobs, createGenerationJob, retryGenerationJob,
+  listGenerationJobs, createGenerationJob, retryGenerationJob, retryAllFailedJobs, seedTestPathways,
   listPromptTemplates, createPromptTemplate, updatePromptTemplate,
   listReviews, getReview, assignReview, assignReviewBulk, submitReview,
   listSources, createSource, updateSource,
@@ -18,9 +18,11 @@ const reviewerRoles   = [Role.SUPER_ADMIN, Role.ADMIN, Role.CONTENT_MANAGER, Rol
 const allStaff        = [Role.SUPER_ADMIN, Role.ADMIN, Role.MANAGER, Role.CONTENT_MANAGER, Role.REVIEWER];
 
 // Generation jobs
-router.get("/jobs",            authorize(contentManagers), listGenerationJobs);
-router.post("/jobs",           authorize(contentManagers), createGenerationJob);
-router.post("/jobs/:id/retry", authorize(contentManagers), retryGenerationJob);
+router.get("/jobs",                 authorize(contentManagers), listGenerationJobs);
+router.post("/jobs",                authorize(contentManagers), createGenerationJob);
+router.post("/jobs/:id/retry",      authorize(contentManagers), retryGenerationJob);
+router.post("/jobs/retry-all",      authorize(contentManagers), retryAllFailedJobs);
+router.post("/jobs/seed-pathways",  authorize(contentManagers), seedTestPathways);
 
 // Prompt templates
 router.get("/prompts",         authorize(contentManagers), listPromptTemplates);

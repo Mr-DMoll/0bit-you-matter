@@ -1,6 +1,6 @@
 import { Router } from "express";
 import {
-  getMyProfile, updateMyProfile, generateProfile,
+  getMyProfile, updateMyProfile, generateProfile, matchCareers,
   saveCareer, unsaveCareer,
   getMyRoadmap, updateMilestone,
   getChatHistory, sendChatMessage,
@@ -13,6 +13,7 @@ router.use(protect);
 router.get("/profile",            getMyProfile);
 router.patch("/profile",          updateMyProfile);
 router.post("/profile/generate",  generateProfile);
+router.post("/profile/match",     matchCareers);
 
 router.post("/saved-careers",         saveCareer);
 router.delete("/saved-careers/:careerId", unsaveCareer);

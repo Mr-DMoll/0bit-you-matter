@@ -44,33 +44,6 @@ export const NAV_CONFIG: Record<string, NavSection[]> = {
       ],
     },
     {
-      title: "People",
-      items: [
-        { href: "/admin/learners",       label: "Learners",       icon: "GraduationCap" },
-        { href: "/admin/managers",       label: "Managers",       icon: "UsersRound"    },
-        { href: "/admin/reviewers", label: "Reviewers", icon: "PenLine" },
-      ],
-    },
-    {
-      title: "Content",
-      items: [
-        { href: "/admin/careers",      label: "Careers Library",  icon: "Briefcase"    },
-        { href: "/admin/universities", label: "University DB",    icon: "Building2"    },
-        { href: "/admin/assessments",  label: "Assessment Bank",  icon: "ClipboardList" },
-        { href: "/admin/bursaries",    label: "Bursaries",        icon: "Coins"        },
-        { href: "/admin/tvet",             label: "TVET Colleges",     icon: "GraduationCap" },
-        { href: "/admin/private-colleges", label: "Private Colleges",  icon: "School"        },
-        { href: "/admin/pathways",         label: "Pathways Library",  icon: "Route"         },
-      ],
-    },
-    {
-      title: "AI & Automation",
-      items: [
-        { href: "/admin/ai-pipeline",   label: "AI Pipeline",    icon: "Bot"      },
-        { href: "/admin/agent-activity", label: "Agent Activity", icon: "Activity" },
-      ],
-    },
-    {
       title: "Analytics",
       items: [
         { href: "/admin/learner-insights",  label: "Learner Insights",  icon: "BarChart2"  },
@@ -79,11 +52,38 @@ export const NAV_CONFIG: Record<string, NavSection[]> = {
       ],
     },
     {
+      title: "Content",
+      items: [
+        { href: "/admin/careers",          label: "Careers Library",  icon: "Briefcase"     },
+        { href: "/admin/universities",     label: "University DB",    icon: "Building2"     },
+        { href: "/admin/assessments",      label: "Assessment Bank",  icon: "ClipboardList" },
+        { href: "/admin/bursaries",        label: "Bursaries",        icon: "Coins"         },
+        { href: "/admin/tvet",             label: "TVET Colleges",    icon: "GraduationCap" },
+        { href: "/admin/private-colleges", label: "Private Colleges", icon: "School"        },
+        { href: "/admin/pathways",         label: "Pathways Library", icon: "Route"         },
+      ],
+    },
+    {
+      title: "AI & Automation",
+      items: [
+        { href: "/admin/ai-pipeline",    label: "AI Pipeline",    icon: "Bot"      },
+        { href: "/admin/agent-activity", label: "Agent Activity", icon: "Activity" },
+      ],
+    },
+    {
       title: "Operations",
       items: [
         { href: "/admin/review-queue",   label: "Review Queue",   icon: "ListChecks"    },
         { href: "/admin/update-planner", label: "Update Planner", icon: "CalendarClock" },
         { href: "/admin/reports",        label: "Reports",        icon: "FileText"      },
+      ],
+    },
+    {
+      title: "Users",
+      items: [
+        { href: "/admin/learners",   label: "Learners",   icon: "GraduationCap" },
+        { href: "/admin/managers",   label: "Managers",   icon: "UsersRound"    },
+        { href: "/admin/reviewers",  label: "Reviewers",  icon: "PenLine"       },
       ],
     },
   ],
@@ -168,6 +168,7 @@ export const NAV_CONFIG: Record<string, NavSection[]> = {
       items: [
         { href: "/learner",             label: "Home",            icon: "Home"          },
         { href: "/learner/assessments", label: "Assessments",     icon: "ClipboardList" },
+        { href: "/learner/matches",     label: "Career Matches",  icon: "Sparkles"      },
         { href: "/learner/profile",     label: "My Profile",      icon: "UserCircle"    },
         { href: "/learner/explore",     label: "Explore Careers", icon: "Compass"       },
       ],

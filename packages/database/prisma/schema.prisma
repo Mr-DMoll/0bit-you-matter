@@ -83,6 +83,7 @@ enum GenerationJobStatus {
 enum ReviewStatus {
   PENDING
   IN_PROGRESS
+  DRAFT
   APPROVED
   REJECTED
 }

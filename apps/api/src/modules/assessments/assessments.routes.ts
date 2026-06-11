@@ -9,7 +9,7 @@ import { authorize } from "../../middleware/role.middleware.js";
 import { Role }      from "@repo/types";
 
 const router = Router();
-const editors = [Role.SUPER_ADMIN, Role.ADMIN, Role.CONTENT_MANAGER];
+const editors = [Role.SUPER_ADMIN, Role.ADMIN, Role.CONTENT_MANAGER, Role.REVIEWER];
 const staff   = [Role.SUPER_ADMIN, Role.ADMIN, Role.CONTENT_MANAGER, Role.REVIEWER];
 
 // Question bank (staff only)

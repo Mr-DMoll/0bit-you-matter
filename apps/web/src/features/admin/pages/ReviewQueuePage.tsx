@@ -452,20 +452,14 @@ function AssignModal({ item, onClose, onAssigned }: { item: QueueItem; onClose: 
       };
       const contentType = contentTypeMap[item.type] ?? item.type;
 
+      // Backend handles content status → IN_REVIEW for all types
       await apiClient.post("/content/reviews", {
         contentType,
-        careerId:    item.type === "CAREER"                   ? item.data.id : undefined,
-        questionId:  item.type === "QUESTION"                 ? item.data.id : undefined,
-        entityId:    !["CAREER", "QUESTION"].includes(item.type) ? item.data.id : undefined,
+        careerId:   item.type === "CAREER"                    ? item.data.id : undefined,
+        questionId: item.type === "QUESTION"                  ? item.data.id : undefined,
+        entityId:   !["CAREER", "QUESTION"].includes(item.type) ? item.data.id : undefined,
         reviewerId,
       });
-
-      if (item.type === "CAREER") {
-        await apiClient.patch(`/careers/${item.data.id}`, { status: "IN_REVIEW" });
-      }
-      if (item.type === "PATHWAY") {
-        await apiClient.patch(`/pathways/${item.data.id}`, { status: "IN_REVIEW" });
-      }
 
       onAssigned();
     } catch (e: any) {
@@ -632,13 +626,22 @@ interface QueueItem {
 
 // ── Main page ─────────────────────────────────────────────────────────────────
 
+const ASSESSMENT_SUBTYPES = [
+  { key: "",            label: "All" },
+  { key: "INTEREST",    label: "Interest" },
+  { key: "APTITUDE",    label: "Aptitude" },
+  { key: "PERSONALITY", label: "Personality" },
+  { key: "VALUES",      label: "Values" },
+];
+
 export function AdminReviewQueuePage() {
-  const [items, setItems]           = useState<QueueItem[]>([]);
-  const [loading, setLoading]       = useState(true);
-  const [typeFilter, setTypeFilter] = useState("");
-  const [assignItem, setAssignItem] = useState<QueueItem | null>(null);
-  const [previewItem, setPreviewItem] = useState<QueueItem | null>(null);
-  const [selected, setSelected]     = useState<Set<string>>(new Set());
+  const [items, setItems]                     = useState<QueueItem[]>([]);
+  const [loading, setLoading]                 = useState(true);
+  const [typeFilter, setTypeFilter]           = useState("");
+  const [assessmentSubFilter, setAssessmentSubFilter] = useState("");
+  const [assignItem, setAssignItem]           = useState<QueueItem | null>(null);
+  const [previewItem, setPreviewItem]         = useState<QueueItem | null>(null);
+  const [selected, setSelected]               = useState<Set<string>>(new Set());
 
   const toggleSelect = (key: string) =>
     setSelected((prev) => { const s = new Set(prev); s.has(key) ? s.delete(key) : s.add(key); return s; });
@@ -652,24 +655,29 @@ export function AdminReviewQueuePage() {
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      // Fetch everything in parallel
+      // Fetch AI_GENERATED + IN_REVIEW for every type so assigned items stay in the queue
       const [
-        careersAI, careersReview,
-        pathwaysRes,
-        bursariesRes,
-        tvetRes,
-        privateRes,
+        careersAI,    careersReview,
+        pathwaysAI,   pathwaysReview,
+        bursariesAI,  bursariesReview,
+        tvetPubAI,    tvetPubReview,
+        tvetPrivAI,   tvetPrivReview,
         questionsRes,
         reviewsRes,
       ] = await Promise.allSettled([
-        apiClient.get("/careers",             { params: { status: "AI_GENERATED", limit: 200 } }),
-        apiClient.get("/careers",             { params: { status: "IN_REVIEW",    limit: 200 } }),
-        apiClient.get("/pathways",            { params: { status: "AI_GENERATED", limit: 200 } }),
-        apiClient.get("/bursaries",           { params: { status: "AI_GENERATED", limit: 200 } }),
-        apiClient.get("/tvet",                { params: { status: "IN_REVIEW", collegeType: "PUBLIC",   limit: 200 } }),
-        apiClient.get("/tvet",                { params: { status: "IN_REVIEW", collegeType: "PRIVATE",  limit: 200 } }),
-        apiClient.get("/assessments/questions", { params: { status: "AI_GENERATED", limit: 200 } }),
-        apiClient.get("/content/reviews",     { params: { limit: 500 } }),
+        apiClient.get("/careers",               { params: { status: "AI_GENERATED", limit: 200 } }),
+        apiClient.get("/careers",               { params: { status: "IN_REVIEW",    limit: 200 } }),
+        apiClient.get("/pathways",              { params: { status: "AI_GENERATED", limit: 200 } }),
+        apiClient.get("/pathways",              { params: { status: "IN_REVIEW",    limit: 200 } }),
+        apiClient.get("/bursaries",             { params: { status: "AI_GENERATED", limit: 200 } }),
+        apiClient.get("/bursaries",             { params: { status: "IN_REVIEW",    limit: 200 } }),
+        apiClient.get("/tvet",                  { params: { status: "AI_GENERATED", collegeType: "PUBLIC",  limit: 200 } }),
+        apiClient.get("/tvet",                  { params: { status: "IN_REVIEW",    collegeType: "PUBLIC",  limit: 200 } }),
+        apiClient.get("/tvet",                  { params: { status: "AI_GENERATED", collegeType: "PRIVATE", limit: 200 } }),
+        apiClient.get("/tvet",                  { params: { status: "IN_REVIEW",    collegeType: "PRIVATE", limit: 200 } }),
+        // Single call for all assessment questions needing review (AI_GENERATED or IN_REVIEW)
+        apiClient.get("/assessments/questions", { params: { status: "AI_GENERATED,IN_REVIEW", limit: 500 } }),
+        apiClient.get("/content/reviews",       { params: { limit: 500 } }),
       ]);
 
       const get = (r: PromiseSettledResult<any>, path: string): any[] => {
@@ -678,7 +686,14 @@ export function AdminReviewQueuePage() {
         return path.split(".").reduce((o, k) => o?.[k] ?? [], d) as any[];
       };
 
-      // Build entity-id → review map (covers careers, questions, and generic entityId)
+      // Deduplicate by id (same item may appear in both AI_GENERATED and IN_REVIEW responses)
+      const dedup = (arr: any[]) => {
+        const m = new Map<string, any>();
+        arr.forEach((x) => m.set(x.id, x));
+        return Array.from(m.values());
+      };
+
+      // Build entity-id → review map
       const reviews: any[] = get(reviewsRes, "reviews");
       const reviewMap = new Map<string, any>();
       reviews.forEach((rv) => {
@@ -687,16 +702,12 @@ export function AdminReviewQueuePage() {
         if (rv.entityId)   reviewMap.set(rv.entityId,   rv);
       });
 
-      // Merge all careers (dedup)
-      const careerMap = new Map<string, any>();
-      [...get(careersAI, "careers"), ...get(careersReview, "careers")].forEach((c) => careerMap.set(c.id, c));
-      const careers = Array.from(careerMap.values());
-
-      const pathways  = get(pathwaysRes,  "pathways");
-      const bursaries = get(bursariesRes, "bursaries");
-      const tvets     = get(tvetRes,      "colleges");
-      const privates  = get(privateRes,   "colleges");
-      const questions = get(questionsRes, "questions");
+      const careers   = dedup([...get(careersAI,   "careers"),   ...get(careersReview,   "careers")]);
+      const pathways  = dedup([...get(pathwaysAI,  "pathways"),  ...get(pathwaysReview,  "pathways")]);
+      const bursaries = dedup([...get(bursariesAI, "bursaries"), ...get(bursariesReview, "bursaries")]);
+      const tvets     = dedup([...get(tvetPubAI,   "colleges"),  ...get(tvetPubReview,   "colleges")]);
+      const privates  = dedup([...get(tvetPrivAI,  "colleges"),  ...get(tvetPrivReview,  "colleges")]);
+      const questions = dedup(get(questionsRes, "questions"));
 
       const queue: QueueItem[] = [
         ...careers.map((c) => ({
@@ -757,7 +768,9 @@ export function AdminReviewQueuePage() {
   const counts: Record<string, number> = {};
   items.forEach((i) => { counts[i.type] = (counts[i.type] ?? 0) + 1; });
 
-  const filtered = typeFilter ? items.filter((i) => i.type === typeFilter) : items;
+  const filtered = items
+    .filter((i) => typeFilter ? i.type === typeFilter : true)
+    .filter((i) => (typeFilter === "QUESTION" && assessmentSubFilter) ? i.sub === assessmentSubFilter : true);
 
   const unassigned  = items.filter((i) => !i.review).length;
   const inReview    = items.filter((i) => i.review && ["PENDING", "IN_PROGRESS"].includes(i.review?.status)).length;
@@ -788,12 +801,55 @@ export function AdminReviewQueuePage() {
 
       {/* Tag filter + refresh */}
       <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
-        <TagFilter active={typeFilter} onChange={setTypeFilter} counts={counts} />
+        <TagFilter
+          active={typeFilter}
+          onChange={(t) => { setTypeFilter(t); setAssessmentSubFilter(""); }}
+          counts={counts}
+        />
         <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: "8px" }}>
           <span style={{ fontSize: "12px", color: "var(--color-text-muted)" }}>{filtered.length} item{filtered.length !== 1 ? "s" : ""}</span>
           <Btn label="Refresh" onClick={load} variant="ghost" small />
         </div>
       </div>
+
+      {/* Assessment sub-filter — only visible when Assessments tab is active */}
+      {typeFilter === "QUESTION" && (
+        <div style={{ display: "flex", gap: "6px", alignItems: "center", flexWrap: "wrap" }}>
+          <span style={{ fontSize: "11px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", color: "var(--color-text-muted)", marginRight: "2px" }}>Topic:</span>
+          {ASSESSMENT_SUBTYPES.map((t) => {
+            const isActive = assessmentSubFilter === t.key;
+            const subCount = t.key
+              ? items.filter((i) => i.type === "QUESTION" && i.sub === t.key).length
+              : items.filter((i) => i.type === "QUESTION").length;
+            return (
+              <button
+                key={t.key}
+                onClick={() => setAssessmentSubFilter(t.key)}
+                style={{
+                  display: "inline-flex", alignItems: "center", gap: "5px",
+                  padding: "4px 12px", borderRadius: "999px", cursor: "pointer",
+                  fontSize: "12px", fontWeight: isActive ? 700 : 500,
+                  border: isActive ? "2px solid #ec4899" : "1px solid var(--color-border)",
+                  background: isActive ? "rgba(236,72,153,0.1)" : "var(--color-card-bg)",
+                  color: isActive ? "#ec4899" : "var(--color-text-muted)",
+                  transition: "all 0.12s",
+                }}
+              >
+                {t.label}
+                {subCount > 0 && (
+                  <span style={{
+                    fontSize: "10px", fontWeight: 700, minWidth: "16px", height: "16px",
+                    borderRadius: "999px", display: "inline-flex", alignItems: "center", justifyContent: "center",
+                    background: isActive ? "#ec4899" : "var(--color-bg-secondary)",
+                    color: isActive ? "#fff" : "var(--color-text-muted)",
+                    padding: "0 4px",
+                  }}>{subCount}</span>
+                )}
+              </button>
+            );
+          })}
+        </div>
+      )}
 
       {/* Table */}
       <Card noPad>

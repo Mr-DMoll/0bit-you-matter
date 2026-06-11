@@ -29,12 +29,18 @@ export const getMyProfile = catchAsync(async (req: Request, res: Response) => {
 
 export const updateMyProfile = catchAsync(async (req: Request, res: Response) => {
   const learnerId = req.user!.userId;
-  const { subjects, chosenCareerId } = req.body;
+  const { subjects, chosenCareerId, chosenPathwayType } = req.body;
+
+  // Only include fields that were actually sent — avoids overwriting unrelated fields with undefined/null
+  const update: Record<string, any> = {};
+  if (subjects       !== undefined) update.subjects        = subjects;
+  if (chosenCareerId !== undefined) update.chosenCareerId  = chosenCareerId;
+  if (chosenPathwayType !== undefined) update.chosenPathwayType = chosenPathwayType;
 
   const profile = await prisma.learnerProfile.upsert({
     where:  { learnerId },
-    create: { learnerId, subjects, chosenCareerId },
-    update: { subjects, chosenCareerId },
+    create: { learnerId, ...update },
+    update,
   });
 
   return res.status(HttpStatus.OK).json({ status: "success", data: profile });
@@ -67,6 +73,134 @@ export const generateProfile = catchAsync(async (req: Request, res: Response) =>
     message: "Profile generation queued",
     data:    { jobId: job.id },
   });
+});
+
+// ── Career matching (synchronous, no queue) ────────────────────────────────────
+
+// Score a career by how well its RIASEC codes align with the learner's profile.
+// Uses spread-based normalisation: scores are rescaled relative to the learner's
+// own strongest vs weakest code. This means a learner who scores high on everything
+// still gets meaningful differentiation — their top code = 100, weakest = 0.
+// Careers matching the top codes score high; careers matching weak codes score low.
+function scoreCareer(riasecScores: Record<string, number>, careerCodes: string[]): number {
+  if (!careerCodes.length) return 0;
+  const values = Object.values(riasecScores);
+  const max    = Math.max(...values);
+  const min    = Math.min(...values);
+  const range  = max - min;
+
+  if (max === 0) return 0;
+  // All 6 codes identical (e.g. first run with no answers) — equal relevance
+  if (range === 0) return 50;
+
+  // Normalise each code to 0–100 based on the learner's own spread
+  const normalised: Record<string, number> = {};
+  for (const [code, score] of Object.entries(riasecScores)) {
+    normalised[code] = ((score - min) / range) * 100;
+  }
+
+  const avg = careerCodes.reduce((sum, c) => sum + (normalised[c] ?? 0), 0) / careerCodes.length;
+  return Math.max(1, Math.min(99, Math.round(avg)));
+}
+
+// POST /learner/profile/match — compute + store career matches synchronously
+export const matchCareers = catchAsync(async (req: Request, res: Response) => {
+  const learnerId = req.user!.userId;
+
+  // Get completed INTEREST session to read RIASEC scores
+  const interestSession = await prisma.learnerAssessmentSession.findUnique({
+    where:   { learnerId_assessmentType: { learnerId, assessmentType: "INTEREST" } },
+    include: {
+      answers: {
+        include: { question: { select: { riasecMapping: true, options: true } } },
+      },
+    },
+  });
+
+  if (!interestSession || interestSession.status !== "COMPLETED")
+    throw new AppError("Interest assessment must be completed before matching careers", HttpStatus.BAD_REQUEST);
+
+  // Recompute RIASEC scores from answers (source of truth)
+  const riasecScores: Record<string, number> = { R: 0, I: 0, A: 0, S: 0, E: 0, C: 0 };
+  for (const ans of interestSession.answers) {
+    const mapping: string[]  = (ans.question as any)?.riasecMapping ?? [];
+    const options: any[]     = (ans.question as any)?.options ?? [];
+    const opt = options.find((o: any) => o.value === ans.answerValue);
+    const score = opt?.score ?? 1;
+    for (const code of mapping) {
+      if (code in riasecScores) riasecScores[code] += score;
+    }
+  }
+
+  const topCodes = Object.entries(riasecScores)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 3)
+    .map(([k]) => k);
+  const riasecType = topCodes.join("");
+
+  // Fetch all verified careers that have RIASEC codes
+  const careers = await prisma.career.findMany({
+    where:  { status: { in: ["VERIFIED", "APPROVED"] }, riasecCodes: { isEmpty: false } },
+    select: { id: true, riasecCodes: true },
+  });
+
+  // Score all careers by RIASEC alignment
+  const allScored = careers
+    .map((c) => {
+      const rawPct = scoreCareer(riasecScores, c.riasecCodes);
+      // Tiebreaker: sum of the learner's actual (non-normalised) scores for this career's codes.
+      // When multiple careers share the same RIASEC codes, this gives a stable secondary ordering.
+      const tiebreaker = c.riasecCodes.reduce((sum, code) => sum + (riasecScores[code] ?? 0), 0);
+      return { careerId: c.id, rawPct, tiebreaker };
+    })
+    .filter((c) => c.rawPct > 0)
+    .sort((a, b) =>
+      b.rawPct !== a.rawPct ? b.rawPct - a.rawPct : b.tiebreaker - a.tiebreaker,
+    );
+
+  // Apply a rank-based spread so the top-10 list is always visibly differentiated.
+  // Top match = 95 %, each rank below loses 2 % (rank 10 → 77 %).
+  // This prevents all matches showing "99%" when the learner's top codes are tied,
+  // while still honouring the relative ordering from the RIASEC scores.
+  const top10Raw = allScored.slice(0, 10);
+  const n = top10Raw.length;
+  const scored = top10Raw.map((c, i) => ({
+    careerId: c.careerId,
+    pct: n === 1 ? 95 : Math.max(55, Math.round(95 - (i / Math.max(n - 1, 1)) * 40)),
+  }));
+
+  // Upsert profile + matches in a transaction
+  const profile = await prisma.learnerProfile.upsert({
+    where:  { learnerId },
+    create: { learnerId, riasecType, riasecScores: riasecScores as any, generatedAt: new Date() },
+    update: { riasecType, riasecScores: riasecScores as any, generatedAt: new Date() },
+  });
+
+  // Delete old matches then insert fresh ones
+  await prisma.learnerCareerMatch.deleteMany({ where: { profileId: profile.id } });
+  if (scored.length > 0) {
+    await prisma.learnerCareerMatch.createMany({
+      data: scored.map((s) => ({
+        profileId:       profile.id,
+        careerId:        s.careerId,
+        matchPercentage: s.pct,
+      })),
+      skipDuplicates: true,
+    });
+  }
+
+  // Return the full profile with matches
+  const result = await prisma.learnerProfile.findUnique({
+    where:   { learnerId },
+    include: {
+      careerMatches: {
+        include: { career: { select: { id: true, title: true, slug: true, riasecCodes: true, earningsMin: true, earningsMax: true, cluster: { select: { name: true } } } } },
+        orderBy: { matchPercentage: "desc" },
+      },
+    },
+  });
+
+  return res.status(HttpStatus.OK).json({ status: "success", data: result });
 });
 
 // ── Saved careers ──────────────────────────────────────────────────────────────

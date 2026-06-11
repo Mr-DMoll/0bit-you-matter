@@ -71,6 +71,123 @@ export const retryGenerationJob = catchAsync(async (req: Request, res: Response)
   return res.status(HttpStatus.OK).json({ status: "success", data: updated });
 });
 
+export const retryAllFailedJobs = catchAsync(async (req: Request, res: Response) => {
+  const { contentType } = req.query;
+  const where: any = { status: "FAILED" };
+  if (contentType) where.contentType = contentType;
+
+  const failedJobs = await prisma.generationJob.findMany({ where, select: { id: true } });
+  if (failedJobs.length === 0)
+    return res.status(HttpStatus.OK).json({ status: "success", data: { retried: 0 } });
+
+  await prisma.generationJob.updateMany({
+    where: { id: { in: failedJobs.map((j) => j.id) } },
+    data:  { status: "QUEUED", errorLog: null },
+  });
+
+  for (const job of failedJobs) {
+    await contentGenerationQueue.add("generate", { generationJobId: job.id });
+  }
+
+  return res.status(HttpStatus.OK).json({
+    status: "success",
+    data: { retried: failedJobs.length, message: `${failedJobs.length} jobs re-queued` },
+  });
+});
+
+export const seedTestPathways = catchAsync(async (req: Request, res: Response) => {
+  // For testing: directly create verified pathways for the first N careers that have none
+  const limit = Math.min(parseInt(req.query.limit as string) || 5, 20);
+
+  // Find careers with no pathways yet
+  const careers = await prisma.career.findMany({
+    where:   { status: { in: ["VERIFIED", "APPROVED"] } },
+    take:    limit * 3, // fetch extra in case some already have pathways
+    orderBy: { createdAt: "asc" },
+    select:  { id: true, title: true },
+  });
+
+  const seeded: string[] = [];
+
+  for (const career of careers) {
+    if (seeded.length >= limit) break;
+
+    const existing = await prisma.pathway.count({ where: { careerId: career.id } });
+    if (existing > 0) continue;
+
+    // Create a UNIVERSITY pathway
+    await prisma.pathway.create({
+      data: {
+        careerId:          career.id,
+        type:              "UNIVERSITY",
+        title:             `Become a ${career.title} via University`,
+        durationLabel:     "3–4 years",
+        durationMonths:    42,
+        estimatedCostMin:  40000,
+        estimatedCostMax:  80000,
+        costNote:          "NSFAS covers tuition + accommodation for qualifying students",
+        earnWhileLearn:    false,
+        entryRequirements: "Grade 12 with a minimum APS of 28. Mathematics and English required.",
+        apsMin:            28,
+        gradeMin:          12,
+        steps: [
+          { step: 1, title: "Pass Grade 12", description: "Achieve a minimum APS of 28 with Maths and English.", duration: "1 year" },
+          { step: 2, title: "Apply to university", description: "Apply to a South African university offering a relevant undergraduate degree. Apply for NSFAS if you qualify.", duration: "6 months" },
+          { step: 3, title: "Complete your degree", description: "Study a 3–4 year Bachelor's degree in a relevant field.", duration: "3–4 years" },
+          { step: 4, title: "Graduate & enter the field", description: "Apply for graduate programmes or entry-level positions. Many employers offer bursaries to final-year students.", duration: "Ongoing" },
+        ],
+        fundingOptions:     ["NSFAS", "Company Bursary", "Merit Scholarship"],
+        setaName:           null,
+        qualificationEarned: "Bachelor's Degree (NQF 7)",
+        nqfLevelEarned:     7,
+        employmentNote:     "Most employers require a relevant degree as a minimum. Graduate unemployment rate is lower than the national average.",
+        pros:               ["Internationally recognised qualification", "NSFAS funding available", "Wide range of universities"],
+        cons:               ["3–4 year commitment", "Competitive entry requirements", "Student loan debt if not on NSFAS"],
+        status:             "VERIFIED",
+      },
+    });
+
+    // Also create a TVET pathway
+    await prisma.pathway.create({
+      data: {
+        careerId:          career.id,
+        type:              "TVET",
+        title:             `Become a ${career.title} via TVET College`,
+        durationLabel:     "2–3 years",
+        durationMonths:    30,
+        estimatedCostMin:  5000,
+        estimatedCostMax:  15000,
+        costNote:          "NSFAS covers TVET fees for qualifying students. DHET also offers TVET bursaries.",
+        earnWhileLearn:    false,
+        entryRequirements: "Grade 10 pass minimum. Grade 12 preferred for N4 and above.",
+        apsMin:            null,
+        gradeMin:          10,
+        steps: [
+          { step: 1, title: "Enrol at a TVET college", description: "Apply to any public TVET college offering the relevant NCV or NATED programme.", duration: "1 month" },
+          { step: 2, title: "Complete your NATED programme (N4–N6)", description: "Study a 3-term NATED N4, N5, and N6 programme (18 months full-time).", duration: "18 months" },
+          { step: 3, title: "Gain 18 months work experience", description: "Complete 18 months of relevant work experience to qualify for your N6 National Certificate.", duration: "18 months" },
+          { step: 4, title: "Enter the workforce", description: "Apply for entry-level positions. Many employers actively recruit TVET graduates.", duration: "Ongoing" },
+        ],
+        fundingOptions:     ["NSFAS", "DHET TVET Bursary", "SETA Bursary"],
+        setaName:           null,
+        qualificationEarned: "N6 National Certificate (NQF 5)",
+        nqfLevelEarned:     5,
+        employmentNote:     "TVET graduates are in high demand. Many companies partner directly with TVET colleges for recruitment.",
+        pros:               ["More affordable than university", "NSFAS available", "Practical skills focus", "Faster entry into the workforce"],
+        cons:               ["May need top-up degree for senior roles", "N6 requires work experience component"],
+        status:             "VERIFIED",
+      },
+    });
+
+    seeded.push(career.title);
+  }
+
+  return res.status(HttpStatus.OK).json({
+    status:  "success",
+    data:    { seeded: seeded.length, careers: seeded, message: `Created UNIVERSITY + TVET pathways for ${seeded.length} careers (verified, ready to view)` },
+  });
+});
+
 // ── Prompt templates ───────────────────────────────────────────────────────────
 
 export const listPromptTemplates = catchAsync(async (req: Request, res: Response) => {
@@ -125,16 +242,19 @@ export const updatePromptTemplate = catchAsync(async (req: Request, res: Respons
 export const listReviews = catchAsync(async (req: Request, res: Response) => {
   const page       = Math.max(1, parseInt(req.query.page as string) || 1);
   const limit      = parseInt(req.query.limit as string) || 50;
-  const status     = req.query.status     as string | undefined;
-  const type       = req.query.type       as string | undefined;
-  const reviewerId = req.query.reviewerId as string | undefined;
-  const careerId   = req.query.careerId   as string | undefined;
+  const status         = req.query.status         as string | undefined;
+  const type           = req.query.type           as string | undefined;
+  const reviewerId     = req.query.reviewerId     as string | undefined;
+  const careerId       = req.query.careerId       as string | undefined;
+  const assessmentType = req.query.assessmentType as string | undefined;
 
   const where: any = {};
   if (status)     where.status      = status;
   if (type)       where.contentType = type;
   if (reviewerId) where.reviewerId  = reviewerId;
   if (careerId)   where.careerId    = careerId;
+  // Sub-filter: when viewing ASSESSMENT_QUESTION reviews, filter by the question's assessmentType
+  if (assessmentType) where.question = { assessmentType };
 
   // Reviewers only see their own queue
   if (req.user!.role === "REVIEWER") where.reviewerId = req.user!.userId;
@@ -154,23 +274,31 @@ export const listReviews = catchAsync(async (req: Request, res: Response) => {
     prisma.contentReview.count({ where }),
   ]);
 
-  // Attach tvetCollege name for TVET_COLLEGE reviews (entityId is a plain FK, no Prisma relation)
-  const collegeIds = reviews
-    .filter((r) => (r.contentType as string) === "TVET_COLLEGE" && r.entityId)
-    .map((r) => r.entityId as string);
+  // Batch-fetch entity names for non-career/question types
+  const byType = (type: string) =>
+    reviews.filter((r) => (r.contentType as string) === type && r.entityId).map((r) => r.entityId as string);
 
-  const collegeMap = new Map<string, { id: string; name: string; province: string }>();
-  if (collegeIds.length > 0) {
-    const colleges = await prisma.tvetCollege.findMany({
-      where:  { id: { in: collegeIds } },
-      select: { id: true, name: true, province: true },
-    });
-    colleges.forEach((c) => collegeMap.set(c.id, c));
-  }
+  const [colleges, bursaries, pathways] = await Promise.all([
+    byType("TVET_COLLEGE").length > 0
+      ? prisma.tvetCollege.findMany({ where: { id: { in: byType("TVET_COLLEGE") } }, select: { id: true, name: true, province: true } })
+      : Promise.resolve([]),
+    byType("BURSARY").length > 0
+      ? prisma.bursary.findMany({ where: { id: { in: byType("BURSARY") } }, select: { id: true, name: true, provider: true } })
+      : Promise.resolve([]),
+    byType("PATHWAY").length > 0
+      ? prisma.pathway.findMany({ where: { id: { in: byType("PATHWAY") } }, select: { id: true, title: true, type: true } })
+      : Promise.resolve([]),
+  ]);
+
+  const collegeMap  = new Map(colleges.map((c) => [c.id, c]));
+  const bursaryMap  = new Map(bursaries.map((b) => [b.id, b]));
+  const pathwayMap  = new Map(pathways.map((p) => [p.id, p]));
 
   const enrichedReviews = reviews.map((r) => ({
     ...r,
-    tvetCollege: r.entityId ? (collegeMap.get(r.entityId) ?? null) : null,
+    tvetCollege: r.entityId ? (collegeMap.get(r.entityId)  ?? null) : null,
+    bursary:     r.entityId ? (bursaryMap.get(r.entityId)  ?? null) : null,
+    pathway:     r.entityId ? (pathwayMap.get(r.entityId)  ?? null) : null,
   }));
 
   return res.status(HttpStatus.OK).json({
@@ -204,15 +332,29 @@ export const getReview = catchAsync(async (req: Request, res: Response) => {
   }
 
   // Attach entity data for non-career/question types (entityId is a plain FK, no Prisma relation)
-  let tvetCollege = null;
-  if ((review.contentType as string) === "TVET_COLLEGE" && review.entityId) {
+  const ct = review.contentType as string;
+  let tvetCollege = null, bursary = null, pathway = null;
+
+  if (ct === "TVET_COLLEGE" && review.entityId) {
     tvetCollege = await prisma.tvetCollege.findUnique({
       where:  { id: review.entityId },
       select: { id: true, name: true, abbreviation: true, province: true, collegeType: true, website: true, sourceUrl: true, verifiedNote: true, logoUrl: true, status: true },
     });
   }
+  if (ct === "BURSARY" && review.entityId) {
+    bursary = await prisma.bursary.findUnique({
+      where:  { id: review.entityId },
+      select: { id: true, name: true, provider: true, description: true, amount: true, fieldsOfStudy: true, eligibilityCriteria: true, applicationUrl: true, openDate: true, closeDate: true, sourceUrl: true, status: true },
+    });
+  }
+  if (ct === "PATHWAY" && review.entityId) {
+    pathway = await prisma.pathway.findUnique({
+      where:  { id: review.entityId },
+      select: { id: true, title: true, type: true, durationLabel: true, estimatedCostMin: true, estimatedCostMax: true, costNote: true, earnWhileLearn: true, entryRequirements: true, apsMin: true, steps: true, fundingOptions: true, setaName: true, qualificationEarned: true, nqfLevelEarned: true, employmentNote: true, pros: true, cons: true, sourceUrl: true, status: true, career: { select: { title: true } } },
+    });
+  }
 
-  return res.status(HttpStatus.OK).json({ status: "success", data: { ...review, tvetCollege } });
+  return res.status(HttpStatus.OK).json({ status: "success", data: { ...review, tvetCollege, bursary, pathway } });
 });
 
 export const assignReview = catchAsync(async (req: Request, res: Response) => {
@@ -230,6 +372,16 @@ export const assignReview = catchAsync(async (req: Request, res: Response) => {
       dueAt: dueAt ? new Date(dueAt) : undefined,
     },
   });
+
+  // Move content to IN_REVIEW so it stays visible in the admin queue with updated status
+  const ct = contentType as string;
+  if (careerId)   await prisma.career.update({ where: { id: careerId }, data: { status: "IN_REVIEW" } }).catch(() => {});
+  if (questionId) await prisma.assessmentQuestion.update({ where: { id: questionId }, data: { status: "IN_REVIEW" } }).catch(() => {});
+  if (entityId) {
+    if (ct === "PATHWAY")      await prisma.pathway.update({ where: { id: entityId }, data: { status: "IN_REVIEW" } }).catch(() => {});
+    if (ct === "BURSARY")      await prisma.bursary.update({ where: { id: entityId }, data: { status: "IN_REVIEW" } }).catch(() => {});
+    if (ct === "TVET_COLLEGE") await prisma.tvetCollege.update({ where: { id: entityId }, data: { status: "IN_REVIEW" } }).catch(() => {});
+  }
 
   // Send notification email (non-blocking)
   const reviewUrl = `${process.env.FRONTEND_URL ?? ""}/reviewer`;
@@ -403,13 +555,32 @@ export const submitReview = catchAsync(async (req: Request, res: Response) => {
     const saved = await prisma.contentReview.update({
       where: { id },
       data: {
-        status:           "IN_PROGRESS",
+        status:           "DRAFT",
         confidenceRating: confidenceRating ? parseInt(confidenceRating) : undefined,
         notes:            notes ?? undefined,
         trackedChanges:   trackedChanges ?? undefined,
       },
     });
     return res.status(HttpStatus.OK).json({ status: "success", data: saved });
+  }
+
+  // ── TAKE OFFLINE: revert a live/archived review back to in-progress ─────────
+  if (decision === "TAKE_OFFLINE") {
+    const reverted = await prisma.contentReview.update({
+      where: { id },
+      data: { status: "DRAFT", completedAt: null },
+    });
+    // Revert content status back to IN_REVIEW
+    const offlineEntityId = (review as any).entityId as string | null | undefined;
+    const offlineCt = review.contentType as string;
+    if (review.careerId)   await prisma.career.update({ where: { id: review.careerId }, data: { status: "IN_REVIEW" } }).catch(() => {});
+    if (review.questionId) await prisma.assessmentQuestion.update({ where: { id: review.questionId }, data: { status: "IN_REVIEW" } }).catch(() => {});
+    if (offlineEntityId) {
+      if (offlineCt === "BURSARY")      await prisma.bursary.update({ where: { id: offlineEntityId }, data: { status: "IN_REVIEW" } }).catch(() => {});
+      if (offlineCt === "PATHWAY")      await prisma.pathway.update({ where: { id: offlineEntityId }, data: { status: "IN_REVIEW" } }).catch(() => {});
+      if (offlineCt === "TVET_COLLEGE") await prisma.tvetCollege.update({ where: { id: offlineEntityId }, data: { status: "IN_REVIEW" } }).catch(() => {});
+    }
+    return res.status(HttpStatus.OK).json({ status: "success", data: reverted });
   }
 
   // ── PUBLISH mode: finalise decision ───────────────────────────────────────

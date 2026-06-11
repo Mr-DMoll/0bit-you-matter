@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/shared/context/AuthContext";
+import { useState, useEffect } from "react";
+import apiClient from "@/api/client";
 import {
   Home, ClipboardList, Compass, Map, GraduationCap,
   Award, MessageCircle, User, Sparkles, LogOut,
@@ -40,12 +42,48 @@ const bottomNav = [
   { href: "/learner/profile",     label: "Me",       icon: User },
 ];
 
+function calcCompletion(user: any, profile: any): { pct: number; missing: string[] } {
+  const checks: [boolean, string][] = [
+    [!!user?.firstName,                                                "First name"],
+    [!!user?.grade,                                                    "Grade"],
+    [!!user?.province,                                                 "Province"],
+    [!!user?.school,                                                   "School"],
+    [Array.isArray(profile?.subjects) && profile.subjects.length > 0, "Subjects"],
+    [!!profile?.chosenCareerId || (profile?.careerMatches?.length > 0), "Career interest"],
+  ];
+  const done    = checks.filter(([ok]) => ok).length;
+  const missing = checks.filter(([ok]) => !ok).map(([, label]) => label);
+  return { pct: Math.round((done / checks.length) * 100), missing };
+}
+
 export function LearnerShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { user, logout } = useAuth() as any;
 
+  const [sidebarUser,    setSidebarUser]    = useState<any>(null);
+  const [profile,        setProfile]        = useState<any>(null);
+
+  useEffect(() => {
+    // Fetch fresh user + profile on every nav change so the card stays in sync
+    Promise.all([
+      apiClient.get("/users/me").then((r) => r.data.data.user).catch(() => null),
+      apiClient.get("/learner/profile").then((r) => r.data.data).catch(() => null),
+    ]).then(([u, p]) => {
+      setSidebarUser(u);
+      setProfile(p);
+    });
+  }, [pathname]);
+
   const firstName = user?.firstName ?? user?.displayName?.split(" ")[0] ?? "there";
   const initial   = firstName[0]?.toUpperCase() ?? "U";
+
+  // Use fresh fetched user (sidebarUser) — auth context user may lack grade/province/school
+  const { pct, missing } = calcCompletion(sidebarUser ?? user, profile);
+  const isDone = pct === 100;
+  // Show the first 2 missing items as the hint, or a done message
+  const hint = isDone
+    ? "Your profile is complete 🎉"
+    : missing.slice(0, 2).join(" & ") + (missing.length > 2 ? ` +${missing.length - 2} more` : "") + " still needed";
 
   const isActive = (href: string) =>
     href === "/learner" ? pathname === "/learner" : pathname.startsWith(href);
@@ -102,16 +140,29 @@ export function LearnerShell({ children }: { children: React.ReactNode }) {
         </nav>
 
         {/* Profile completion */}
-        <div style={{ padding: "0 14px 16px" }}>
-          <div style={{ background: "rgba(255,255,255,0.07)", borderRadius: 14, padding: "14px" }}>
-            <p style={{ color: "rgba(255,255,255,0.85)", fontWeight: 700, fontSize: "0.8rem", marginBottom: 4 }}>Complete your profile</p>
-            <p style={{ color: "rgba(255,255,255,0.4)", fontSize: "0.7rem", marginBottom: 10, lineHeight: 1.4 }}>Add your grade to unlock career matches</p>
+        <Link href="/learner/profile" style={{ padding: "0 14px 16px", display: "block", textDecoration: "none" }}>
+          <div style={{
+            background: isDone ? "rgba(13,148,136,0.18)" : "rgba(255,255,255,0.07)",
+            borderRadius: 14, padding: "14px",
+            border: isDone ? "1px solid rgba(13,148,136,0.35)" : "none",
+            transition: "background 0.2s",
+          }}>
+            <p style={{ color: "rgba(255,255,255,0.85)", fontWeight: 700, fontSize: "0.8rem", marginBottom: 4 }}>
+              {isDone ? "Profile complete ✓" : "Complete your profile"}
+            </p>
+            <p style={{ color: "rgba(255,255,255,0.45)", fontSize: "0.7rem", marginBottom: 10, lineHeight: 1.4 }}>
+              {hint}
+            </p>
             <div style={{ width: "100%", height: 5, borderRadius: 999, background: "rgba(255,255,255,0.12)" }}>
-              <div style={{ width: "40%", height: "100%", borderRadius: 999, background: T.primary }} />
+              <div style={{
+                width: `${pct}%`, height: "100%", borderRadius: 999,
+                background: isDone ? "#0D9488" : T.primary,
+                transition: "width 0.4s ease",
+              }} />
             </div>
-            <p style={{ color: "rgba(255,255,255,0.3)", fontSize: "0.65rem", marginTop: 5 }}>40% complete</p>
+            <p style={{ color: "rgba(255,255,255,0.3)", fontSize: "0.65rem", marginTop: 5 }}>{pct}% complete</p>
           </div>
-        </div>
+        </Link>
 
         {/* Sign out */}
         <button

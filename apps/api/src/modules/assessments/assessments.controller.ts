@@ -10,14 +10,19 @@ type AssessmentTypeStr = typeof ASSESSMENT_TYPES[number];
 // ── Question bank (staff) ──────────────────────────────────────────────────────
 
 export const listQuestions = catchAsync(async (req: Request, res: Response) => {
-  const page   = Math.max(1, parseInt(req.query.page as string) || 1);
-  const limit  = 50;
+  const page  = Math.max(1, parseInt(req.query.page as string) || 1);
+  const limit = Math.min(parseInt(req.query.limit as string) || 50, 500); // respect caller, cap at 500
   const type   = req.query.type as AssessmentTypeStr | undefined;
   const status = req.query.status as string | undefined;
 
   const where: any = {};
   if (type)   where.assessmentType = type;
-  if (status) where.status         = status;
+  // Support comma-separated statuses e.g. status=AI_GENERATED,IN_REVIEW
+  if (status) {
+    where.status = status.includes(",")
+      ? { in: status.split(",").map((s) => s.trim()) }
+      : status;
+  }
 
   const [questions, total] = await Promise.all([
     prisma.assessmentQuestion.findMany({
@@ -92,18 +97,28 @@ export const getAssessmentQuestions = catchAsync(async (req: Request, res: Respo
   if (!(ASSESSMENT_TYPES as readonly string[]).includes(type))
     throw new AppError("Invalid assessment type", HttpStatus.BAD_REQUEST);
 
-  // Fetch the full bank, then randomly select 20 so no two learners get identical tests
+  // Per-type sample sizes — enough for reliable scoring without fatiguing learners
+  // INTEREST / PERSONALITY need more items for multi-dimension scoring
+  // APTITUDE / VALUES are shorter (cognitively taxing / reflective)
+  // TODO: make these configurable from admin dashboard
+  const QUESTIONS_PER_TYPE: Record<AssessmentTypeStr, number> = {
+    INTEREST:    20,
+    PERSONALITY: 20,
+    APTITUDE:    15,
+    VALUES:      15,
+  };
+
+  // Fetch the full bank, then randomly select per-type count so no two learners get identical tests
   const bank = await prisma.assessmentQuestion.findMany({
     where:   { assessmentType: type, status: { in: ["APPROVED", "VERIFIED"] } },
     select:  { id: true, questionText: true, contextNote: true, options: true, riasecMapping: true },
   });
 
-  // Fisher-Yates shuffle then take 20 (or all if fewer)
-  const QUESTIONS_PER_SESSION = 20;
-  const shuffled = [...bank].sort(() => Math.random() - 0.5);
-  const questions = shuffled.slice(0, QUESTIONS_PER_SESSION);
+  const questionsPerSession = QUESTIONS_PER_TYPE[type] ?? 20;
+  const shuffled  = [...bank].sort(() => Math.random() - 0.5);
+  const questions = shuffled.slice(0, questionsPerSession);
 
-  return res.status(HttpStatus.OK).json({ status: "success", data: questions });
+  return res.status(HttpStatus.OK).json({ status: "success", data: questions, total: questionsPerSession });
 });
 
 // POST /assessments/:type/start — create or resume a session
