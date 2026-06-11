@@ -51,12 +51,13 @@ export function LearnerShell({ children }: { children: React.ReactNode }) {
     href === "/learner" ? pathname === "/learner" : pathname.startsWith(href);
 
   return (
-    <div style={{ display: "flex", minHeight: "100svh", background: T.bg }}>
+    <div style={{ display: "flex", height: "100svh", overflow: "hidden", background: T.bg }}>
 
       {/* ── Desktop sidebar ─────────────────────────────────────────────── */}
       <aside className="ym-sidebar" style={{
         width: 240, flexShrink: 0, background: T.sidebar,
-        display: "flex", flexDirection: "column", minHeight: "100svh",
+        display: "flex", flexDirection: "column",
+        height: "100svh", overflow: "hidden",
         position: "sticky", top: 0,
       }}>
         {/* Logo */}
@@ -114,20 +115,32 @@ export function LearnerShell({ children }: { children: React.ReactNode }) {
 
         {/* Sign out */}
         <button
-          onClick={() => logout?.()}
+          onClick={async () => {
+            await logout?.();
+            window.location.href = "/login";
+          }}
           style={{
-            margin: "0 14px 20px", padding: "10px 14px", background: "transparent",
-            border: "1px solid rgba(255,255,255,0.1)", borderRadius: 12, cursor: "pointer",
-            display: "flex", alignItems: "center", gap: 10,
-            color: "rgba(255,255,255,0.4)", fontSize: "0.82rem",
+            margin: "0 14px 20px", padding: "12px 14px", background: "transparent",
+            border: "1px solid rgba(255,255,255,0.12)", borderRadius: 12, cursor: "pointer",
+            display: "flex", alignItems: "center", gap: 10, width: "calc(100% - 28px)",
+            color: "rgba(255,255,255,0.5)", fontSize: "0.85rem",
+            transition: "all 0.15s",
+          }}
+          onMouseEnter={e => {
+            e.currentTarget.style.background = "rgba(255,255,255,0.07)";
+            e.currentTarget.style.color = "rgba(255,255,255,0.8)";
+          }}
+          onMouseLeave={e => {
+            e.currentTarget.style.background = "transparent";
+            e.currentTarget.style.color = "rgba(255,255,255,0.5)";
           }}
         >
-          <LogOut size={15} /> Sign out
+          <LogOut size={16} /> Sign out
         </button>
       </aside>
 
       {/* ── Main content ────────────────────────────────────────────────── */}
-      <main className="ym-main" style={{ flex: 1, overflow: "auto", minWidth: 0 }}>
+      <main className="ym-main" style={{ flex: 1, overflowY: "auto", minWidth: 0, height: "100svh" }}>
         {children}
       </main>
 
