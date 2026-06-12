@@ -280,17 +280,79 @@ export const updateMilestone = catchAsync(async (req: Request, res: Response) =>
 
 // ── Guidance chat ─────────────────────────────────────────────────────────────
 
+export const reactToChatMessage = catchAsync(async (req: Request, res: Response) => {
+  const learnerId  = req.user!.userId;
+  const { id }     = req.params;
+  const { reaction } = req.body; // "up" | "down" | null
+
+  const msg = await prisma.guidanceMessage.findFirst({
+    where: { id, learnerId, role: "assistant" },
+  });
+  if (!msg) throw new AppError("Message not found", HttpStatus.NOT_FOUND);
+
+  // Toggle: if same reaction sent again, clear it
+  const next = msg.reaction === reaction ? null : (reaction ?? null);
+
+  const updated = await prisma.guidanceMessage.update({
+    where: { id },
+    data:  { reaction: next },
+  });
+
+  return res.status(HttpStatus.OK).json({ status: "success", data: { reaction: updated.reaction } });
+});
+
 export const getChatHistory = catchAsync(async (req: Request, res: Response) => {
-  return res.status(HttpStatus.OK).json({ status: "success", data: [] });
-});
-
-export const sendChatMessage = catchAsync(async (req: Request, res: Response) => {
   const learnerId = req.user!.userId;
-  const { message, history } = req.body;
-  if (!message?.trim()) throw new AppError("Message is required", HttpStatus.BAD_REQUEST);
-
-  const { runLearnerGuidanceAgent } = await import("../../agents/learnerGuidance.agent.js");
-  const reply = await runLearnerGuidanceAgent(learnerId, message, history ?? []);
-
-  return res.status(HttpStatus.OK).json({ status: "success", data: { reply } });
+  const messages  = await prisma.guidanceMessage.findMany({
+    where:   { learnerId },
+    orderBy: { createdAt: "asc" },
+    take:    100,
+  });
+  return res.status(HttpStatus.OK).json({ status: "success", data: messages });
 });
+
+export const sendChatMessage = async (req: Request, res: Response) => {
+  const learnerId = req.user!.userId;
+  const { message } = req.body;
+  if (!message?.trim()) {
+    res.status(400).json({ status: "error", message: "Message is required" });
+    return;
+  }
+
+  // Save user message
+  await prisma.guidanceMessage.create({ data: { learnerId, role: "user", content: message.trim() } });
+
+  // Load recent history from DB (last 20 exchanges = 40 messages)
+  const history = await prisma.guidanceMessage.findMany({
+    where:   { learnerId },
+    orderBy: { createdAt: "desc" },
+    take:    40,
+    select:  { role: true, content: true },
+  });
+  history.reverse();
+
+  // SSE headers for streaming
+  res.setHeader("Content-Type",  "text/event-stream");
+  res.setHeader("Cache-Control", "no-cache");
+  res.setHeader("Connection",    "keep-alive");
+  res.flushHeaders();
+
+  try {
+    const { streamLearnerGuidance } = await import("../../agents/learnerGuidance.agent.js");
+    let fullReply = "";
+
+    await streamLearnerGuidance(learnerId, history, (token: string) => {
+      fullReply += token;
+      res.write(`data: ${JSON.stringify({ token })}\n\n`);
+    });
+
+    // Save completed assistant reply
+    await prisma.guidanceMessage.create({ data: { learnerId, role: "assistant", content: fullReply } });
+
+    res.write(`data: ${JSON.stringify({ done: true })}\n\n`);
+  } catch (err: any) {
+    res.write(`data: ${JSON.stringify({ error: err.message ?? "Something went wrong" })}\n\n`);
+  } finally {
+    res.end();
+  }
+};

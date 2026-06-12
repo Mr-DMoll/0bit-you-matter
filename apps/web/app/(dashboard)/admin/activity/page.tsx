@@ -1,3 +1,3 @@
 "use client";
-import { AdminActivityPage } from "@/features/admin/pages/ActivityPage";
-export default function Page() { return <AdminActivityPage />; }
+import { redirect } from "next/navigation";
+export default function Page() { redirect("/admin/logs"); }

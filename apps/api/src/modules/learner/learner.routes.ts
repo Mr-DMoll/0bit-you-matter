@@ -3,7 +3,7 @@ import {
   getMyProfile, updateMyProfile, generateProfile, matchCareers,
   saveCareer, unsaveCareer,
   getMyRoadmap, updateMilestone,
-  getChatHistory, sendChatMessage,
+  getChatHistory, sendChatMessage, reactToChatMessage,
 } from "./learner.controller.js";
 import { protect } from "../../middleware/auth.middleware.js";
 
@@ -21,7 +21,8 @@ router.delete("/saved-careers/:careerId", unsaveCareer);
 router.get("/roadmap",            getMyRoadmap);
 router.patch("/roadmap/milestone", updateMilestone);
 
-router.get("/chat/history",       getChatHistory);
-router.post("/chat/message",      sendChatMessage);
+router.get("/chat/history",              getChatHistory);
+router.post("/chat/message",             sendChatMessage);
+router.patch("/chat/:id/reaction",       reactToChatMessage);
 
 export default router;

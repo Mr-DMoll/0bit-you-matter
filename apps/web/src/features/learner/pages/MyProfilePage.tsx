@@ -86,8 +86,18 @@ function Avatar({
     if (!file) return;
     const reader = new FileReader();
     reader.onload = (ev) => {
-      const dataUrl = ev.target?.result as string;
-      onUpload?.(dataUrl);
+      const img = new Image();
+      img.onload = () => {
+        // Resize to max 256×256 before sending — keeps payload well under 100kb
+        const MAX = 256;
+        const scale = Math.min(MAX / img.width, MAX / img.height, 1);
+        const canvas = document.createElement("canvas");
+        canvas.width  = Math.round(img.width  * scale);
+        canvas.height = Math.round(img.height * scale);
+        canvas.getContext("2d")!.drawImage(img, 0, 0, canvas.width, canvas.height);
+        onUpload?.(canvas.toDataURL("image/jpeg", 0.82));
+      };
+      img.src = ev.target?.result as string;
     };
     reader.readAsDataURL(file);
   };
@@ -380,6 +390,9 @@ export function MyProfilePage() {
     setTimeout(() => setFlashMsg(""), 2500);
   };
 
+  const notifyProfileUpdated = () =>
+    window.dispatchEvent(new CustomEvent("profile-updated"));
+
   useEffect(() => {
     Promise.all([
       apiClient.get("/users/me").then((r) => r.data.data.user),
@@ -394,12 +407,14 @@ export function MyProfilePage() {
     const r = await apiClient.patch("/users/me", fields);
     setUser(r.data.data.user);
     flash("Saved ✓");
+    notifyProfileUpdated();
   };
 
   const patchProfile = async (fields: Record<string, any>) => {
     const r = await apiClient.patch("/learner/profile", fields);
     setProfile(r.data.data);
     flash("Saved ✓");
+    notifyProfileUpdated();
   };
 
   const handleAvatarUpload = async (dataUrl: string) => {

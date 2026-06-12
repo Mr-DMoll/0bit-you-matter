@@ -1,3 +1,3 @@
 "use client";
-import { AdminReportsPage } from "@/features/admin/pages/ReportsPage";
-export default function Page() { return <AdminReportsPage />; }
+import { redirect } from "next/navigation";
+export default function Page() { redirect("/admin/analytics"); }

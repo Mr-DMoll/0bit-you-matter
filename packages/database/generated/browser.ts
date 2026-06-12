@@ -133,6 +133,11 @@ export type PromptTemplate = Prisma.PromptTemplateModel
  */
 export type GenerationJob = Prisma.GenerationJobModel
 /**
+ * Model GuidanceMessage
+ * 
+ */
+export type GuidanceMessage = Prisma.GuidanceMessageModel
+/**
  * Model Source
  * 
  */

@@ -407,6 +407,7 @@ export const ModelName = {
   DataVerification: 'DataVerification',
   PromptTemplate: 'PromptTemplate',
   GenerationJob: 'GenerationJob',
+  GuidanceMessage: 'GuidanceMessage',
   Source: 'Source'
 } as const
 
@@ -423,7 +424,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "auditLog" | "notification" | "systemSetting" | "careerCluster" | "career" | "university" | "programme" | "tvetCollege" | "tvetProgramme" | "pathway" | "bursary" | "assessmentQuestion" | "learnerAssessmentSession" | "learnerAnswer" | "learnerProfile" | "learnerCareerMatch" | "learnerSavedCareer" | "learnerRoadmap" | "contentReview" | "dataVerification" | "promptTemplate" | "generationJob" | "source"
+    modelProps: "user" | "auditLog" | "notification" | "systemSetting" | "careerCluster" | "career" | "university" | "programme" | "tvetCollege" | "tvetProgramme" | "pathway" | "bursary" | "assessmentQuestion" | "learnerAssessmentSession" | "learnerAnswer" | "learnerProfile" | "learnerCareerMatch" | "learnerSavedCareer" | "learnerRoadmap" | "contentReview" | "dataVerification" | "promptTemplate" | "generationJob" | "guidanceMessage" | "source"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2129,6 +2130,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    GuidanceMessage: {
+      payload: Prisma.$GuidanceMessagePayload<ExtArgs>
+      fields: Prisma.GuidanceMessageFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.GuidanceMessageFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GuidanceMessagePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.GuidanceMessageFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GuidanceMessagePayload>
+        }
+        findFirst: {
+          args: Prisma.GuidanceMessageFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GuidanceMessagePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.GuidanceMessageFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GuidanceMessagePayload>
+        }
+        findMany: {
+          args: Prisma.GuidanceMessageFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GuidanceMessagePayload>[]
+        }
+        create: {
+          args: Prisma.GuidanceMessageCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GuidanceMessagePayload>
+        }
+        createMany: {
+          args: Prisma.GuidanceMessageCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.GuidanceMessageCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GuidanceMessagePayload>[]
+        }
+        delete: {
+          args: Prisma.GuidanceMessageDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GuidanceMessagePayload>
+        }
+        update: {
+          args: Prisma.GuidanceMessageUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GuidanceMessagePayload>
+        }
+        deleteMany: {
+          args: Prisma.GuidanceMessageDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.GuidanceMessageUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.GuidanceMessageUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GuidanceMessagePayload>[]
+        }
+        upsert: {
+          args: Prisma.GuidanceMessageUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GuidanceMessagePayload>
+        }
+        aggregate: {
+          args: Prisma.GuidanceMessageAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateGuidanceMessage>
+        }
+        groupBy: {
+          args: Prisma.GuidanceMessageGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GuidanceMessageGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.GuidanceMessageCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GuidanceMessageCountAggregateOutputType> | number
+        }
+      }
+    }
     Source: {
       payload: Prisma.$SourcePayload<ExtArgs>
       fields: Prisma.SourceFieldRefs
@@ -2666,6 +2741,18 @@ export const GenerationJobScalarFieldEnum = {
 export type GenerationJobScalarFieldEnum = (typeof GenerationJobScalarFieldEnum)[keyof typeof GenerationJobScalarFieldEnum]
 
 
+export const GuidanceMessageScalarFieldEnum = {
+  id: 'id',
+  learnerId: 'learnerId',
+  role: 'role',
+  content: 'content',
+  reaction: 'reaction',
+  createdAt: 'createdAt'
+} as const
+
+export type GuidanceMessageScalarFieldEnum = (typeof GuidanceMessageScalarFieldEnum)[keyof typeof GuidanceMessageScalarFieldEnum]
+
+
 export const SourceScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -3063,6 +3150,7 @@ export type GlobalOmitConfig = {
   dataVerification?: Prisma.DataVerificationOmit
   promptTemplate?: Prisma.PromptTemplateOmit
   generationJob?: Prisma.GenerationJobOmit
+  guidanceMessage?: Prisma.GuidanceMessageOmit
   source?: Prisma.SourceOmit
 }
 

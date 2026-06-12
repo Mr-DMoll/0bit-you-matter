@@ -6,10 +6,11 @@ import { useAuth } from "@/shared/context/AuthContext";
 import { Zap, Target, Star } from "lucide-react";
 
 const ERRORS: Record<string, string> = {
-  google_denied: "Google sign-in was cancelled.",
-  suspended:     "Your account has been suspended. Please contact support.",
-  not_found:     "No account found. Please contact support.",
-  oauth_failed:  "Google sign-in failed. Please try again.",
+  google_denied:  "Google sign-in was cancelled.",
+  suspended:      "Your account has been suspended. Please contact support.",
+  not_found:      "No account found. Please contact support.",
+  oauth_failed:   "Google sign-in failed. Please try again.",
+  staff_account:  "This email is registered as a staff account and cannot be used here.",
 };
 
 function LearnerLoginInner() {
@@ -108,14 +109,13 @@ function LearnerLoginInner() {
       <div style={{ flex: 1, display: "flex", flexDirection: "column", background: "#FAFAF9", overflow: "hidden" }}>
 
         {/* Top bar: logo + back */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "20px 32px", flexShrink: 0 }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-start", padding: "20px 32px", flexShrink: 0 }}>
           <a href="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
             <div style={{ width: 32, height: 32, borderRadius: 10, background: "#5B4FCF", display: "flex", alignItems: "center", justifyContent: "center" }}>
               <Zap size={16} color="white" />
             </div>
             <span style={{ fontWeight: 800, fontSize: "0.95rem", color: "#5B4FCF" }}>You Matter</span>
           </a>
-          <a href="/" style={{ fontSize: "0.8rem", color: "#7A7499", textDecoration: "none", fontWeight: 500 }}>← Back</a>
         </div>
 
         {/* Centred form */}
@@ -142,18 +142,22 @@ function LearnerLoginInner() {
               onClick={handleGoogle}
               style={{
                 width: "100%", display: "flex", alignItems: "center", justifyContent: "center", gap: 12,
-                padding: "15px 20px", borderRadius: 16, border: "none", cursor: "pointer",
-                background: "#5B4FCF", color: "white", fontWeight: 700, fontSize: "1rem",
-                boxShadow: "0 4px 20px rgba(91,79,207,0.35)", transition: "opacity 0.15s",
+                padding: "14px 20px", borderRadius: 12,
+                border: "1.5px solid #DADCE0", cursor: "pointer",
+                background: "white", color: "#3C4043",
+                fontWeight: 600, fontSize: "0.95rem",
+                boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
+                transition: "box-shadow 0.15s, background 0.15s",
               }}
-              onMouseEnter={e => (e.currentTarget.style.opacity = "0.88")}
-              onMouseLeave={e => (e.currentTarget.style.opacity = "1")}
+              onMouseEnter={e => { e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,0,0,0.14)"; e.currentTarget.style.background = "#F8FAFF"; }}
+              onMouseLeave={e => { e.currentTarget.style.boxShadow = "0 1px 3px rgba(0,0,0,0.08)"; e.currentTarget.style.background = "white"; }}
             >
-              <svg width="20" height="20" viewBox="0 0 18 18">
-                <path fill="white" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z" opacity="0.9"/>
-                <path fill="white" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" opacity="0.9"/>
-                <path fill="white" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" opacity="0.9"/>
-                <path fill="white" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" opacity="0.9"/>
+              {/* Official Google G */}
+              <svg width="20" height="20" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+                <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/>
+                <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/>
+                <path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/>
+                <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/>
               </svg>
               Continue with Google
             </button>
@@ -165,13 +169,6 @@ function LearnerLoginInner() {
               <span style={{ textDecoration: "underline", cursor: "pointer", color: "#5B4FCF" }}>Privacy Policy</span>
             </p>
 
-            {/* Staff divider */}
-            <div style={{ textAlign: "center", marginTop: 40, paddingTop: 24, borderTop: "1px solid rgba(91,79,207,0.1)" }}>
-              <a href="/staff-login" style={{ fontSize: "0.78rem", color: "#7A7499", textDecoration: "none" }}>
-                Are you a staff member?{" "}
-                <span style={{ color: "#5B4FCF", fontWeight: 600 }}>Staff login →</span>
-              </a>
-            </div>
           </div>
         </div>
       </div>

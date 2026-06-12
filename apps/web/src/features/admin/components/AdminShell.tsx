@@ -48,12 +48,30 @@ export function Card({
   );
 }
 
-export function StatCard({ label, value, sub, accent }: { label: string; value: string | number; sub?: string; accent?: string }) {
+export function StatCard({ label, value, sub, accent, color, icon }: {
+  label: string; value: string | number; sub?: string; accent?: string; color?: string; icon?: string;
+}) {
+  const bg   = color ? `${color}12` : "var(--color-card-bg)";
+  const border = color ? `${color}28` : "var(--color-card-border)";
+  const numColor = color ?? accent ?? "var(--color-text-primary)";
   return (
-    <div style={{ padding: "20px 24px", background: "var(--color-card-bg)", border: "1px solid var(--color-card-border)", borderRadius: "var(--radius-lg)", boxShadow: "var(--color-card-shadow)" }}>
+    <div style={{
+      padding: "20px 24px", background: bg,
+      border: `1px solid ${border}`,
+      borderRadius: "var(--radius-lg)",
+      boxShadow: "var(--color-card-shadow)",
+      borderTop: color ? `3px solid ${color}` : "1px solid var(--color-card-border)",
+      position: "relative", overflow: "hidden",
+    }}>
+      {icon && (
+        <div style={{
+          position: "absolute", top: 14, right: 16,
+          fontSize: 22, opacity: 0.18, lineHeight: 1,
+        }}>{icon}</div>
+      )}
       <p style={{ fontSize: "11px", color: "var(--color-text-muted)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "8px" }}>{label}</p>
-      <p style={{ fontSize: "30px", fontWeight: 300, color: accent ?? "var(--color-text-primary)", lineHeight: 1 }}>{value}</p>
-      {sub && <p style={{ fontSize: "12px", color: "var(--color-text-muted)", marginTop: "4px" }}>{sub}</p>}
+      <p style={{ fontSize: "32px", fontWeight: 700, color: numColor, lineHeight: 1 }}>{value}</p>
+      {sub && <p style={{ fontSize: "12px", color: "var(--color-text-muted)", marginTop: "6px" }}>{sub}</p>}
     </div>
   );
 }

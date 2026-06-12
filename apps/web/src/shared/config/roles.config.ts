@@ -8,7 +8,7 @@ export const ROLE_HOME_ROUTES: Record<string, string> = {
   SUPER_ADMIN:     "/super-admin",
   ADMIN:           "/admin",
   MANAGER:         "/manager",
-  CONTENT_MANAGER: "/content-manager",
+  CONTENT_MANAGER: "/admin",
   REVIEWER:        "/reviewer",
   LEARNER:         "/learner",
 };

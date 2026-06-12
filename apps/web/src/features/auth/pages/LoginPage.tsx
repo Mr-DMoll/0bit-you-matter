@@ -8,30 +8,15 @@ import { BRAND } from "@/shared/config/branding.config";
 import { roleHomeRoute } from "@/shared/config/roles.config";
 
 const OAUTH_ERRORS: Record<string, string> = {
-  google_denied:  "Google sign-in was cancelled.",
-  suspended:      "Your account has been suspended. Please contact support.",
-  not_found:      "No account found. Please contact support.",
-  oauth_failed:   "Google sign-in failed. Please try again.",
-};
-
-const inputStyle: React.CSSProperties = {
-  width: "100%", padding: "11px 14px",
-  background: "rgba(255,255,255,0.06)",
-  border: "1px solid rgba(255,255,255,0.1)",
-  borderRadius: "8px", fontSize: "14px", color: "#fff",
-  outline: "none", boxSizing: "border-box",
-  transition: "border-color 0.15s, box-shadow 0.15s",
-};
-
-const labelStyle: React.CSSProperties = {
-  display: "block", fontSize: "12px", fontWeight: 600,
-  color: "rgba(255,255,255,0.5)", marginBottom: "6px",
-  textTransform: "uppercase", letterSpacing: "0.06em",
+  google_denied: "Google sign-in was cancelled.",
+  suspended:     "Your account has been suspended. Please contact support.",
+  not_found:     "No account found. Please contact support.",
+  oauth_failed:  "Google sign-in failed. Please try again.",
 };
 
 export default function LoginPage() {
-  const router              = useRouter();
-  const searchParams        = useSearchParams();
+  const router     = useRouter();
+  const params     = useSearchParams();
   const { login, user, isLoading } = useAuth();
 
   const [email,    setEmail]    = useState("");
@@ -40,18 +25,14 @@ export default function LoginPage() {
   const [error,    setError]    = useState("");
   const [loading,  setLoading]  = useState(false);
 
-  // Redirect as soon as user is set — uses the shared role map so no role is ever missed
   useEffect(() => {
-    if (!isLoading && user) {
-      router.push(roleHomeRoute(user.role));
-    }
+    if (!isLoading && user) router.push(roleHomeRoute(user.role));
   }, [user, isLoading, router]);
 
-  // Surface OAuth redirect errors
   useEffect(() => {
-    const err = searchParams.get("error");
+    const err = params.get("error");
     if (err && OAUTH_ERRORS[err]) setError(OAUTH_ERRORS[err]);
-  }, [searchParams]);
+  }, [params]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -65,108 +46,90 @@ export default function LoginPage() {
     }
   };
 
-  const handleGoogleSignIn = () => {
-    const apiBase = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api/v1";
-    window.location.href = `${apiBase}/auth/google`;
-  };
-
   return (
     <div style={{
-      minHeight: "calc(100vh - 57px)",
-      display: "flex", alignItems: "center", justifyContent: "center",
-      padding: "24px",
+      minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center",
+      background: "#F8FAFC", padding: "24px",
     }}>
       <div style={{ width: "100%", maxWidth: "400px" }}>
-        {/* Logo */}
-        <div style={{ textAlign: "center", marginBottom: "40px" }}>
+
+        {/* Logo + heading */}
+        <div style={{ textAlign: "center", marginBottom: "32px" }}>
           <div style={{
-            width: "48px", height: "48px", borderRadius: "12px",
+            width: 52, height: 52, borderRadius: 14,
             background: "linear-gradient(135deg, var(--color-accent), var(--color-accent-hover))",
             display: "flex", alignItems: "center", justifyContent: "center",
-            margin: "0 auto 16px", fontSize: "22px", fontWeight: 900,
-            color: "var(--color-accent-text)",
+            margin: "0 auto 16px",
+            fontSize: 22, fontWeight: 900, color: "#fff",
+            boxShadow: "0 4px 14px rgba(91,79,207,0.25)",
           }}>
-            O
+            {BRAND.logoMark}
           </div>
-          <h1 style={{ fontSize: "24px", fontWeight: 700, color: "#fff", marginBottom: "6px" }}>
-            Welcome back
+          <h1 style={{ fontSize: 22, fontWeight: 800, color: "#0F172A", marginBottom: 4, letterSpacing: "-0.02em" }}>
+            {BRAND.name}
           </h1>
-          <p style={{ fontSize: "14px", color: "rgba(255,255,255,0.4)" }}>
-            Sign in to your {BRAND.name} account
+          <p style={{ fontSize: 13, color: "#64748B" }}>
+            Staff portal — sign in to continue
           </p>
         </div>
 
         {/* Card */}
         <div style={{
-          background: "rgba(255,255,255,0.04)",
-          border: "1px solid rgba(255,255,255,0.08)",
-          borderRadius: "16px", padding: "32px",
+          background: "#fff",
+          border: "1px solid #E2E8F0",
+          borderRadius: 16,
+          padding: 32,
+          boxShadow: "0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04)",
         }}>
-          {/* Google OAuth */}
-          <button
-            type="button"
-            onClick={handleGoogleSignIn}
-            style={{
-              width: "100%", padding: "11px 16px",
-              background: "rgba(255,255,255,0.06)",
-              border: "1px solid rgba(255,255,255,0.12)",
-              borderRadius: "8px", fontSize: "14px", fontWeight: 600,
-              color: "#fff", cursor: "pointer",
-              display: "flex", alignItems: "center", justifyContent: "center", gap: "10px",
-              transition: "background 0.15s, border-color 0.15s",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = "rgba(255,255,255,0.1)";
-              e.currentTarget.style.borderColor = "rgba(255,255,255,0.2)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = "rgba(255,255,255,0.06)";
-              e.currentTarget.style.borderColor = "rgba(255,255,255,0.12)";
-            }}
-          >
-            {/* Google logo SVG */}
-            <svg width="18" height="18" viewBox="0 0 18 18">
-              <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/>
-              <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/>
-              <path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/>
-              <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/>
-            </svg>
-            Continue with Google
-          </button>
 
-          {/* Divider */}
-          <div style={{
-            display: "flex", alignItems: "center", gap: "12px",
-            margin: "20px 0",
-          }}>
-            <div style={{ flex: 1, height: "1px", background: "rgba(255,255,255,0.08)" }} />
-            <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.25)", fontWeight: 500 }}>
-              or sign in with email
-            </span>
-            <div style={{ flex: 1, height: "1px", background: "rgba(255,255,255,0.08)" }} />
-          </div>
+          {error && (
+            <div style={{
+              padding: "10px 14px", marginBottom: 20,
+              background: "#FEF2F2", border: "1px solid #FECACA",
+              borderRadius: 8, fontSize: 13, color: "#DC2626",
+            }}>
+              {error}
+            </div>
+          )}
 
-          <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
+          <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 18 }}>
             {/* Email */}
             <div>
-              <label style={labelStyle}>Email</label>
+              <label style={{
+                display: "block", fontSize: 11, fontWeight: 700,
+                color: "#64748B", marginBottom: 6,
+                textTransform: "uppercase", letterSpacing: "0.07em",
+              }}>
+                Email
+              </label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@company.com"
+                placeholder="you@youmatter.co.za"
                 required
-                style={inputStyle}
-                onFocus={(e) => { e.target.style.borderColor = "var(--color-accent)"; e.target.style.boxShadow = "0 0 0 3px rgba(132,204,22,0.12)"; }}
-                onBlur={(e)  => { e.target.style.borderColor = "rgba(255,255,255,0.1)"; e.target.style.boxShadow = "none"; }}
+                style={{
+                  width: "100%", padding: "11px 14px",
+                  background: "#F8FAFC", border: "1px solid #E2E8F0",
+                  borderRadius: 8, fontSize: 14, color: "#0F172A",
+                  outline: "none", boxSizing: "border-box",
+                  transition: "border-color 0.15s, box-shadow 0.15s",
+                }}
+                onFocus={(e) => { e.target.style.borderColor = "var(--color-accent)"; e.target.style.boxShadow = "0 0 0 3px rgba(91,79,207,0.1)"; }}
+                onBlur={(e)  => { e.target.style.borderColor = "#E2E8F0"; e.target.style.boxShadow = "none"; }}
               />
             </div>
 
             {/* Password */}
             <div>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "6px" }}>
-                <label style={{ ...labelStyle, marginBottom: 0 }}>Password</label>
-                <Link href="/forgot-password" style={{ fontSize: "12px", color: "var(--color-accent)", textDecoration: "none" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
+                <label style={{
+                  fontSize: 11, fontWeight: 700, color: "#64748B",
+                  textTransform: "uppercase", letterSpacing: "0.07em",
+                }}>
+                  Password
+                </label>
+                <Link href="/forgot-password" style={{ fontSize: 12, color: "var(--color-accent)", textDecoration: "none", fontWeight: 500 }}>
                   Forgot password?
                 </Link>
               </div>
@@ -177,17 +140,23 @@ export default function LoginPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Your password"
                   required
-                  style={{ ...inputStyle, paddingRight: "52px" }}
-                  onFocus={(e) => { e.target.style.borderColor = "var(--color-accent)"; e.target.style.boxShadow = "0 0 0 3px rgba(132,204,22,0.12)"; }}
-                  onBlur={(e)  => { e.target.style.borderColor = "rgba(255,255,255,0.1)"; e.target.style.boxShadow = "none"; }}
+                  style={{
+                    width: "100%", padding: "11px 52px 11px 14px",
+                    background: "#F8FAFC", border: "1px solid #E2E8F0",
+                    borderRadius: 8, fontSize: 14, color: "#0F172A",
+                    outline: "none", boxSizing: "border-box",
+                    transition: "border-color 0.15s, box-shadow 0.15s",
+                  }}
+                  onFocus={(e) => { e.target.style.borderColor = "var(--color-accent)"; e.target.style.boxShadow = "0 0 0 3px rgba(91,79,207,0.1)"; }}
+                  onBlur={(e)  => { e.target.style.borderColor = "#E2E8F0"; e.target.style.boxShadow = "none"; }}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPw(!showPw)}
                   style={{
-                    position: "absolute", right: "12px", top: "50%", transform: "translateY(-50%)",
+                    position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)",
                     background: "none", border: "none", cursor: "pointer",
-                    fontSize: "12px", color: "rgba(255,255,255,0.4)", fontWeight: 500,
+                    fontSize: 12, color: "#94A3B8", fontWeight: 600,
                   }}
                 >
                   {showPw ? "Hide" : "Show"}
@@ -195,39 +164,31 @@ export default function LoginPage() {
               </div>
             </div>
 
-            {/* Error */}
-            {error && (
-              <div style={{
-                padding: "10px 14px",
-                background: "rgba(239,68,68,0.08)",
-                border: "1px solid rgba(239,68,68,0.2)",
-                borderRadius: "8px", fontSize: "13px", color: "#f87171",
-              }}>
-                {error}
-              </div>
-            )}
-
             {/* Submit */}
             <button
               type="submit"
               disabled={loading}
               style={{
                 width: "100%", padding: "12px",
-                background: loading ? "var(--color-accent-subtle)" : "var(--color-accent)",
-                border: "none", borderRadius: "8px",
-                fontSize: "14px", fontWeight: 700, color: "var(--color-accent-text)",
+                background: loading ? "#94A3B8" : "var(--color-accent)",
+                border: "none", borderRadius: 8,
+                fontSize: 14, fontWeight: 700, color: "#fff",
                 cursor: loading ? "not-allowed" : "pointer",
                 transition: "opacity 0.15s",
+                marginTop: 4,
               }}
             >
-              {loading ? "Signing in..." : "Sign in"}
+              {loading ? "Signing in…" : "Sign in"}
             </button>
           </form>
         </div>
 
-        {/* Register hint */}
-        <p style={{ textAlign: "center", marginTop: "20px", fontSize: "13px", color: "rgba(255,255,255,0.3)" }}>
-          New here? Sign in with Google above to create an account.
+        {/* Footer */}
+        <p style={{ textAlign: "center", marginTop: 24, fontSize: 12, color: "#94A3B8" }}>
+          For learner access, visit{" "}
+          <Link href="/login" style={{ color: "var(--color-accent)", textDecoration: "none", fontWeight: 600 }}>
+            the learner portal →
+          </Link>
         </p>
       </div>
     </div>

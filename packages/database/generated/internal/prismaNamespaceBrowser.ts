@@ -74,6 +74,7 @@ export const ModelName = {
   DataVerification: 'DataVerification',
   PromptTemplate: 'PromptTemplate',
   GenerationJob: 'GenerationJob',
+  GuidanceMessage: 'GuidanceMessage',
   Source: 'Source'
 } as const
 
@@ -515,6 +516,18 @@ export const GenerationJobScalarFieldEnum = {
 } as const
 
 export type GenerationJobScalarFieldEnum = (typeof GenerationJobScalarFieldEnum)[keyof typeof GenerationJobScalarFieldEnum]
+
+
+export const GuidanceMessageScalarFieldEnum = {
+  id: 'id',
+  learnerId: 'learnerId',
+  role: 'role',
+  content: 'content',
+  reaction: 'reaction',
+  createdAt: 'createdAt'
+} as const
+
+export type GuidanceMessageScalarFieldEnum = (typeof GuidanceMessageScalarFieldEnum)[keyof typeof GuidanceMessageScalarFieldEnum]
 
 
 export const SourceScalarFieldEnum = {

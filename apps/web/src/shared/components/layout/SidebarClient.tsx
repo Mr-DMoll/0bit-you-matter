@@ -24,7 +24,7 @@ import {
   // Learner
   Home, Compass, MessageCircle, Target,
   // Additional
-  Route, School,
+  Route, School, Cpu, Settings2,
 } from "lucide-react";
 
 const ICON_MAP: Record<string, React.ComponentType<{ size?: number; strokeWidth?: number }>> = {
@@ -45,7 +45,7 @@ const ICON_MAP: Record<string, React.ComponentType<{ size?: number; strokeWidth?
   // Learner
   Home, Compass, MessageCircle, Target,
   // Additional
-  Route, School,
+  Route, School, Cpu, Settings2,
 };
 
 interface Props {

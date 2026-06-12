@@ -108,13 +108,14 @@ export const getAssessmentQuestions = catchAsync(async (req: Request, res: Respo
     VALUES:      15,
   };
 
-  // Fetch the full bank, then randomly select per-type count so no two learners get identical tests
+  const questionsPerSession = QUESTIONS_PER_TYPE[type] ?? 20;
+
+  // Fetch at most 4× what we need — enough variety without loading the whole bank
   const bank = await prisma.assessmentQuestion.findMany({
     where:   { assessmentType: type, status: { in: ["APPROVED", "VERIFIED"] } },
     select:  { id: true, questionText: true, contextNote: true, options: true, riasecMapping: true },
+    take:    questionsPerSession * 4,
   });
-
-  const questionsPerSession = QUESTIONS_PER_TYPE[type] ?? 20;
   const shuffled  = [...bank].sort(() => Math.random() - 0.5);
   const questions = shuffled.slice(0, questionsPerSession);
 
@@ -206,6 +207,16 @@ export const completeAssessment = catchAsync(async (req: Request, res: Response)
   const allSessions = await prisma.learnerAssessmentSession.count({
     where: { learnerId, status: "COMPLETED" },
   });
+
+  // Explicit audit log so the activity log shows assessment completions
+  await prisma.auditLog.create({
+    data: {
+      userId: learnerId,
+      action: "ASSESSMENT_COMPLETED",
+      meta:   { assessmentType: type, allCompleted: allSessions >= 4 },
+    },
+  }).catch(() => {});
+  req.auditLogged = true;
 
   return res.status(HttpStatus.OK).json({
     status: "success",

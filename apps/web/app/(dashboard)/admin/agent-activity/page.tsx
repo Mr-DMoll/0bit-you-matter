@@ -1,3 +1,3 @@
 "use client";
-import { AdminAgentActivityPage } from "@/features/admin/pages/AgentActivityPage";
-export default function Page() { return <AdminAgentActivityPage />; }
+import { redirect } from "next/navigation";
+export default function Page() { redirect("/admin/logs"); }

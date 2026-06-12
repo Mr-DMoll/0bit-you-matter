@@ -148,8 +148,9 @@ model User {
   // Relations
   auditLogs         AuditLog[]
   notifications     Notification[]
-  learnerProfile    LearnerProfile?
+  learnerProfile     LearnerProfile?
   assessmentSessions LearnerAssessmentSession[]
+  guidanceMessages   GuidanceMessage[]
   reviewAssignments ContentReview[]    @relation("ReviewerAssignments")
   verificationItems DataVerification[] @relation("VerifierAssignments")
   generationJobs    GenerationJob[]
@@ -178,6 +179,7 @@ model AuditLog {
 
   @@index([userId])
   @@index([createdAt])
+  @@index([action])
 }
 
 model Notification {
@@ -760,6 +762,20 @@ model GenerationJob {
   @@index([contentType])
   @@index([requestedById])
   @@index([createdAt])
+}
+
+// ─── Career Guidance Chat ─────────────────────────────────────────────────────
+
+model GuidanceMessage {
+  id        String   @id @default(cuid())
+  learnerId String
+  learner   User     @relation(fields: [learnerId], references: [id], onDelete: Cascade)
+  role      String   // "user" | "assistant"
+  content   String   @db.Text
+  reaction  String?  // "up" | "down" | null
+  createdAt DateTime @default(now())
+
+  @@index([learnerId, createdAt])
 }
 
 // ─── Source Library ───────────────────────────────────────────────────────────

@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 import apiClient from "@/api/client";
 import {
   Home, ClipboardList, Compass, Map, GraduationCap,
-  Award, MessageCircle, User, Sparkles, LogOut,
+  Award, MessageCircle, User, LogOut,
 } from "lucide-react";
 
 // ── Learner theme tokens ───────────────────────────────────────────────────
@@ -63,19 +63,25 @@ export function LearnerShell({ children }: { children: React.ReactNode }) {
   const [sidebarUser,    setSidebarUser]    = useState<any>(null);
   const [profile,        setProfile]        = useState<any>(null);
 
-  useEffect(() => {
-    // Fetch fresh user + profile on every nav change so the card stays in sync
+  const fetchSidebarData = () =>
     Promise.all([
       apiClient.get("/users/me").then((r) => r.data.data.user).catch(() => null),
       apiClient.get("/learner/profile").then((r) => r.data.data).catch(() => null),
-    ]).then(([u, p]) => {
-      setSidebarUser(u);
-      setProfile(p);
-    });
-  }, [pathname]);
+    ]).then(([u, p]) => { setSidebarUser(u); setProfile(p); });
+
+  useEffect(() => { fetchSidebarData(); }, [pathname]);
+
+  useEffect(() => {
+    window.addEventListener("profile-updated", fetchSidebarData);
+    return () => window.removeEventListener("profile-updated", fetchSidebarData);
+  }, []);
 
   const firstName = user?.firstName ?? user?.displayName?.split(" ")[0] ?? "there";
   const initial   = firstName[0]?.toUpperCase() ?? "U";
+
+  // Avatar for logo spot
+  const avatarSrc      = sidebarUser?.avatarUrl ?? user?.avatarUrl;
+  const avatarInitials = firstName[0]?.toUpperCase() ?? "?";
 
   // Use fresh fetched user (sidebarUser) — auth context user may lack grade/province/school
   const { pct, missing } = calcCompletion(sidebarUser ?? user, profile);
@@ -98,18 +104,29 @@ export function LearnerShell({ children }: { children: React.ReactNode }) {
         height: "100svh", overflow: "hidden",
         position: "sticky", top: 0,
       }}>
-        {/* Logo */}
-        <div style={{ padding: "28px 24px 20px", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <div style={{ width: 36, height: 36, borderRadius: 12, background: T.primary, display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <Sparkles size={18} color="white" />
-            </div>
-            <div>
-              <p style={{ color: "white", fontWeight: 800, fontSize: "1rem", lineHeight: 1.2 }}>You Matter</p>
-              <p style={{ color: "rgba(255,255,255,0.4)", fontSize: "0.68rem" }}>Career Guidance</p>
+        {/* Logo — learner avatar as the brand mark */}
+        <Link href="/learner" style={{ textDecoration: "none" }}>
+          <div style={{ padding: "28px 24px 20px", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              {/* Avatar circle — YOUR face IS the logo */}
+              <div style={{
+                width: 38, height: 38, borderRadius: "50%", flexShrink: 0,
+                border: "2px solid rgba(255,255,255,0.3)", overflow: "hidden",
+                background: avatarSrc ? "transparent" : `linear-gradient(135deg, ${T.primary}, #7C3AED)`,
+                display: "flex", alignItems: "center", justifyContent: "center",
+              }}>
+                {avatarSrc
+                  ? <img src={avatarSrc} alt="You" style={{ width: "100%", height: "100%", objectFit: "cover" }} referrerPolicy="no-referrer" />
+                  : <span style={{ color: "#fff", fontSize: 15, fontWeight: 800 }}>{avatarInitials}</span>
+                }
+              </div>
+              <div>
+                <p style={{ color: "white", fontWeight: 800, fontSize: "1rem", lineHeight: 1.2, margin: 0 }}>You Matter</p>
+                <p style={{ color: "rgba(255,255,255,0.4)", fontSize: "0.68rem", margin: 0 }}>Career Guidance</p>
+              </div>
             </div>
           </div>
-        </div>
+        </Link>
 
         {/* Greeting */}
         <div style={{ padding: "16px 24px 4px" }}>

@@ -143,6 +143,12 @@ export async function googleCallback(req: Request, res: Response) {
       }
     }
 
+    // Block staff accounts from using the learner Google login
+    const STAFF_ROLES = ["ADMIN", "SUPER_ADMIN", "CONTENT_MANAGER", "REVIEWER", "MANAGER"];
+    if (STAFF_ROLES.includes(user.role)) {
+      return res.redirect(`${env.FRONTEND_URL}/login?error=staff_account`);
+    }
+
     if (user.accountStatus === "SUSPENDED") {
       return res.redirect(`${env.FRONTEND_URL}/login?error=suspended`);
     }

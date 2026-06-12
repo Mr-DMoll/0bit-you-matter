@@ -1,3 +1,3 @@
 "use client";
-import { AdminLearnersPage } from "@/features/admin/pages/LearnersPage";
-export default function Page() { return <AdminLearnersPage />; }
+import { redirect } from "next/navigation";
+export default function Page() { redirect("/admin/users"); }

@@ -416,6 +416,7 @@ export type UserWhereInput = {
   notifications?: Prisma.NotificationListRelationFilter
   learnerProfile?: Prisma.XOR<Prisma.LearnerProfileNullableScalarRelationFilter, Prisma.LearnerProfileWhereInput> | null
   assessmentSessions?: Prisma.LearnerAssessmentSessionListRelationFilter
+  guidanceMessages?: Prisma.GuidanceMessageListRelationFilter
   reviewAssignments?: Prisma.ContentReviewListRelationFilter
   verificationItems?: Prisma.DataVerificationListRelationFilter
   generationJobs?: Prisma.GenerationJobListRelationFilter
@@ -459,6 +460,7 @@ export type UserOrderByWithRelationInput = {
   notifications?: Prisma.NotificationOrderByRelationAggregateInput
   learnerProfile?: Prisma.LearnerProfileOrderByWithRelationInput
   assessmentSessions?: Prisma.LearnerAssessmentSessionOrderByRelationAggregateInput
+  guidanceMessages?: Prisma.GuidanceMessageOrderByRelationAggregateInput
   reviewAssignments?: Prisma.ContentReviewOrderByRelationAggregateInput
   verificationItems?: Prisma.DataVerificationOrderByRelationAggregateInput
   generationJobs?: Prisma.GenerationJobOrderByRelationAggregateInput
@@ -505,6 +507,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   notifications?: Prisma.NotificationListRelationFilter
   learnerProfile?: Prisma.XOR<Prisma.LearnerProfileNullableScalarRelationFilter, Prisma.LearnerProfileWhereInput> | null
   assessmentSessions?: Prisma.LearnerAssessmentSessionListRelationFilter
+  guidanceMessages?: Prisma.GuidanceMessageListRelationFilter
   reviewAssignments?: Prisma.ContentReviewListRelationFilter
   verificationItems?: Prisma.DataVerificationListRelationFilter
   generationJobs?: Prisma.GenerationJobListRelationFilter
@@ -618,6 +621,7 @@ export type UserCreateInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   learnerProfile?: Prisma.LearnerProfileCreateNestedOneWithoutLearnerInput
   assessmentSessions?: Prisma.LearnerAssessmentSessionCreateNestedManyWithoutLearnerInput
+  guidanceMessages?: Prisma.GuidanceMessageCreateNestedManyWithoutLearnerInput
   reviewAssignments?: Prisma.ContentReviewCreateNestedManyWithoutReviewerInput
   verificationItems?: Prisma.DataVerificationCreateNestedManyWithoutVerifierInput
   generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutRequestedByInput
@@ -659,6 +663,7 @@ export type UserUncheckedCreateInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   learnerProfile?: Prisma.LearnerProfileUncheckedCreateNestedOneWithoutLearnerInput
   assessmentSessions?: Prisma.LearnerAssessmentSessionUncheckedCreateNestedManyWithoutLearnerInput
+  guidanceMessages?: Prisma.GuidanceMessageUncheckedCreateNestedManyWithoutLearnerInput
   reviewAssignments?: Prisma.ContentReviewUncheckedCreateNestedManyWithoutReviewerInput
   verificationItems?: Prisma.DataVerificationUncheckedCreateNestedManyWithoutVerifierInput
   generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutRequestedByInput
@@ -700,6 +705,7 @@ export type UserUpdateInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   learnerProfile?: Prisma.LearnerProfileUpdateOneWithoutLearnerNestedInput
   assessmentSessions?: Prisma.LearnerAssessmentSessionUpdateManyWithoutLearnerNestedInput
+  guidanceMessages?: Prisma.GuidanceMessageUpdateManyWithoutLearnerNestedInput
   reviewAssignments?: Prisma.ContentReviewUpdateManyWithoutReviewerNestedInput
   verificationItems?: Prisma.DataVerificationUpdateManyWithoutVerifierNestedInput
   generationJobs?: Prisma.GenerationJobUpdateManyWithoutRequestedByNestedInput
@@ -741,6 +747,7 @@ export type UserUncheckedUpdateInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   learnerProfile?: Prisma.LearnerProfileUncheckedUpdateOneWithoutLearnerNestedInput
   assessmentSessions?: Prisma.LearnerAssessmentSessionUncheckedUpdateManyWithoutLearnerNestedInput
+  guidanceMessages?: Prisma.GuidanceMessageUncheckedUpdateManyWithoutLearnerNestedInput
   reviewAssignments?: Prisma.ContentReviewUncheckedUpdateManyWithoutReviewerNestedInput
   verificationItems?: Prisma.DataVerificationUncheckedUpdateManyWithoutVerifierNestedInput
   generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutRequestedByNestedInput
@@ -1210,6 +1217,20 @@ export type UserUpdateOneRequiredWithoutGenerationJobsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutGenerationJobsInput, Prisma.UserUpdateWithoutGenerationJobsInput>, Prisma.UserUncheckedUpdateWithoutGenerationJobsInput>
 }
 
+export type UserCreateNestedOneWithoutGuidanceMessagesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutGuidanceMessagesInput, Prisma.UserUncheckedCreateWithoutGuidanceMessagesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutGuidanceMessagesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutGuidanceMessagesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutGuidanceMessagesInput, Prisma.UserUncheckedCreateWithoutGuidanceMessagesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutGuidanceMessagesInput
+  upsert?: Prisma.UserUpsertWithoutGuidanceMessagesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutGuidanceMessagesInput, Prisma.UserUpdateWithoutGuidanceMessagesInput>, Prisma.UserUncheckedUpdateWithoutGuidanceMessagesInput>
+}
+
 export type UserCreateWithoutInviteesInput = {
   id?: string
   email: string
@@ -1245,6 +1266,7 @@ export type UserCreateWithoutInviteesInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   learnerProfile?: Prisma.LearnerProfileCreateNestedOneWithoutLearnerInput
   assessmentSessions?: Prisma.LearnerAssessmentSessionCreateNestedManyWithoutLearnerInput
+  guidanceMessages?: Prisma.GuidanceMessageCreateNestedManyWithoutLearnerInput
   reviewAssignments?: Prisma.ContentReviewCreateNestedManyWithoutReviewerInput
   verificationItems?: Prisma.DataVerificationCreateNestedManyWithoutVerifierInput
   generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutRequestedByInput
@@ -1285,6 +1307,7 @@ export type UserUncheckedCreateWithoutInviteesInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   learnerProfile?: Prisma.LearnerProfileUncheckedCreateNestedOneWithoutLearnerInput
   assessmentSessions?: Prisma.LearnerAssessmentSessionUncheckedCreateNestedManyWithoutLearnerInput
+  guidanceMessages?: Prisma.GuidanceMessageUncheckedCreateNestedManyWithoutLearnerInput
   reviewAssignments?: Prisma.ContentReviewUncheckedCreateNestedManyWithoutReviewerInput
   verificationItems?: Prisma.DataVerificationUncheckedCreateNestedManyWithoutVerifierInput
   generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutRequestedByInput
@@ -1330,6 +1353,7 @@ export type UserCreateWithoutInvitedByInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   learnerProfile?: Prisma.LearnerProfileCreateNestedOneWithoutLearnerInput
   assessmentSessions?: Prisma.LearnerAssessmentSessionCreateNestedManyWithoutLearnerInput
+  guidanceMessages?: Prisma.GuidanceMessageCreateNestedManyWithoutLearnerInput
   reviewAssignments?: Prisma.ContentReviewCreateNestedManyWithoutReviewerInput
   verificationItems?: Prisma.DataVerificationCreateNestedManyWithoutVerifierInput
   generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutRequestedByInput
@@ -1370,6 +1394,7 @@ export type UserUncheckedCreateWithoutInvitedByInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   learnerProfile?: Prisma.LearnerProfileUncheckedCreateNestedOneWithoutLearnerInput
   assessmentSessions?: Prisma.LearnerAssessmentSessionUncheckedCreateNestedManyWithoutLearnerInput
+  guidanceMessages?: Prisma.GuidanceMessageUncheckedCreateNestedManyWithoutLearnerInput
   reviewAssignments?: Prisma.ContentReviewUncheckedCreateNestedManyWithoutReviewerInput
   verificationItems?: Prisma.DataVerificationUncheckedCreateNestedManyWithoutVerifierInput
   generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutRequestedByInput
@@ -1420,6 +1445,7 @@ export type UserCreateWithoutManagedLearnersInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   learnerProfile?: Prisma.LearnerProfileCreateNestedOneWithoutLearnerInput
   assessmentSessions?: Prisma.LearnerAssessmentSessionCreateNestedManyWithoutLearnerInput
+  guidanceMessages?: Prisma.GuidanceMessageCreateNestedManyWithoutLearnerInput
   reviewAssignments?: Prisma.ContentReviewCreateNestedManyWithoutReviewerInput
   verificationItems?: Prisma.DataVerificationCreateNestedManyWithoutVerifierInput
   generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutRequestedByInput
@@ -1460,6 +1486,7 @@ export type UserUncheckedCreateWithoutManagedLearnersInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   learnerProfile?: Prisma.LearnerProfileUncheckedCreateNestedOneWithoutLearnerInput
   assessmentSessions?: Prisma.LearnerAssessmentSessionUncheckedCreateNestedManyWithoutLearnerInput
+  guidanceMessages?: Prisma.GuidanceMessageUncheckedCreateNestedManyWithoutLearnerInput
   reviewAssignments?: Prisma.ContentReviewUncheckedCreateNestedManyWithoutReviewerInput
   verificationItems?: Prisma.DataVerificationUncheckedCreateNestedManyWithoutVerifierInput
   generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutRequestedByInput
@@ -1505,6 +1532,7 @@ export type UserCreateWithoutManagerInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   learnerProfile?: Prisma.LearnerProfileCreateNestedOneWithoutLearnerInput
   assessmentSessions?: Prisma.LearnerAssessmentSessionCreateNestedManyWithoutLearnerInput
+  guidanceMessages?: Prisma.GuidanceMessageCreateNestedManyWithoutLearnerInput
   reviewAssignments?: Prisma.ContentReviewCreateNestedManyWithoutReviewerInput
   verificationItems?: Prisma.DataVerificationCreateNestedManyWithoutVerifierInput
   generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutRequestedByInput
@@ -1545,6 +1573,7 @@ export type UserUncheckedCreateWithoutManagerInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   learnerProfile?: Prisma.LearnerProfileUncheckedCreateNestedOneWithoutLearnerInput
   assessmentSessions?: Prisma.LearnerAssessmentSessionUncheckedCreateNestedManyWithoutLearnerInput
+  guidanceMessages?: Prisma.GuidanceMessageUncheckedCreateNestedManyWithoutLearnerInput
   reviewAssignments?: Prisma.ContentReviewUncheckedCreateNestedManyWithoutReviewerInput
   verificationItems?: Prisma.DataVerificationUncheckedCreateNestedManyWithoutVerifierInput
   generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutRequestedByInput
@@ -1606,6 +1635,7 @@ export type UserUpdateWithoutInviteesInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   learnerProfile?: Prisma.LearnerProfileUpdateOneWithoutLearnerNestedInput
   assessmentSessions?: Prisma.LearnerAssessmentSessionUpdateManyWithoutLearnerNestedInput
+  guidanceMessages?: Prisma.GuidanceMessageUpdateManyWithoutLearnerNestedInput
   reviewAssignments?: Prisma.ContentReviewUpdateManyWithoutReviewerNestedInput
   verificationItems?: Prisma.DataVerificationUpdateManyWithoutVerifierNestedInput
   generationJobs?: Prisma.GenerationJobUpdateManyWithoutRequestedByNestedInput
@@ -1646,6 +1676,7 @@ export type UserUncheckedUpdateWithoutInviteesInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   learnerProfile?: Prisma.LearnerProfileUncheckedUpdateOneWithoutLearnerNestedInput
   assessmentSessions?: Prisma.LearnerAssessmentSessionUncheckedUpdateManyWithoutLearnerNestedInput
+  guidanceMessages?: Prisma.GuidanceMessageUncheckedUpdateManyWithoutLearnerNestedInput
   reviewAssignments?: Prisma.ContentReviewUncheckedUpdateManyWithoutReviewerNestedInput
   verificationItems?: Prisma.DataVerificationUncheckedUpdateManyWithoutVerifierNestedInput
   generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutRequestedByNestedInput
@@ -1748,6 +1779,7 @@ export type UserUpdateWithoutManagedLearnersInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   learnerProfile?: Prisma.LearnerProfileUpdateOneWithoutLearnerNestedInput
   assessmentSessions?: Prisma.LearnerAssessmentSessionUpdateManyWithoutLearnerNestedInput
+  guidanceMessages?: Prisma.GuidanceMessageUpdateManyWithoutLearnerNestedInput
   reviewAssignments?: Prisma.ContentReviewUpdateManyWithoutReviewerNestedInput
   verificationItems?: Prisma.DataVerificationUpdateManyWithoutVerifierNestedInput
   generationJobs?: Prisma.GenerationJobUpdateManyWithoutRequestedByNestedInput
@@ -1788,6 +1820,7 @@ export type UserUncheckedUpdateWithoutManagedLearnersInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   learnerProfile?: Prisma.LearnerProfileUncheckedUpdateOneWithoutLearnerNestedInput
   assessmentSessions?: Prisma.LearnerAssessmentSessionUncheckedUpdateManyWithoutLearnerNestedInput
+  guidanceMessages?: Prisma.GuidanceMessageUncheckedUpdateManyWithoutLearnerNestedInput
   reviewAssignments?: Prisma.ContentReviewUncheckedUpdateManyWithoutReviewerNestedInput
   verificationItems?: Prisma.DataVerificationUncheckedUpdateManyWithoutVerifierNestedInput
   generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutRequestedByNestedInput
@@ -1844,6 +1877,7 @@ export type UserCreateWithoutAuditLogsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   learnerProfile?: Prisma.LearnerProfileCreateNestedOneWithoutLearnerInput
   assessmentSessions?: Prisma.LearnerAssessmentSessionCreateNestedManyWithoutLearnerInput
+  guidanceMessages?: Prisma.GuidanceMessageCreateNestedManyWithoutLearnerInput
   reviewAssignments?: Prisma.ContentReviewCreateNestedManyWithoutReviewerInput
   verificationItems?: Prisma.DataVerificationCreateNestedManyWithoutVerifierInput
   generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutRequestedByInput
@@ -1884,6 +1918,7 @@ export type UserUncheckedCreateWithoutAuditLogsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   learnerProfile?: Prisma.LearnerProfileUncheckedCreateNestedOneWithoutLearnerInput
   assessmentSessions?: Prisma.LearnerAssessmentSessionUncheckedCreateNestedManyWithoutLearnerInput
+  guidanceMessages?: Prisma.GuidanceMessageUncheckedCreateNestedManyWithoutLearnerInput
   reviewAssignments?: Prisma.ContentReviewUncheckedCreateNestedManyWithoutReviewerInput
   verificationItems?: Prisma.DataVerificationUncheckedCreateNestedManyWithoutVerifierInput
   generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutRequestedByInput
@@ -1940,6 +1975,7 @@ export type UserUpdateWithoutAuditLogsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   learnerProfile?: Prisma.LearnerProfileUpdateOneWithoutLearnerNestedInput
   assessmentSessions?: Prisma.LearnerAssessmentSessionUpdateManyWithoutLearnerNestedInput
+  guidanceMessages?: Prisma.GuidanceMessageUpdateManyWithoutLearnerNestedInput
   reviewAssignments?: Prisma.ContentReviewUpdateManyWithoutReviewerNestedInput
   verificationItems?: Prisma.DataVerificationUpdateManyWithoutVerifierNestedInput
   generationJobs?: Prisma.GenerationJobUpdateManyWithoutRequestedByNestedInput
@@ -1980,6 +2016,7 @@ export type UserUncheckedUpdateWithoutAuditLogsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   learnerProfile?: Prisma.LearnerProfileUncheckedUpdateOneWithoutLearnerNestedInput
   assessmentSessions?: Prisma.LearnerAssessmentSessionUncheckedUpdateManyWithoutLearnerNestedInput
+  guidanceMessages?: Prisma.GuidanceMessageUncheckedUpdateManyWithoutLearnerNestedInput
   reviewAssignments?: Prisma.ContentReviewUncheckedUpdateManyWithoutReviewerNestedInput
   verificationItems?: Prisma.DataVerificationUncheckedUpdateManyWithoutVerifierNestedInput
   generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutRequestedByNestedInput
@@ -2020,6 +2057,7 @@ export type UserCreateWithoutNotificationsInput = {
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
   learnerProfile?: Prisma.LearnerProfileCreateNestedOneWithoutLearnerInput
   assessmentSessions?: Prisma.LearnerAssessmentSessionCreateNestedManyWithoutLearnerInput
+  guidanceMessages?: Prisma.GuidanceMessageCreateNestedManyWithoutLearnerInput
   reviewAssignments?: Prisma.ContentReviewCreateNestedManyWithoutReviewerInput
   verificationItems?: Prisma.DataVerificationCreateNestedManyWithoutVerifierInput
   generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutRequestedByInput
@@ -2060,6 +2098,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
   learnerProfile?: Prisma.LearnerProfileUncheckedCreateNestedOneWithoutLearnerInput
   assessmentSessions?: Prisma.LearnerAssessmentSessionUncheckedCreateNestedManyWithoutLearnerInput
+  guidanceMessages?: Prisma.GuidanceMessageUncheckedCreateNestedManyWithoutLearnerInput
   reviewAssignments?: Prisma.ContentReviewUncheckedCreateNestedManyWithoutReviewerInput
   verificationItems?: Prisma.DataVerificationUncheckedCreateNestedManyWithoutVerifierInput
   generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutRequestedByInput
@@ -2116,6 +2155,7 @@ export type UserUpdateWithoutNotificationsInput = {
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
   learnerProfile?: Prisma.LearnerProfileUpdateOneWithoutLearnerNestedInput
   assessmentSessions?: Prisma.LearnerAssessmentSessionUpdateManyWithoutLearnerNestedInput
+  guidanceMessages?: Prisma.GuidanceMessageUpdateManyWithoutLearnerNestedInput
   reviewAssignments?: Prisma.ContentReviewUpdateManyWithoutReviewerNestedInput
   verificationItems?: Prisma.DataVerificationUpdateManyWithoutVerifierNestedInput
   generationJobs?: Prisma.GenerationJobUpdateManyWithoutRequestedByNestedInput
@@ -2156,6 +2196,7 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
   learnerProfile?: Prisma.LearnerProfileUncheckedUpdateOneWithoutLearnerNestedInput
   assessmentSessions?: Prisma.LearnerAssessmentSessionUncheckedUpdateManyWithoutLearnerNestedInput
+  guidanceMessages?: Prisma.GuidanceMessageUncheckedUpdateManyWithoutLearnerNestedInput
   reviewAssignments?: Prisma.ContentReviewUncheckedUpdateManyWithoutReviewerNestedInput
   verificationItems?: Prisma.DataVerificationUncheckedUpdateManyWithoutVerifierNestedInput
   generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutRequestedByNestedInput
@@ -2196,6 +2237,7 @@ export type UserCreateWithoutAssessmentSessionsInput = {
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   learnerProfile?: Prisma.LearnerProfileCreateNestedOneWithoutLearnerInput
+  guidanceMessages?: Prisma.GuidanceMessageCreateNestedManyWithoutLearnerInput
   reviewAssignments?: Prisma.ContentReviewCreateNestedManyWithoutReviewerInput
   verificationItems?: Prisma.DataVerificationCreateNestedManyWithoutVerifierInput
   generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutRequestedByInput
@@ -2236,6 +2278,7 @@ export type UserUncheckedCreateWithoutAssessmentSessionsInput = {
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   learnerProfile?: Prisma.LearnerProfileUncheckedCreateNestedOneWithoutLearnerInput
+  guidanceMessages?: Prisma.GuidanceMessageUncheckedCreateNestedManyWithoutLearnerInput
   reviewAssignments?: Prisma.ContentReviewUncheckedCreateNestedManyWithoutReviewerInput
   verificationItems?: Prisma.DataVerificationUncheckedCreateNestedManyWithoutVerifierInput
   generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutRequestedByInput
@@ -2292,6 +2335,7 @@ export type UserUpdateWithoutAssessmentSessionsInput = {
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   learnerProfile?: Prisma.LearnerProfileUpdateOneWithoutLearnerNestedInput
+  guidanceMessages?: Prisma.GuidanceMessageUpdateManyWithoutLearnerNestedInput
   reviewAssignments?: Prisma.ContentReviewUpdateManyWithoutReviewerNestedInput
   verificationItems?: Prisma.DataVerificationUpdateManyWithoutVerifierNestedInput
   generationJobs?: Prisma.GenerationJobUpdateManyWithoutRequestedByNestedInput
@@ -2332,6 +2376,7 @@ export type UserUncheckedUpdateWithoutAssessmentSessionsInput = {
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   learnerProfile?: Prisma.LearnerProfileUncheckedUpdateOneWithoutLearnerNestedInput
+  guidanceMessages?: Prisma.GuidanceMessageUncheckedUpdateManyWithoutLearnerNestedInput
   reviewAssignments?: Prisma.ContentReviewUncheckedUpdateManyWithoutReviewerNestedInput
   verificationItems?: Prisma.DataVerificationUncheckedUpdateManyWithoutVerifierNestedInput
   generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutRequestedByNestedInput
@@ -2372,6 +2417,7 @@ export type UserCreateWithoutLearnerProfileInput = {
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   assessmentSessions?: Prisma.LearnerAssessmentSessionCreateNestedManyWithoutLearnerInput
+  guidanceMessages?: Prisma.GuidanceMessageCreateNestedManyWithoutLearnerInput
   reviewAssignments?: Prisma.ContentReviewCreateNestedManyWithoutReviewerInput
   verificationItems?: Prisma.DataVerificationCreateNestedManyWithoutVerifierInput
   generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutRequestedByInput
@@ -2412,6 +2458,7 @@ export type UserUncheckedCreateWithoutLearnerProfileInput = {
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   assessmentSessions?: Prisma.LearnerAssessmentSessionUncheckedCreateNestedManyWithoutLearnerInput
+  guidanceMessages?: Prisma.GuidanceMessageUncheckedCreateNestedManyWithoutLearnerInput
   reviewAssignments?: Prisma.ContentReviewUncheckedCreateNestedManyWithoutReviewerInput
   verificationItems?: Prisma.DataVerificationUncheckedCreateNestedManyWithoutVerifierInput
   generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutRequestedByInput
@@ -2468,6 +2515,7 @@ export type UserUpdateWithoutLearnerProfileInput = {
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   assessmentSessions?: Prisma.LearnerAssessmentSessionUpdateManyWithoutLearnerNestedInput
+  guidanceMessages?: Prisma.GuidanceMessageUpdateManyWithoutLearnerNestedInput
   reviewAssignments?: Prisma.ContentReviewUpdateManyWithoutReviewerNestedInput
   verificationItems?: Prisma.DataVerificationUpdateManyWithoutVerifierNestedInput
   generationJobs?: Prisma.GenerationJobUpdateManyWithoutRequestedByNestedInput
@@ -2508,6 +2556,7 @@ export type UserUncheckedUpdateWithoutLearnerProfileInput = {
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   assessmentSessions?: Prisma.LearnerAssessmentSessionUncheckedUpdateManyWithoutLearnerNestedInput
+  guidanceMessages?: Prisma.GuidanceMessageUncheckedUpdateManyWithoutLearnerNestedInput
   reviewAssignments?: Prisma.ContentReviewUncheckedUpdateManyWithoutReviewerNestedInput
   verificationItems?: Prisma.DataVerificationUncheckedUpdateManyWithoutVerifierNestedInput
   generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutRequestedByNestedInput
@@ -2549,6 +2598,7 @@ export type UserCreateWithoutReviewAssignmentsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   learnerProfile?: Prisma.LearnerProfileCreateNestedOneWithoutLearnerInput
   assessmentSessions?: Prisma.LearnerAssessmentSessionCreateNestedManyWithoutLearnerInput
+  guidanceMessages?: Prisma.GuidanceMessageCreateNestedManyWithoutLearnerInput
   verificationItems?: Prisma.DataVerificationCreateNestedManyWithoutVerifierInput
   generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutRequestedByInput
 }
@@ -2589,6 +2639,7 @@ export type UserUncheckedCreateWithoutReviewAssignmentsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   learnerProfile?: Prisma.LearnerProfileUncheckedCreateNestedOneWithoutLearnerInput
   assessmentSessions?: Prisma.LearnerAssessmentSessionUncheckedCreateNestedManyWithoutLearnerInput
+  guidanceMessages?: Prisma.GuidanceMessageUncheckedCreateNestedManyWithoutLearnerInput
   verificationItems?: Prisma.DataVerificationUncheckedCreateNestedManyWithoutVerifierInput
   generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutRequestedByInput
 }
@@ -2645,6 +2696,7 @@ export type UserUpdateWithoutReviewAssignmentsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   learnerProfile?: Prisma.LearnerProfileUpdateOneWithoutLearnerNestedInput
   assessmentSessions?: Prisma.LearnerAssessmentSessionUpdateManyWithoutLearnerNestedInput
+  guidanceMessages?: Prisma.GuidanceMessageUpdateManyWithoutLearnerNestedInput
   verificationItems?: Prisma.DataVerificationUpdateManyWithoutVerifierNestedInput
   generationJobs?: Prisma.GenerationJobUpdateManyWithoutRequestedByNestedInput
 }
@@ -2685,6 +2737,7 @@ export type UserUncheckedUpdateWithoutReviewAssignmentsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   learnerProfile?: Prisma.LearnerProfileUncheckedUpdateOneWithoutLearnerNestedInput
   assessmentSessions?: Prisma.LearnerAssessmentSessionUncheckedUpdateManyWithoutLearnerNestedInput
+  guidanceMessages?: Prisma.GuidanceMessageUncheckedUpdateManyWithoutLearnerNestedInput
   verificationItems?: Prisma.DataVerificationUncheckedUpdateManyWithoutVerifierNestedInput
   generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutRequestedByNestedInput
 }
@@ -2725,6 +2778,7 @@ export type UserCreateWithoutVerificationItemsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   learnerProfile?: Prisma.LearnerProfileCreateNestedOneWithoutLearnerInput
   assessmentSessions?: Prisma.LearnerAssessmentSessionCreateNestedManyWithoutLearnerInput
+  guidanceMessages?: Prisma.GuidanceMessageCreateNestedManyWithoutLearnerInput
   reviewAssignments?: Prisma.ContentReviewCreateNestedManyWithoutReviewerInput
   generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutRequestedByInput
 }
@@ -2765,6 +2819,7 @@ export type UserUncheckedCreateWithoutVerificationItemsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   learnerProfile?: Prisma.LearnerProfileUncheckedCreateNestedOneWithoutLearnerInput
   assessmentSessions?: Prisma.LearnerAssessmentSessionUncheckedCreateNestedManyWithoutLearnerInput
+  guidanceMessages?: Prisma.GuidanceMessageUncheckedCreateNestedManyWithoutLearnerInput
   reviewAssignments?: Prisma.ContentReviewUncheckedCreateNestedManyWithoutReviewerInput
   generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutRequestedByInput
 }
@@ -2821,6 +2876,7 @@ export type UserUpdateWithoutVerificationItemsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   learnerProfile?: Prisma.LearnerProfileUpdateOneWithoutLearnerNestedInput
   assessmentSessions?: Prisma.LearnerAssessmentSessionUpdateManyWithoutLearnerNestedInput
+  guidanceMessages?: Prisma.GuidanceMessageUpdateManyWithoutLearnerNestedInput
   reviewAssignments?: Prisma.ContentReviewUpdateManyWithoutReviewerNestedInput
   generationJobs?: Prisma.GenerationJobUpdateManyWithoutRequestedByNestedInput
 }
@@ -2861,6 +2917,7 @@ export type UserUncheckedUpdateWithoutVerificationItemsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   learnerProfile?: Prisma.LearnerProfileUncheckedUpdateOneWithoutLearnerNestedInput
   assessmentSessions?: Prisma.LearnerAssessmentSessionUncheckedUpdateManyWithoutLearnerNestedInput
+  guidanceMessages?: Prisma.GuidanceMessageUncheckedUpdateManyWithoutLearnerNestedInput
   reviewAssignments?: Prisma.ContentReviewUncheckedUpdateManyWithoutReviewerNestedInput
   generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutRequestedByNestedInput
 }
@@ -2901,6 +2958,7 @@ export type UserCreateWithoutGenerationJobsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   learnerProfile?: Prisma.LearnerProfileCreateNestedOneWithoutLearnerInput
   assessmentSessions?: Prisma.LearnerAssessmentSessionCreateNestedManyWithoutLearnerInput
+  guidanceMessages?: Prisma.GuidanceMessageCreateNestedManyWithoutLearnerInput
   reviewAssignments?: Prisma.ContentReviewCreateNestedManyWithoutReviewerInput
   verificationItems?: Prisma.DataVerificationCreateNestedManyWithoutVerifierInput
 }
@@ -2941,6 +2999,7 @@ export type UserUncheckedCreateWithoutGenerationJobsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   learnerProfile?: Prisma.LearnerProfileUncheckedCreateNestedOneWithoutLearnerInput
   assessmentSessions?: Prisma.LearnerAssessmentSessionUncheckedCreateNestedManyWithoutLearnerInput
+  guidanceMessages?: Prisma.GuidanceMessageUncheckedCreateNestedManyWithoutLearnerInput
   reviewAssignments?: Prisma.ContentReviewUncheckedCreateNestedManyWithoutReviewerInput
   verificationItems?: Prisma.DataVerificationUncheckedCreateNestedManyWithoutVerifierInput
 }
@@ -2997,6 +3056,7 @@ export type UserUpdateWithoutGenerationJobsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   learnerProfile?: Prisma.LearnerProfileUpdateOneWithoutLearnerNestedInput
   assessmentSessions?: Prisma.LearnerAssessmentSessionUpdateManyWithoutLearnerNestedInput
+  guidanceMessages?: Prisma.GuidanceMessageUpdateManyWithoutLearnerNestedInput
   reviewAssignments?: Prisma.ContentReviewUpdateManyWithoutReviewerNestedInput
   verificationItems?: Prisma.DataVerificationUpdateManyWithoutVerifierNestedInput
 }
@@ -3037,8 +3097,189 @@ export type UserUncheckedUpdateWithoutGenerationJobsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   learnerProfile?: Prisma.LearnerProfileUncheckedUpdateOneWithoutLearnerNestedInput
   assessmentSessions?: Prisma.LearnerAssessmentSessionUncheckedUpdateManyWithoutLearnerNestedInput
+  guidanceMessages?: Prisma.GuidanceMessageUncheckedUpdateManyWithoutLearnerNestedInput
   reviewAssignments?: Prisma.ContentReviewUncheckedUpdateManyWithoutReviewerNestedInput
   verificationItems?: Prisma.DataVerificationUncheckedUpdateManyWithoutVerifierNestedInput
+}
+
+export type UserCreateWithoutGuidanceMessagesInput = {
+  id?: string
+  email: string
+  password?: string | null
+  role?: $Enums.Role
+  accountStatus?: $Enums.AccountStatus
+  firstName?: string | null
+  lastName?: string | null
+  displayName?: string | null
+  avatarUrl?: string | null
+  phone?: string | null
+  verificationCode?: string | null
+  verificationExpires?: Date | string | null
+  passwordResetToken?: string | null
+  passwordResetExpires?: Date | string | null
+  lastActiveAt?: Date | string | null
+  city?: string | null
+  country?: string | null
+  language?: string | null
+  dateOfBirth?: Date | string | null
+  googleId?: string | null
+  googleRefreshToken?: string | null
+  specialisation?: string | null
+  grade?: number | null
+  province?: string | null
+  school?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  invitedBy?: Prisma.UserCreateNestedOneWithoutInviteesInput
+  invitees?: Prisma.UserCreateNestedManyWithoutInvitedByInput
+  manager?: Prisma.UserCreateNestedOneWithoutManagedLearnersInput
+  managedLearners?: Prisma.UserCreateNestedManyWithoutManagerInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  learnerProfile?: Prisma.LearnerProfileCreateNestedOneWithoutLearnerInput
+  assessmentSessions?: Prisma.LearnerAssessmentSessionCreateNestedManyWithoutLearnerInput
+  reviewAssignments?: Prisma.ContentReviewCreateNestedManyWithoutReviewerInput
+  verificationItems?: Prisma.DataVerificationCreateNestedManyWithoutVerifierInput
+  generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutRequestedByInput
+}
+
+export type UserUncheckedCreateWithoutGuidanceMessagesInput = {
+  id?: string
+  email: string
+  password?: string | null
+  role?: $Enums.Role
+  accountStatus?: $Enums.AccountStatus
+  firstName?: string | null
+  lastName?: string | null
+  displayName?: string | null
+  avatarUrl?: string | null
+  phone?: string | null
+  verificationCode?: string | null
+  verificationExpires?: Date | string | null
+  passwordResetToken?: string | null
+  passwordResetExpires?: Date | string | null
+  lastActiveAt?: Date | string | null
+  city?: string | null
+  country?: string | null
+  language?: string | null
+  dateOfBirth?: Date | string | null
+  googleId?: string | null
+  googleRefreshToken?: string | null
+  specialisation?: string | null
+  grade?: number | null
+  province?: string | null
+  school?: string | null
+  invitedById?: string | null
+  managerId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  invitees?: Prisma.UserUncheckedCreateNestedManyWithoutInvitedByInput
+  managedLearners?: Prisma.UserUncheckedCreateNestedManyWithoutManagerInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  learnerProfile?: Prisma.LearnerProfileUncheckedCreateNestedOneWithoutLearnerInput
+  assessmentSessions?: Prisma.LearnerAssessmentSessionUncheckedCreateNestedManyWithoutLearnerInput
+  reviewAssignments?: Prisma.ContentReviewUncheckedCreateNestedManyWithoutReviewerInput
+  verificationItems?: Prisma.DataVerificationUncheckedCreateNestedManyWithoutVerifierInput
+  generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutRequestedByInput
+}
+
+export type UserCreateOrConnectWithoutGuidanceMessagesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutGuidanceMessagesInput, Prisma.UserUncheckedCreateWithoutGuidanceMessagesInput>
+}
+
+export type UserUpsertWithoutGuidanceMessagesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutGuidanceMessagesInput, Prisma.UserUncheckedUpdateWithoutGuidanceMessagesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutGuidanceMessagesInput, Prisma.UserUncheckedCreateWithoutGuidanceMessagesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutGuidanceMessagesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutGuidanceMessagesInput, Prisma.UserUncheckedUpdateWithoutGuidanceMessagesInput>
+}
+
+export type UserUpdateWithoutGuidanceMessagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordResetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordResetExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialisation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  invitedBy?: Prisma.UserUpdateOneWithoutInviteesNestedInput
+  invitees?: Prisma.UserUpdateManyWithoutInvitedByNestedInput
+  manager?: Prisma.UserUpdateOneWithoutManagedLearnersNestedInput
+  managedLearners?: Prisma.UserUpdateManyWithoutManagerNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  learnerProfile?: Prisma.LearnerProfileUpdateOneWithoutLearnerNestedInput
+  assessmentSessions?: Prisma.LearnerAssessmentSessionUpdateManyWithoutLearnerNestedInput
+  reviewAssignments?: Prisma.ContentReviewUpdateManyWithoutReviewerNestedInput
+  verificationItems?: Prisma.DataVerificationUpdateManyWithoutVerifierNestedInput
+  generationJobs?: Prisma.GenerationJobUpdateManyWithoutRequestedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutGuidanceMessagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  accountStatus?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordResetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordResetExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleRefreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialisation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  grade?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  province?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invitedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  managerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  invitees?: Prisma.UserUncheckedUpdateManyWithoutInvitedByNestedInput
+  managedLearners?: Prisma.UserUncheckedUpdateManyWithoutManagerNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  learnerProfile?: Prisma.LearnerProfileUncheckedUpdateOneWithoutLearnerNestedInput
+  assessmentSessions?: Prisma.LearnerAssessmentSessionUncheckedUpdateManyWithoutLearnerNestedInput
+  reviewAssignments?: Prisma.ContentReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  verificationItems?: Prisma.DataVerificationUncheckedUpdateManyWithoutVerifierNestedInput
+  generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutRequestedByNestedInput
 }
 
 export type UserCreateManyInvitedByInput = {
@@ -3138,6 +3379,7 @@ export type UserUpdateWithoutInvitedByInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   learnerProfile?: Prisma.LearnerProfileUpdateOneWithoutLearnerNestedInput
   assessmentSessions?: Prisma.LearnerAssessmentSessionUpdateManyWithoutLearnerNestedInput
+  guidanceMessages?: Prisma.GuidanceMessageUpdateManyWithoutLearnerNestedInput
   reviewAssignments?: Prisma.ContentReviewUpdateManyWithoutReviewerNestedInput
   verificationItems?: Prisma.DataVerificationUpdateManyWithoutVerifierNestedInput
   generationJobs?: Prisma.GenerationJobUpdateManyWithoutRequestedByNestedInput
@@ -3178,6 +3420,7 @@ export type UserUncheckedUpdateWithoutInvitedByInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   learnerProfile?: Prisma.LearnerProfileUncheckedUpdateOneWithoutLearnerNestedInput
   assessmentSessions?: Prisma.LearnerAssessmentSessionUncheckedUpdateManyWithoutLearnerNestedInput
+  guidanceMessages?: Prisma.GuidanceMessageUncheckedUpdateManyWithoutLearnerNestedInput
   reviewAssignments?: Prisma.ContentReviewUncheckedUpdateManyWithoutReviewerNestedInput
   verificationItems?: Prisma.DataVerificationUncheckedUpdateManyWithoutVerifierNestedInput
   generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutRequestedByNestedInput
@@ -3249,6 +3492,7 @@ export type UserUpdateWithoutManagerInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   learnerProfile?: Prisma.LearnerProfileUpdateOneWithoutLearnerNestedInput
   assessmentSessions?: Prisma.LearnerAssessmentSessionUpdateManyWithoutLearnerNestedInput
+  guidanceMessages?: Prisma.GuidanceMessageUpdateManyWithoutLearnerNestedInput
   reviewAssignments?: Prisma.ContentReviewUpdateManyWithoutReviewerNestedInput
   verificationItems?: Prisma.DataVerificationUpdateManyWithoutVerifierNestedInput
   generationJobs?: Prisma.GenerationJobUpdateManyWithoutRequestedByNestedInput
@@ -3289,6 +3533,7 @@ export type UserUncheckedUpdateWithoutManagerInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   learnerProfile?: Prisma.LearnerProfileUncheckedUpdateOneWithoutLearnerNestedInput
   assessmentSessions?: Prisma.LearnerAssessmentSessionUncheckedUpdateManyWithoutLearnerNestedInput
+  guidanceMessages?: Prisma.GuidanceMessageUncheckedUpdateManyWithoutLearnerNestedInput
   reviewAssignments?: Prisma.ContentReviewUncheckedUpdateManyWithoutReviewerNestedInput
   verificationItems?: Prisma.DataVerificationUncheckedUpdateManyWithoutVerifierNestedInput
   generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutRequestedByNestedInput
@@ -3336,6 +3581,7 @@ export type UserCountOutputType = {
   auditLogs: number
   notifications: number
   assessmentSessions: number
+  guidanceMessages: number
   reviewAssignments: number
   verificationItems: number
   generationJobs: number
@@ -3347,6 +3593,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   auditLogs?: boolean | UserCountOutputTypeCountAuditLogsArgs
   notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
   assessmentSessions?: boolean | UserCountOutputTypeCountAssessmentSessionsArgs
+  guidanceMessages?: boolean | UserCountOutputTypeCountGuidanceMessagesArgs
   reviewAssignments?: boolean | UserCountOutputTypeCountReviewAssignmentsArgs
   verificationItems?: boolean | UserCountOutputTypeCountVerificationItemsArgs
   generationJobs?: boolean | UserCountOutputTypeCountGenerationJobsArgs
@@ -3395,6 +3642,13 @@ export type UserCountOutputTypeCountNotificationsArgs<ExtArgs extends runtime.Ty
  */
 export type UserCountOutputTypeCountAssessmentSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.LearnerAssessmentSessionWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountGuidanceMessagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.GuidanceMessageWhereInput
 }
 
 /**
@@ -3457,6 +3711,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
   learnerProfile?: boolean | Prisma.User$learnerProfileArgs<ExtArgs>
   assessmentSessions?: boolean | Prisma.User$assessmentSessionsArgs<ExtArgs>
+  guidanceMessages?: boolean | Prisma.User$guidanceMessagesArgs<ExtArgs>
   reviewAssignments?: boolean | Prisma.User$reviewAssignmentsArgs<ExtArgs>
   verificationItems?: boolean | Prisma.User$verificationItemsArgs<ExtArgs>
   generationJobs?: boolean | Prisma.User$generationJobsArgs<ExtArgs>
@@ -3573,6 +3828,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
   learnerProfile?: boolean | Prisma.User$learnerProfileArgs<ExtArgs>
   assessmentSessions?: boolean | Prisma.User$assessmentSessionsArgs<ExtArgs>
+  guidanceMessages?: boolean | Prisma.User$guidanceMessagesArgs<ExtArgs>
   reviewAssignments?: boolean | Prisma.User$reviewAssignmentsArgs<ExtArgs>
   verificationItems?: boolean | Prisma.User$verificationItemsArgs<ExtArgs>
   generationJobs?: boolean | Prisma.User$generationJobsArgs<ExtArgs>
@@ -3598,6 +3854,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     notifications: Prisma.$NotificationPayload<ExtArgs>[]
     learnerProfile: Prisma.$LearnerProfilePayload<ExtArgs> | null
     assessmentSessions: Prisma.$LearnerAssessmentSessionPayload<ExtArgs>[]
+    guidanceMessages: Prisma.$GuidanceMessagePayload<ExtArgs>[]
     reviewAssignments: Prisma.$ContentReviewPayload<ExtArgs>[]
     verificationItems: Prisma.$DataVerificationPayload<ExtArgs>[]
     generationJobs: Prisma.$GenerationJobPayload<ExtArgs>[]
@@ -4034,6 +4291,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   notifications<T extends Prisma.User$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   learnerProfile<T extends Prisma.User$learnerProfileArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$learnerProfileArgs<ExtArgs>>): Prisma.Prisma__LearnerProfileClient<runtime.Types.Result.GetResult<Prisma.$LearnerProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   assessmentSessions<T extends Prisma.User$assessmentSessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$assessmentSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LearnerAssessmentSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  guidanceMessages<T extends Prisma.User$guidanceMessagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$guidanceMessagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GuidanceMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   reviewAssignments<T extends Prisma.User$reviewAssignmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$reviewAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ContentReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   verificationItems<T extends Prisma.User$verificationItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$verificationItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DataVerificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   generationJobs<T extends Prisma.User$generationJobsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$generationJobsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GenerationJobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -4670,6 +4928,30 @@ export type User$assessmentSessionsArgs<ExtArgs extends runtime.Types.Extensions
   take?: number
   skip?: number
   distinct?: Prisma.LearnerAssessmentSessionScalarFieldEnum | Prisma.LearnerAssessmentSessionScalarFieldEnum[]
+}
+
+/**
+ * User.guidanceMessages
+ */
+export type User$guidanceMessagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the GuidanceMessage
+   */
+  select?: Prisma.GuidanceMessageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the GuidanceMessage
+   */
+  omit?: Prisma.GuidanceMessageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.GuidanceMessageInclude<ExtArgs> | null
+  where?: Prisma.GuidanceMessageWhereInput
+  orderBy?: Prisma.GuidanceMessageOrderByWithRelationInput | Prisma.GuidanceMessageOrderByWithRelationInput[]
+  cursor?: Prisma.GuidanceMessageWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.GuidanceMessageScalarFieldEnum | Prisma.GuidanceMessageScalarFieldEnum[]
 }
 
 /**

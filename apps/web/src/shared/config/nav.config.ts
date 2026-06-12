@@ -39,16 +39,11 @@ export const NAV_CONFIG: Record<string, NavSection[]> = {
   // ── Admin ─────────────────────────────────────────────────────────────────
   ADMIN: [
     {
+      title: "Overview",
       items: [
-        { href: "/admin", label: "Dashboard", icon: "LayoutDashboard" },
-      ],
-    },
-    {
-      title: "Analytics",
-      items: [
-        { href: "/admin/learner-insights",  label: "Learner Insights",  icon: "BarChart2"  },
-        { href: "/admin/content-analytics", label: "Content Analytics", icon: "TrendingUp" },
-        { href: "/admin/platform-growth",   label: "Platform Growth",   icon: "LineChart"  },
+        { href: "/admin",           label: "Dashboard", icon: "LayoutDashboard" },
+        { href: "/admin/analytics", label: "Analytics", icon: "BarChart2"       },
+        { href: "/admin/users",     label: "Users",     icon: "UsersRound"      },
       ],
     },
     {
@@ -61,29 +56,21 @@ export const NAV_CONFIG: Record<string, NavSection[]> = {
         { href: "/admin/tvet",             label: "TVET Colleges",    icon: "GraduationCap" },
         { href: "/admin/private-colleges", label: "Private Colleges", icon: "School"        },
         { href: "/admin/pathways",         label: "Pathways Library", icon: "Route"         },
-      ],
-    },
-    {
-      title: "AI & Automation",
-      items: [
-        { href: "/admin/ai-pipeline",    label: "AI Pipeline",    icon: "Bot"      },
-        { href: "/admin/agent-activity", label: "Agent Activity", icon: "Activity" },
+        { href: "/admin/update-planner",   label: "Update Planner",   icon: "CalendarClock" },
       ],
     },
     {
       title: "Operations",
       items: [
-        { href: "/admin/review-queue",   label: "Review Queue",   icon: "ListChecks"    },
-        { href: "/admin/update-planner", label: "Update Planner", icon: "CalendarClock" },
-        { href: "/admin/reports",        label: "Reports",        icon: "FileText"      },
+        { href: "/admin/ai-pipeline",  label: "AI Pipeline",  icon: "Bot"       },
+        { href: "/admin/review-queue", label: "Review Queue", icon: "ListChecks" },
       ],
     },
     {
-      title: "Users",
+      title: "System",
       items: [
-        { href: "/admin/learners",   label: "Learners",   icon: "GraduationCap" },
-        { href: "/admin/managers",   label: "Managers",   icon: "UsersRound"    },
-        { href: "/admin/reviewers",  label: "Reviewers",  icon: "PenLine"       },
+        { href: "/admin/platform", label: "Platform", icon: "Cpu"        },
+        { href: "/admin/logs",     label: "Logs",     icon: "ScrollText" },
       ],
     },
   ],
@@ -115,37 +102,33 @@ export const NAV_CONFIG: Record<string, NavSection[]> = {
   ],
 
   // ── Content Manager ───────────────────────────────────────────────────────
+  // Same admin pages as ADMIN but scoped to Dashboard + Content + Operations only.
+  // No Analytics, Users, or System access.
   CONTENT_MANAGER: [
     {
-      title: "Generate",
+      title: "Overview",
       items: [
-        { href: "/content-manager",                  label: "Generate Content", icon: "Zap"         },
-        { href: "/content-manager/generation-queue", label: "Generation Queue", icon: "ListOrdered" },
-        { href: "/content-manager/prompt-templates", label: "Prompt Templates", icon: "FileCode"    },
+        { href: "/admin", label: "Dashboard", icon: "LayoutDashboard" },
       ],
     },
     {
-      title: "Review",
+      title: "Content",
       items: [
-        { href: "/content-manager/assign-reviews",  label: "Assign Reviews", icon: "UserCheck"  },
-        { href: "/content-manager/review-status",   label: "Review Status",  icon: "ListChecks" },
-        { href: "/content-manager/feedback-loop",   label: "Feedback Loop",  icon: "RefreshCw"  },
+        { href: "/admin/careers",          label: "Careers Library",  icon: "Briefcase"     },
+        { href: "/admin/universities",     label: "University DB",    icon: "Building2"     },
+        { href: "/admin/assessments",      label: "Assessment Bank",  icon: "ClipboardList" },
+        { href: "/admin/bursaries",        label: "Bursaries",        icon: "Coins"         },
+        { href: "/admin/tvet",             label: "TVET Colleges",    icon: "GraduationCap" },
+        { href: "/admin/private-colleges", label: "Private Colleges", icon: "School"        },
+        { href: "/admin/pathways",         label: "Pathways Library", icon: "Route"         },
+        { href: "/admin/update-planner",   label: "Update Planner",   icon: "CalendarClock" },
       ],
     },
     {
-      title: "Verification",
+      title: "Operations",
       items: [
-        { href: "/content-manager/verification-queue", label: "Verification Queue", icon: "BadgeCheck" },
-        { href: "/content-manager/source-library",     label: "Source Library",     icon: "BookMarked" },
-      ],
-    },
-    {
-      title: "Planning",
-      items: [
-        { href: "/content-manager/update-planner",      label: "Update Planner",     icon: "CalendarClock" },
-        { href: "/content-manager/coverage-map",        label: "Coverage Map",       icon: "Map"           },
-        { href: "/content-manager/quality-dashboard",   label: "Quality Dashboard",  icon: "Star"          },
-        { href: "/content-manager/freshness-dashboard", label: "Freshness Dashboard",icon: "Leaf"          },
+        { href: "/admin/ai-pipeline",  label: "AI Pipeline",  icon: "Bot"        },
+        { href: "/admin/review-queue", label: "Review Queue", icon: "ListChecks" },
       ],
     },
   ],

@@ -8,7 +8,7 @@ import { sendInviteEmail } from "../../services/mail.service.js";
 // Use string literals — not the Role enum — so this works even if @repo/types
 // hasn't been rebuilt yet after adding new enum values.
 // DATA_VERIFIER removed — reviewers are the single verification authority
-const INVITABLE_ROLES = ["MANAGER", "CONTENT_MANAGER", "REVIEWER"] as const;
+const INVITABLE_ROLES = ["CONTENT_MANAGER", "REVIEWER"] as const;
 type InvitableRoleStr = typeof INVITABLE_ROLES[number];
 
 // ── Admin dashboard ────────────────────────────────────────────────────────────
@@ -256,7 +256,15 @@ export const adminActivity = catchAsync(async (req: Request, res: Response) => {
   const action = req.query.action as string | undefined;
 
   const where: any = {};
-  if (action) where.action = { contains: action.toUpperCase() };
+  if (action) {
+    // Support comma-separated OR keywords: "LOGIN,REGISTERED" matches either
+    const keywords = action.toUpperCase().split(",").map((s) => s.trim()).filter(Boolean);
+    if (keywords.length === 1) {
+      where.action = { contains: keywords[0] };
+    } else {
+      where.OR = keywords.map((k) => ({ action: { contains: k } }));
+    }
+  }
 
   const [logs, total] = await Promise.all([
     prisma.auditLog.findMany({
@@ -265,7 +273,7 @@ export const adminActivity = catchAsync(async (req: Request, res: Response) => {
       skip:    (page - 1) * limit,
       take:    limit,
       include: {
-        user: { select: { email: true, displayName: true, firstName: true, lastName: true, role: true } },
+        user: { select: { email: true, displayName: true, firstName: true, lastName: true, role: true, province: true, school: true } },
       },
     }),
     prisma.auditLog.count({ where }),
@@ -326,6 +334,158 @@ export const updateReviewerProfile = catchAsync(async (req: Request, res: Respon
   });
 
   return res.status(HttpStatus.OK).json({ status: "success", data: { user: updated } });
+});
+
+// ── Analytics ──────────────────────────────────────────────────────────────────
+// GET /admin/analytics
+
+export const adminAnalytics = catchAsync(async (_req: Request, res: Response) => {
+  const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+
+  const [
+    totalLearners,
+    activeThisWeek,
+    profilesGenerated,
+    pendingInvites,
+    assessmentCompletions,
+    provinceDistribution,
+    topCareerMatches,
+    topSavedCareers,
+    totalCareers,
+    completedJobs,
+    totalChatMessages,
+    thumbsUpCount,
+    thumbsDownCount,
+    schoolRows,
+    learnerDates,
+  ] = await Promise.all([
+    prisma.user.count({ where: { role: "LEARNER", accountStatus: { not: "DELETED" } } }),
+    prisma.user.count({ where: { role: "LEARNER", lastActiveAt: { gte: sevenDaysAgo } } }),
+    prisma.learnerProfile.count(),
+    prisma.user.count({ where: { accountStatus: "PENDING" } }),
+    // assessments completed per type
+    prisma.learnerAssessmentSession.groupBy({
+      by: ["assessmentType"],
+      where: { status: "COMPLETED" },
+      _count: { id: true },
+    }),
+    // province breakdown for learners
+    prisma.user.groupBy({
+      by: ["province"],
+      where: { role: "LEARNER", province: { not: null } },
+      _count: { id: true },
+      orderBy: { _count: { id: "desc" } },
+    }),
+    // top 5 careers by how many learners matched them
+    prisma.learnerCareerMatch.groupBy({
+      by: ["careerId"],
+      _count: { id: true },
+      orderBy: { _count: { id: "desc" } },
+      take: 5,
+    }),
+    // top 5 saved careers
+    prisma.learnerSavedCareer.groupBy({
+      by: ["careerId"],
+      _count: { id: true },
+      orderBy: { _count: { id: "desc" } },
+      take: 5,
+    }),
+    prisma.career.count({ where: { status: { in: ["APPROVED", "VERIFIED"] } } }),
+    prisma.generationJob.count({ where: { status: "COMPLETED" } }),
+    prisma.guidanceMessage.count(),
+    prisma.guidanceMessage.count({ where: { reaction: "up" } }),
+    prisma.guidanceMessage.count({ where: { reaction: "down" } }),
+    // distinct schools
+    prisma.user.findMany({
+      where: { role: "LEARNER", school: { not: null } },
+      select: { school: true },
+      distinct: ["school"],
+    }),
+    // registration dates for growth chart
+    prisma.user.findMany({
+      where: { role: "LEARNER" },
+      select: { createdAt: true },
+      orderBy: { createdAt: "asc" },
+    }),
+  ]);
+
+  // Enrich top careers with names
+  const careerIds = [...new Set([
+    ...topCareerMatches.map((r) => r.careerId),
+    ...topSavedCareers.map((r) => r.careerId),
+  ])];
+  const careers = careerIds.length
+    ? await prisma.career.findMany({
+        where: { id: { in: careerIds } },
+        select: { id: true, title: true },
+      })
+    : [];
+  const careerMap: Record<string, string> = {};
+  careers.forEach((c) => { careerMap[c.id] = c.title; });
+
+  // Monthly registrations — group by YYYY-MM
+  const monthlyMap: Record<string, number> = {};
+  for (const { createdAt } of learnerDates) {
+    const key = createdAt.toISOString().slice(0, 7); // "2025-11"
+    monthlyMap[key] = (monthlyMap[key] ?? 0) + 1;
+  }
+  const registrationsByMonth = Object.entries(monthlyMap)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([month, count]) => ({ month, count }));
+
+  // Assessment totals (all sessions, not just completed, for denominator context)
+  const assessmentTotals = await prisma.learnerAssessmentSession.groupBy({
+    by: ["assessmentType"],
+    _count: { id: true },
+  });
+  const totalByType: Record<string, number> = {};
+  assessmentTotals.forEach((r) => { totalByType[r.assessmentType] = r._count.id; });
+  const completedByType: Record<string, number> = {};
+  assessmentCompletions.forEach((r) => { completedByType[r.assessmentType] = r._count.id; });
+
+  return res.status(HttpStatus.OK).json({
+    status: "success",
+    data: {
+      learnerInsights: {
+        totalLearners,
+        activeThisWeek,
+        profilesGenerated,
+        assessmentCompletion: ["INTEREST", "APTITUDE", "PERSONALITY", "VALUES"].map((type) => ({
+          type,
+          completed: completedByType[type] ?? 0,
+          total:     totalByType[type]     ?? 0,
+        })),
+        provinceDistribution: provinceDistribution.map((r) => ({
+          province: r.province,
+          count:    r._count.id,
+        })),
+      },
+      contentAnalytics: {
+        totalCareers,
+        completedJobs,
+        totalChatMessages,
+        thumbsUpCount,
+        thumbsDownCount,
+        topMatchedCareers: topCareerMatches.map((r) => ({
+          careerId: r.careerId,
+          title:    careerMap[r.careerId] ?? r.careerId,
+          count:    r._count.id,
+        })),
+        topSavedCareers: topSavedCareers.map((r) => ({
+          careerId: r.careerId,
+          title:    careerMap[r.careerId] ?? r.careerId,
+          count:    r._count.id,
+        })),
+      },
+      platformGrowth: {
+        totalLearners,
+        pendingInvites,
+        schoolsCovered:  schoolRows.length,
+        provincesCovered: provinceDistribution.length,
+        registrationsByMonth,
+      },
+    },
+  });
 });
 
 // ── Legacy compatibility — kept so existing invite routes still work ───────────
