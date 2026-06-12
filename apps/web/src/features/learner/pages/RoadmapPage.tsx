@@ -543,7 +543,7 @@ export function RoadmapPage() {
   );
 
   return (
-    <div className="roadmap-wrap" style={{ background: T.bg, minHeight: "100vh", padding: "28px 24px 60px", fontFamily: "inherit", overflowX: "hidden", maxWidth: "100%" }}>
+    <div className="roadmap-wrap" style={{ background: T.bg, minHeight: "100vh", padding: "28px 24px 60px", fontFamily: "inherit" }}>
 
       {/* Header */}
       <div style={{ marginBottom: 24 }}>
@@ -556,7 +556,7 @@ export function RoadmapPage() {
       <div style={{ display: "grid", gridTemplateColumns: "280px 1fr", gap: 24, alignItems: "start" }} className="roadmap-grid">
 
         {/* LEFT — Career selector */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 12, minWidth: 0, width: "100%" }}>
           {isGoalSet && (
             <div style={{ background: T.teal + "12", border: `1px solid ${T.teal}30`, borderRadius: 12, padding: "10px 14px", display: "flex", alignItems: "center", gap: 8 }}>
               <span style={{ fontSize: 16 }}>🎯</span>
@@ -567,12 +567,12 @@ export function RoadmapPage() {
             </div>
           )}
 
-          <div className="roadmap-career-list" style={{ background: T.card, borderRadius: 16, border: `1px solid ${T.border}` }}>
-            <div className="roadmap-career-list-header" style={{ padding: "12px 16px", borderBottom: `1px solid ${T.border}` }}>
-              <p style={{ margin: 0, fontSize: 11, fontWeight: 700, color: T.muted, textTransform: "uppercase", letterSpacing: "0.06em" }}>
-                Your top career matches
-              </p>
-            </div>
+          <div className="roadmap-career-list-header" style={{ padding: "4px 0 8px" }}>
+            <p style={{ margin: 0, fontSize: 11, fontWeight: 700, color: T.muted, textTransform: "uppercase", letterSpacing: "0.06em" }}>
+              Your top career matches
+            </p>
+          </div>
+          <div className="roadmap-career-list" style={{ background: T.card, borderRadius: 16, border: `1px solid ${T.border}`, overflow: "hidden" }}>
             {matches.map((m: any, i: number) => {
               const isActive = m.career.id === activeCareerId;
               return (
@@ -660,7 +660,7 @@ export function RoadmapPage() {
         </div>
 
         {/* RIGHT — Pathways / Grade 9 stream guide */}
-        <div>
+        <div style={{ minWidth: 0, width: "100%" }}>
           {activeCareer && (
             <div style={{ background: T.card, borderRadius: 16, padding: "16px 20px", border: `1px solid ${T.border}`, marginBottom: 16, display: "flex", alignItems: "center", gap: 12 }}>
               <div style={{ flex: 1 }}>
@@ -760,37 +760,41 @@ export function RoadmapPage() {
         @media (max-width: 768px) {
           .roadmap-wrap {
             padding: 16px 14px 80px !important;
-            overflow-x: hidden !important;
-            max-width: 100vw !important;
             box-sizing: border-box !important;
+            width: 100% !important;
           }
           .roadmap-grid {
             grid-template-columns: 1fr !important;
             gap: 12px !important;
             min-width: 0 !important;
+            width: 100% !important;
           }
-          .roadmap-career-list-header {
-            display: none !important;
-          }
-          /* Collapse career list to a horizontal scrolling strip on mobile */
+          /* Collapse career list to a horizontal scrolling strip */
           .roadmap-career-list {
             display: flex !important;
             flex-direction: row !important;
+            overflow: visible !important;
             overflow-x: auto !important;
-            overflow-y: hidden !important;
             gap: 8px !important;
             padding: 8px !important;
             scrollbar-width: none !important;
-            border-radius: 16px !important;
+            background: transparent !important;
+            border: none !important;
+            border-radius: 0 !important;
           }
           .roadmap-career-list::-webkit-scrollbar { display: none; }
+          .roadmap-career-list-header {
+            display: none !important;
+          }
           .roadmap-career-btn {
             flex-shrink: 0 !important;
             flex-direction: column !important;
             border-radius: 12px !important;
             padding: 10px 14px !important;
-            min-width: 130px !important;
-            border: 1.5px solid rgba(91,79,207,0.15) !important;
+            min-width: 120px !important;
+            border: 1.5px solid rgba(91,79,207,0.18) !important;
+            background: var(--roadmap-card-bg, #fff) !important;
+            width: auto !important;
           }
           .roadmap-career-btn-rank {
             display: none !important;
