@@ -30,7 +30,7 @@ const sidebarNav = [
   { href: "/learner/roadmap",      label: "My Roadmap",   icon: Map },
   { href: "/learner/universities", label: "Universities", icon: GraduationCap },
   { href: "/learner/bursaries",    label: "Bursaries",    icon: Award },
-  { href: "/learner/chat",         label: "Career Guide", icon: MessageCircle },
+  { href: "/learner/chat",         label: "Ask AI",       icon: MessageCircle },
   { href: "/learner/profile",      label: "Profile",      icon: User },
 ];
 
@@ -45,7 +45,7 @@ const moreNav = [
   { href: "/learner/roadmap",      label: "My Roadmap",   icon: Map },
   { href: "/learner/universities", label: "Universities", icon: GraduationCap },
   { href: "/learner/bursaries",    label: "Bursaries",    icon: Award },
-  { href: "/learner/chat",         label: "Career Guide", icon: MessageCircle },
+  { href: "/learner/chat",         label: "Ask AI",       icon: MessageCircle },
 ];
 
 function calcCompletion(user: any, profile: any): { pct: number; missing: string[] } {

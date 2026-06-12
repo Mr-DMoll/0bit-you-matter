@@ -401,12 +401,12 @@ export function GuidanceChatPage() {
       {/* Header */}
       <div style={{ borderBottom: `1px solid ${T.border}`, background: T.card, flexShrink: 0 }}>
         <div style={{ padding: "14px 24px", display: "flex", alignItems: "center", gap: 12 }}>
-          <div style={{ width: 36, height: 36, borderRadius: "50%", background: T.primary, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 800, flexShrink: 0 }}>
-            YM
+          <div style={{ width: 36, height: 36, borderRadius: "50%", background: "linear-gradient(135deg, #5B4FCF 0%, #0D9488 100%)", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, flexShrink: 0 }}>
+            ✨
           </div>
           <div>
-            <p style={{ margin: 0, fontSize: 15, fontWeight: 700, color: T.fg }}>Career Guide</p>
-            <p style={{ margin: 0, fontSize: 12, color: T.teal, fontWeight: 600 }}>● Online — ask me anything</p>
+            <p style={{ margin: 0, fontSize: 15, fontWeight: 700, color: T.fg }}>Ask AI</p>
+            <p style={{ margin: 0, fontSize: 12, color: T.teal, fontWeight: 600 }}>● AI-powered career guide</p>
           </div>
         </div>
         {/* Always-visible capability strip */}
@@ -440,7 +440,7 @@ export function GuidanceChatPage() {
         {showSuggestions && (
           <div style={{ display: "flex", flexDirection: "column", gap: 12, maxWidth: 520, margin: "0 auto", width: "100%", paddingTop: 20 }}>
             <div style={{ background: T.card, borderRadius: 16, padding: "18px 20px", border: `1px solid ${T.border}` }}>
-              <p style={{ margin: "0 0 6px", fontSize: 15, fontWeight: 700, color: T.fg }}>Hi! I'm your Career Guide 👋</p>
+              <p style={{ margin: "0 0 6px", fontSize: 15, fontWeight: 700, color: T.fg }}>Hi! I'm an AI career guide ✨</p>
               <p style={{ margin: 0, fontSize: 13, color: T.muted, lineHeight: 1.6 }}>
                 Ask me anything about careers, bursaries, subjects, or university applications in South Africa. I know your profile so my advice is specific to you.
               </p>
@@ -472,8 +472,8 @@ export function GuidanceChatPage() {
               <div className={isUser ? "chat-bubble-user" : "chat-bubble-ai"} style={{ display: "flex", alignItems: "flex-end", gap: 8, maxWidth: "76%", alignSelf: isUser ? "flex-end" : "flex-start" }}>
 
                 {!isUser && (
-                  <div style={{ width: 30, height: 30, borderRadius: "50%", background: T.primary, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 800, flexShrink: 0 }}>
-                    YM
+                  <div style={{ width: 30, height: 30, borderRadius: "50%", background: "linear-gradient(135deg, #5B4FCF 0%, #0D9488 100%)", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, flexShrink: 0 }}>
+                    ✨
                   </div>
                 )}
 
