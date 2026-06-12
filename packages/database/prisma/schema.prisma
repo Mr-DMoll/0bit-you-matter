@@ -239,6 +239,10 @@ model Career {
   earningsCurrency String @default("ZAR")
   earningsNote     String? // e.g. "entry level to senior"
 
+  // Entry requirements
+  apsMin              Int?    // minimum APS score typically needed
+  subjectRequirements Json?   // { "Mathematics": 4, "English Home Language": 3 } — achievement level (1-7)
+
   // SA-specific context
   nqfLevelMin Int?    // minimum NQF level typically needed
   saContext   String? @db.Text // additional SA-specific information

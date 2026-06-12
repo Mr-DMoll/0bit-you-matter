@@ -24,31 +24,57 @@ const SA_PROVINCES = [
 ];
 
 const SA_SUBJECTS = [
-  "Mathematics",
-  "Mathematical Literacy",
+  // Core languages
   "English Home Language",
   "English First Additional Language",
   "Afrikaans Home Language",
   "Afrikaans First Additional Language",
+  // SA languages
   "isiZulu Home Language",
   "isiZulu First Additional Language",
-  "Life Orientation",
+  "isiXhosa Home Language",
+  "isiXhosa First Additional Language",
+  "Sesotho Home Language",
+  "Sesotho First Additional Language",
+  "Setswana Home Language",
+  "Setswana First Additional Language",
+  "Sepedi Home Language",
+  "Sepedi First Additional Language",
+  "Tshivenda Home Language",
+  "Tshivenda First Additional Language",
+  "Xitsonga Home Language",
+  "Xitsonga First Additional Language",
+  "SiSwati Home Language",
+  "SiSwati First Additional Language",
+  "isiNdebele Home Language",
+  "isiNdebele First Additional Language",
+  // Mathematics
+  "Mathematics",
+  "Mathematical Literacy",
+  "Technical Mathematics",
+  // Sciences
   "Life Sciences",
   "Physical Sciences",
-  "Geography",
-  "History",
+  "Technical Sciences",
+  // Social & Commercial
   "Accounting",
   "Business Studies",
   "Economics",
+  "History",
+  "Geography",
+  // Technology
   "Information Technology",
   "Computer Applications Technology",
   "Engineering Graphics & Design",
-  "Agricultural Sciences",
-  "Consumer Studies",
-  "Tourism",
+  // Arts & other
   "Visual Arts",
   "Music",
   "Dramatic Arts",
+  "Consumer Studies",
+  "Tourism",
+  "Agricultural Sciences",
+  "Life Orientation",
+  "Religion Studies",
 ];
 
 const RIASEC_COLOR: Record<string, string> = {
@@ -285,25 +311,10 @@ function SubjectsEditor({
 
   return (
     <div style={{ paddingTop: 12 }}>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
-        <span style={{ fontSize: 13, color: T.muted, fontWeight: 600 }}>Subjects</span>
-        {dirty && (
-          <button
-            onClick={save}
-            disabled={saving}
-            style={{
-              fontSize: 12, fontWeight: 700, padding: "4px 12px", borderRadius: 8,
-              background: T.primary, color: "#fff", border: "none", cursor: "pointer",
-              opacity: saving ? 0.7 : 1,
-            }}
-          >
-            {saving ? "Saving…" : "Save subjects"}
-          </button>
-        )}
-      </div>
+      <span style={{ fontSize: 13, color: T.muted, fontWeight: 600 }}>Subjects</span>
 
       {/* Subject chips */}
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 7, marginBottom: draft.length > 0 ? 10 : 0 }}>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 7, marginTop: 8, marginBottom: draft.length > 0 ? 10 : 0 }}>
         {draft.map(({ subject }) => (
           <div
             key={subject}
@@ -328,7 +339,7 @@ function SubjectsEditor({
         ))}
       </div>
 
-      {/* Add subject row */}
+      {/* Add subject row — when adding, show select + Add + Cancel */}
       {adding ? (
         <div style={{ display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap", marginTop: 6 }}>
           <select
@@ -363,15 +374,31 @@ function SubjectsEditor({
           </button>
         </div>
       ) : (
-        <button
-          onClick={() => setAdding(true)}
-          style={{
-            marginTop: 6, fontSize: 12, fontWeight: 600, padding: "5px 12px", borderRadius: 8,
-            background: "none", border: `1.5px dashed ${T.primary}40`, color: T.primary, cursor: "pointer",
-          }}
-        >
-          + Add subject
-        </button>
+        /* Bottom row: "+ Add subject" always visible, "Save" appears when dirty */
+        <div style={{ display: "flex", gap: 8, alignItems: "center", marginTop: 6 }}>
+          <button
+            onClick={() => setAdding(true)}
+            style={{
+              fontSize: 12, fontWeight: 600, padding: "5px 12px", borderRadius: 8,
+              background: "none", border: `1.5px dashed ${T.primary}40`, color: T.primary, cursor: "pointer",
+            }}
+          >
+            + Add subject
+          </button>
+          {dirty && (
+            <button
+              onClick={save}
+              disabled={saving}
+              style={{
+                fontSize: 12, fontWeight: 700, padding: "5px 16px", borderRadius: 8,
+                background: T.primary, color: "#fff", border: "none", cursor: "pointer",
+                opacity: saving ? 0.7 : 1,
+              }}
+            >
+              {saving ? "Saving…" : "Save"}
+            </button>
+          )}
+        </div>
       )}
     </div>
   );

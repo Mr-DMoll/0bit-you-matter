@@ -77,12 +77,23 @@ export const generateProfile = catchAsync(async (req: Request, res: Response) =>
 
 // ── Career matching (synchronous, no queue) ────────────────────────────────────
 
-// Score a career by how well its RIASEC codes align with the learner's profile.
-// Uses spread-based normalisation: scores are rescaled relative to the learner's
-// own strongest vs weakest code. This means a learner who scores high on everything
-// still gets meaningful differentiation — their top code = 100, weakest = 0.
-// Careers matching the top codes score high; careers matching weak codes score low.
-function scoreCareer(riasecScores: Record<string, number>, careerCodes: string[]): number {
+// Score a career by RIASEC alignment + optional subject alignment boost.
+//
+// RIASEC (primary, 80% weight): spread-based normalisation so the learner's top
+// code maps to 100 and weakest to 0. This keeps differentiation meaningful even
+// when raw scores are tightly clustered.
+//
+// Subject alignment (secondary, up to ±10 points): if the career has required
+// subjects and the learner has entered their subjects, we check overlap.
+//   - Each required subject the learner has → +2 pts (max +10)
+//   - Each required subject the learner is missing → −2 pts (max −10)
+// If the learner has no subjects on file, the subject component is neutral (0).
+function scoreCareer(
+  riasecScores: Record<string, number>,
+  careerCodes: string[],
+  learnerSubjects: string[],
+  careerSubjectReqs: Record<string, number> | null,
+): number {
   if (!careerCodes.length) return 0;
   const values = Object.values(riasecScores);
   const max    = Math.max(...values);
@@ -90,17 +101,31 @@ function scoreCareer(riasecScores: Record<string, number>, careerCodes: string[]
   const range  = max - min;
 
   if (max === 0) return 0;
-  // All 6 codes identical (e.g. first run with no answers) — equal relevance
   if (range === 0) return 50;
 
-  // Normalise each code to 0–100 based on the learner's own spread
   const normalised: Record<string, number> = {};
   for (const [code, score] of Object.entries(riasecScores)) {
     normalised[code] = ((score - min) / range) * 100;
   }
 
-  const avg = careerCodes.reduce((sum, c) => sum + (normalised[c] ?? 0), 0) / careerCodes.length;
-  return Math.max(1, Math.min(99, Math.round(avg)));
+  const riasecScore = careerCodes.reduce((sum, c) => sum + (normalised[c] ?? 0), 0) / careerCodes.length;
+
+  // Subject alignment boost — only applied when both sides have data
+  let subjectBoost = 0;
+  if (learnerSubjects.length > 0 && careerSubjectReqs && Object.keys(careerSubjectReqs).length > 0) {
+    const reqSubjects = Object.keys(careerSubjectReqs);
+    // Normalise subject names for comparison (lowercase, trim)
+    const learnerSet = new Set(learnerSubjects.map((s) => s.toLowerCase().trim()));
+    for (const req of reqSubjects) {
+      // Check exact match or if learner has a variant (e.g. "Mathematics" matches "Mathematics HL")
+      const matched = learnerSet.has(req.toLowerCase().trim()) ||
+        [...learnerSet].some((ls) => ls.includes(req.toLowerCase()) || req.toLowerCase().includes(ls));
+      subjectBoost += matched ? 2 : -2;
+    }
+    subjectBoost = Math.max(-10, Math.min(10, subjectBoost));
+  }
+
+  return Math.max(1, Math.min(99, Math.round(riasecScore + subjectBoost)));
 }
 
 // POST /learner/profile/match — compute + store career matches synchronously
@@ -138,18 +163,26 @@ export const matchCareers = catchAsync(async (req: Request, res: Response) => {
     .map(([k]) => k);
   const riasecType = topCodes.join("");
 
+  // Fetch learner's stored subjects (used for subject alignment boost)
+  const learnerProfile = await prisma.learnerProfile.findUnique({
+    where:  { learnerId },
+    select: { subjects: true },
+  });
+  const learnerSubjects: string[] = Array.isArray(learnerProfile?.subjects)
+    ? (learnerProfile!.subjects as any[]).map((s: any) => s.subject ?? "").filter(Boolean)
+    : [];
+
   // Fetch all verified careers that have RIASEC codes
   const careers = await prisma.career.findMany({
     where:  { status: { in: ["VERIFIED", "APPROVED"] }, riasecCodes: { isEmpty: false } },
-    select: { id: true, riasecCodes: true },
+    select: { id: true, riasecCodes: true, subjectRequirements: true },
   });
 
-  // Score all careers by RIASEC alignment
+  // Score all careers by RIASEC alignment + subject boost
   const allScored = careers
     .map((c) => {
-      const rawPct = scoreCareer(riasecScores, c.riasecCodes);
-      // Tiebreaker: sum of the learner's actual (non-normalised) scores for this career's codes.
-      // When multiple careers share the same RIASEC codes, this gives a stable secondary ordering.
+      const subjectReqs = c.subjectRequirements as Record<string, number> | null ?? null;
+      const rawPct = scoreCareer(riasecScores, c.riasecCodes, learnerSubjects, subjectReqs);
       const tiebreaker = c.riasecCodes.reduce((sum, code) => sum + (riasecScores[code] ?? 0), 0);
       return { careerId: c.id, rawPct, tiebreaker };
     })
@@ -194,7 +227,7 @@ export const matchCareers = catchAsync(async (req: Request, res: Response) => {
     where:   { learnerId },
     include: {
       careerMatches: {
-        include: { career: { select: { id: true, title: true, slug: true, riasecCodes: true, earningsMin: true, earningsMax: true, cluster: { select: { name: true } } } } },
+        include: { career: { select: { id: true, title: true, slug: true, riasecCodes: true, earningsMin: true, earningsMax: true, apsMin: true, subjectRequirements: true, cluster: { select: { name: true } } } } },
         orderBy: { matchPercentage: "desc" },
       },
     },
