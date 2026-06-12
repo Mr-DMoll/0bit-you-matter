@@ -543,7 +543,7 @@ export function RoadmapPage() {
   );
 
   return (
-    <div className="roadmap-wrap" style={{ background: T.bg, minHeight: "100vh", padding: "28px 24px 60px", fontFamily: "inherit" }}>
+    <div className="roadmap-wrap" style={{ background: T.bg, minHeight: "100vh", padding: "28px 24px 60px", fontFamily: "inherit", overflowX: "hidden", maxWidth: "100%" }}>
 
       {/* Header */}
       <div style={{ marginBottom: 24 }}>
@@ -567,7 +567,7 @@ export function RoadmapPage() {
             </div>
           )}
 
-          <div className="roadmap-career-list" style={{ background: T.card, borderRadius: 16, border: `1px solid ${T.border}`, overflow: "hidden" }}>
+          <div className="roadmap-career-list" style={{ background: T.card, borderRadius: 16, border: `1px solid ${T.border}` }}>
             <div className="roadmap-career-list-header" style={{ padding: "12px 16px", borderBottom: `1px solid ${T.border}` }}>
               <p style={{ margin: 0, fontSize: 11, fontWeight: 700, color: T.muted, textTransform: "uppercase", letterSpacing: "0.06em" }}>
                 Your top career matches
@@ -758,21 +758,30 @@ export function RoadmapPage() {
       <style>{`
         @keyframes spin { to { transform: rotate(360deg); } }
         @media (max-width: 768px) {
+          .roadmap-wrap {
+            padding: 16px 14px 80px !important;
+            overflow-x: hidden !important;
+            max-width: 100vw !important;
+            box-sizing: border-box !important;
+          }
           .roadmap-grid {
             grid-template-columns: 1fr !important;
             gap: 12px !important;
+            min-width: 0 !important;
           }
-          .roadmap-wrap {
-            padding: 16px 14px 80px !important;
+          .roadmap-career-list-header {
+            display: none !important;
           }
           /* Collapse career list to a horizontal scrolling strip on mobile */
           .roadmap-career-list {
             display: flex !important;
             flex-direction: row !important;
             overflow-x: auto !important;
+            overflow-y: hidden !important;
             gap: 8px !important;
-            padding-bottom: 4px !important;
+            padding: 8px !important;
             scrollbar-width: none !important;
+            border-radius: 16px !important;
           }
           .roadmap-career-list::-webkit-scrollbar { display: none; }
           .roadmap-career-btn {
