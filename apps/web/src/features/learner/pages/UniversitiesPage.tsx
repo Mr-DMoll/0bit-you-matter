@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Search, MapPin, ExternalLink, Loader2 } from "lucide-react";
 import apiClient from "@/api/client";
+import { InfoBanner } from "@/features/learner/components/InfoBanner";
 
 const T = {
   primary:   "#5B4FCF",
@@ -116,6 +117,14 @@ export function UniversitiesPage() {
 
   return (
     <div style={{ background: T.bg, minHeight: "100vh", padding: "28px 24px 48px", fontFamily: "inherit" }}>
+
+      <InfoBanner
+        id="universities"
+        icon="🏫"
+        title="Finding the right institution"
+        body="South Africa has 26 public universities and hundreds of TVET colleges. Browse here to find one that offers programmes for your career goal, then visit their website for application details and fees."
+        tip="Check your career's roadmap page to see which universities offer programmes for your specific career."
+      />
 
       {/* Header */}
       <div style={{ marginBottom: 20 }}>

@@ -222,13 +222,16 @@ export const matchCareers = catchAsync(async (req: Request, res: Response) => {
     });
   }
 
-  // Return the full profile with matches
+  // Return the full profile with matches and saved careers
   const result = await prisma.learnerProfile.findUnique({
     where:   { learnerId },
     include: {
       careerMatches: {
         include: { career: { select: { id: true, title: true, slug: true, riasecCodes: true, earningsMin: true, earningsMax: true, apsMin: true, subjectRequirements: true, cluster: { select: { name: true } } } } },
         orderBy: { matchPercentage: "desc" },
+      },
+      savedCareers: {
+        include: { career: { select: { id: true, title: true, slug: true, apsMin: true, subjectRequirements: true, cluster: { select: { name: true } } } } },
       },
     },
   });

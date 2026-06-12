@@ -88,12 +88,14 @@ const RIASEC_LABEL: Record<string, string> = {
 
 // Calculate profile completion based on filled fields
 function calcCompletion(user: any, profile: any): { pct: number; missing: string[] } {
+  const isGrade9 = parseInt(user?.grade ?? "0") === 9;
   const checks: [boolean, string][] = [
     [!!user?.firstName,   "First name"],
     [!!user?.grade,       "Grade"],
     [!!user?.province,    "Province"],
     [!!user?.school,      "School"],
-    [Array.isArray(profile?.subjects) && profile.subjects.length > 0, "Subjects"],
+    // Grade 9 learners don't add subjects — count as complete
+    [isGrade9 || (Array.isArray(profile?.subjects) && profile.subjects.length > 0), "Subjects"],
     [!!profile?.chosenCareerId || (profile?.careerMatches?.length > 0), "Career interest"],
   ];
   const done    = checks.filter(([ok]) => ok).length;
@@ -263,6 +265,102 @@ function InlineEdit({
           <X size={12} color={T.muted} />
         </button>
       </div>
+    </div>
+  );
+}
+
+// ─── Grade 9 subject guide ────────────────────────────────────────────────────
+
+const STREAM_SUBJECTS: Record<string, { stream: string; icon: string; color: string; core: string[]; optional: string[] }> = {
+  R: {
+    stream: "Science & Technology",
+    icon: "🔬", color: "#2563EB",
+    core:     ["Mathematics", "Physical Sciences", "Life Sciences"],
+    optional: ["Information Technology", "Technical Sciences", "Geography"],
+  },
+  I: {
+    stream: "Science & Technology",
+    icon: "🔬", color: "#2563EB",
+    core:     ["Mathematics", "Physical Sciences", "Information Technology"],
+    optional: ["Life Sciences", "Technical Mathematics", "Geography"],
+  },
+  A: {
+    stream: "Arts & Humanities",
+    icon: "🎨", color: "#7C3AED",
+    core:     ["English Home Language", "Visual Arts", "History"],
+    optional: ["Dramatic Arts", "Music", "isiZulu Home Language", "Afrikaans First Additional Language"],
+  },
+  S: {
+    stream: "Social Sciences",
+    icon: "🤝", color: "#0D9488",
+    core:     ["Life Sciences", "History", "Geography"],
+    optional: ["English Home Language", "Religion Studies", "Economics"],
+  },
+  E: {
+    stream: "Commerce & Business",
+    icon: "💼", color: "#D97706",
+    core:     ["Mathematics", "Accounting", "Business Studies"],
+    optional: ["Economics", "Information Technology", "English First Additional Language"],
+  },
+  C: {
+    stream: "Commerce & Business",
+    icon: "💼", color: "#D97706",
+    core:     ["Mathematics", "Accounting", "Business Studies"],
+    optional: ["Economics", "Mathematical Literacy", "Information Technology"],
+  },
+};
+
+function Grade9SubjectGuide({ riasecType }: { riasecType: string }) {
+  const topCode = riasecType?.[0] ?? "";
+  const data    = STREAM_SUBJECTS[topCode];
+
+  if (!data) return (
+    <div style={{ padding: "12px 0" }}>
+      <p style={{ margin: 0, fontSize: 13, color: T.muted }}>
+        Complete the Interest Assessment to see which subjects we recommend for you.
+      </p>
+    </div>
+  );
+
+  return (
+    <div>
+      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+        <span style={{ fontSize: 22 }}>{data.icon}</span>
+        <div>
+          <p style={{ margin: 0, fontSize: 13, fontWeight: 700, color: T.fg }}>{data.stream} stream</p>
+          <p style={{ margin: 0, fontSize: 11, color: T.muted }}>Recommended based on your RIASEC type ({riasecType})</p>
+        </div>
+      </div>
+
+      <div style={{ marginBottom: 10 }}>
+        <p style={{ margin: "0 0 6px", fontSize: 11, fontWeight: 700, color: data.color, textTransform: "uppercase", letterSpacing: "0.06em" }}>
+          Core subjects to choose in Grade 10
+        </p>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+          {data.core.map((s) => (
+            <span key={s} style={{ fontSize: 12, padding: "4px 10px", borderRadius: 8, background: data.color + "15", color: data.color, fontWeight: 600 }}>
+              ✓ {s}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <p style={{ margin: "0 0 6px", fontSize: 11, fontWeight: 700, color: T.muted, textTransform: "uppercase", letterSpacing: "0.06em" }}>
+          Also useful
+        </p>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+          {data.optional.map((s) => (
+            <span key={s} style={{ fontSize: 12, padding: "4px 10px", borderRadius: 8, background: T.secondary, color: T.muted, fontWeight: 500 }}>
+              {s}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      <p style={{ margin: "12px 0 0", fontSize: 12, color: T.muted, lineHeight: 1.6 }}>
+        You&apos;ll add your actual subjects once you&apos;re in Grade 10 and have chosen them with your school.
+      </p>
     </div>
   );
 }
@@ -476,6 +574,8 @@ export function MyProfilePage() {
 
   const riasecCode   = profile?.riasecType ?? "";
   const riasecCodes  = riasecCode ? riasecCode.split("") : [];
+  const grade        = parseInt(user?.grade ?? "0") || 0;
+  const isGrade9     = grade === 9;
 
   return (
     <div style={{ background: T.bg, minHeight: "100vh", padding: "28px 24px 48px", fontFamily: "inherit" }}>
@@ -584,19 +684,40 @@ export function MyProfilePage() {
           {/* RIASEC personality type */}
           {riasecCodes.length > 0 && (
             <div style={{ padding: "10px 0 4px" }}>
-              <span style={{ fontSize: 13, color: T.muted, display: "block", marginBottom: 8 }}>Personality type (RIASEC)</span>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8, flexWrap: "wrap" }}>
+                <span style={{ fontSize: 13, color: T.muted }}>Personality type</span>
+                <button
+                  onClick={() => router.push("/learner/chat?prompt=" + encodeURIComponent("What does RIASEC mean and how does it help with career choices?"))}
+                  style={{ fontSize: 11, fontWeight: 700, color: T.primary, background: T.secondary, border: "none", borderRadius: 99, padding: "2px 10px", cursor: "pointer" }}
+                >
+                  What is RIASEC? →
+                </button>
+              </div>
+
+              {/* RIASEC acronym legend */}
+              <div style={{ display: "flex", gap: 4, flexWrap: "wrap", marginBottom: 10 }}>
+                {(["R","I","A","S","E","C"] as const).map((code) => (
+                  <span key={code} style={{ fontSize: 11, color: riasecCodes.includes(code) ? (RIASEC_COLOR[code] ?? T.muted) : T.muted, fontWeight: riasecCodes.includes(code) ? 700 : 400, opacity: riasecCodes.includes(code) ? 1 : 0.5 }}>
+                    <strong>{code}</strong>={RIASEC_LABEL[code]}{code !== "C" ? "  " : ""}
+                  </span>
+                ))}
+              </div>
+
+              {/* Clickable chips — each opens chat with a personalised question */}
               <div style={{ display: "flex", gap: 7, flexWrap: "wrap" }}>
                 {riasecCodes.map((code: string) => (
-                  <span
+                  <button
                     key={code}
-                    title={RIASEC_LABEL[code]}
+                    onClick={() => router.push("/learner/chat?prompt=" + encodeURIComponent(`Tell me more about the ${RIASEC_LABEL[code]} (${code}) personality type in RIASEC and what careers suit it.`))}
                     style={{
                       display: "inline-flex", alignItems: "center", gap: 6,
-                      padding: "4px 12px", borderRadius: 99, fontSize: 12, fontWeight: 700,
+                      padding: "5px 12px", borderRadius: 99, fontSize: 12, fontWeight: 700,
                       background: (RIASEC_COLOR[code] ?? "#6366f1") + "15",
                       color: RIASEC_COLOR[code] ?? "#6366f1",
                       border: `1.5px solid ${(RIASEC_COLOR[code] ?? "#6366f1") + "40"}`,
+                      cursor: "pointer",
                     }}
+                    title="Tap to learn more about this type"
                   >
                     <span style={{
                       width: 18, height: 18, borderRadius: "50%", fontSize: 10, fontWeight: 800,
@@ -604,17 +725,24 @@ export function MyProfilePage() {
                       background: (RIASEC_COLOR[code] ?? "#6366f1") + "25",
                     }}>{code}</span>
                     {RIASEC_LABEL[code]}
-                  </span>
+                    <span style={{ fontSize: 10, opacity: 0.6 }}>?</span>
+                  </button>
                 ))}
               </div>
+              <p style={{ margin: "6px 0 0", fontSize: 11, color: T.muted }}>Tap a type to ask your Career Guide what it means for you.</p>
             </div>
           )}
 
-          {/* Subjects — always editable */}
-          <SubjectsEditor
-            subjects={subjects}
-            onSave={(subs) => patchProfile({ subjects: subs })}
-          />
+          {/* Subjects — hidden for Grade 9; replaced with stream subject guide */}
+          <div style={{ borderTop: `1px solid ${T.border}`, paddingTop: 16 }}>
+            <p style={{ margin: "0 0 10px", fontSize: 13, fontWeight: 600, color: T.muted }}>
+              {isGrade9 ? "Recommended subjects" : "Subjects"}
+            </p>
+            {isGrade9
+              ? <Grade9SubjectGuide riasecType={riasecCode} />
+              : <SubjectsEditor subjects={subjects} onSave={(subs) => patchProfile({ subjects: subs })} />
+            }
+          </div>
         </div>
 
         {/* Career Goals */}

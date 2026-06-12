@@ -294,6 +294,7 @@ export type ProgrammeWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Programme"> | Date | string
   university?: Prisma.XOR<Prisma.UniversityScalarRelationFilter, Prisma.UniversityWhereInput>
   verifications?: Prisma.DataVerificationListRelationFilter
+  careers?: Prisma.CareerProgrammeListRelationFilter
 }
 
 export type ProgrammeOrderByWithRelationInput = {
@@ -313,6 +314,7 @@ export type ProgrammeOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   university?: Prisma.UniversityOrderByWithRelationInput
   verifications?: Prisma.DataVerificationOrderByRelationAggregateInput
+  careers?: Prisma.CareerProgrammeOrderByRelationAggregateInput
 }
 
 export type ProgrammeWhereUniqueInput = Prisma.AtLeast<{
@@ -335,6 +337,7 @@ export type ProgrammeWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Programme"> | Date | string
   university?: Prisma.XOR<Prisma.UniversityScalarRelationFilter, Prisma.UniversityWhereInput>
   verifications?: Prisma.DataVerificationListRelationFilter
+  careers?: Prisma.CareerProgrammeListRelationFilter
 }, "id">
 
 export type ProgrammeOrderByWithAggregationInput = {
@@ -395,6 +398,7 @@ export type ProgrammeCreateInput = {
   updatedAt?: Date | string
   university: Prisma.UniversityCreateNestedOneWithoutProgrammesInput
   verifications?: Prisma.DataVerificationCreateNestedManyWithoutProgrammeInput
+  careers?: Prisma.CareerProgrammeCreateNestedManyWithoutProgrammeInput
 }
 
 export type ProgrammeUncheckedCreateInput = {
@@ -413,6 +417,7 @@ export type ProgrammeUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   verifications?: Prisma.DataVerificationUncheckedCreateNestedManyWithoutProgrammeInput
+  careers?: Prisma.CareerProgrammeUncheckedCreateNestedManyWithoutProgrammeInput
 }
 
 export type ProgrammeUpdateInput = {
@@ -431,6 +436,7 @@ export type ProgrammeUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   university?: Prisma.UniversityUpdateOneRequiredWithoutProgrammesNestedInput
   verifications?: Prisma.DataVerificationUpdateManyWithoutProgrammeNestedInput
+  careers?: Prisma.CareerProgrammeUpdateManyWithoutProgrammeNestedInput
 }
 
 export type ProgrammeUncheckedUpdateInput = {
@@ -449,6 +455,7 @@ export type ProgrammeUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   verifications?: Prisma.DataVerificationUncheckedUpdateManyWithoutProgrammeNestedInput
+  careers?: Prisma.CareerProgrammeUncheckedUpdateManyWithoutProgrammeNestedInput
 }
 
 export type ProgrammeCreateManyInput = {
@@ -572,6 +579,11 @@ export type ProgrammeSumOrderByAggregateInput = {
   apsMin?: Prisma.SortOrder
 }
 
+export type ProgrammeScalarRelationFilter = {
+  is?: Prisma.ProgrammeWhereInput
+  isNot?: Prisma.ProgrammeWhereInput
+}
+
 export type ProgrammeNullableScalarRelationFilter = {
   is?: Prisma.ProgrammeWhereInput | null
   isNot?: Prisma.ProgrammeWhereInput | null
@@ -619,6 +631,20 @@ export type ProgrammeUncheckedUpdateManyWithoutUniversityNestedInput = {
   deleteMany?: Prisma.ProgrammeScalarWhereInput | Prisma.ProgrammeScalarWhereInput[]
 }
 
+export type ProgrammeCreateNestedOneWithoutCareersInput = {
+  create?: Prisma.XOR<Prisma.ProgrammeCreateWithoutCareersInput, Prisma.ProgrammeUncheckedCreateWithoutCareersInput>
+  connectOrCreate?: Prisma.ProgrammeCreateOrConnectWithoutCareersInput
+  connect?: Prisma.ProgrammeWhereUniqueInput
+}
+
+export type ProgrammeUpdateOneRequiredWithoutCareersNestedInput = {
+  create?: Prisma.XOR<Prisma.ProgrammeCreateWithoutCareersInput, Prisma.ProgrammeUncheckedCreateWithoutCareersInput>
+  connectOrCreate?: Prisma.ProgrammeCreateOrConnectWithoutCareersInput
+  upsert?: Prisma.ProgrammeUpsertWithoutCareersInput
+  connect?: Prisma.ProgrammeWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProgrammeUpdateToOneWithWhereWithoutCareersInput, Prisma.ProgrammeUpdateWithoutCareersInput>, Prisma.ProgrammeUncheckedUpdateWithoutCareersInput>
+}
+
 export type ProgrammeCreateNestedOneWithoutVerificationsInput = {
   create?: Prisma.XOR<Prisma.ProgrammeCreateWithoutVerificationsInput, Prisma.ProgrammeUncheckedCreateWithoutVerificationsInput>
   connectOrCreate?: Prisma.ProgrammeCreateOrConnectWithoutVerificationsInput
@@ -650,6 +676,7 @@ export type ProgrammeCreateWithoutUniversityInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   verifications?: Prisma.DataVerificationCreateNestedManyWithoutProgrammeInput
+  careers?: Prisma.CareerProgrammeCreateNestedManyWithoutProgrammeInput
 }
 
 export type ProgrammeUncheckedCreateWithoutUniversityInput = {
@@ -667,6 +694,7 @@ export type ProgrammeUncheckedCreateWithoutUniversityInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   verifications?: Prisma.DataVerificationUncheckedCreateNestedManyWithoutProgrammeInput
+  careers?: Prisma.CareerProgrammeUncheckedCreateNestedManyWithoutProgrammeInput
 }
 
 export type ProgrammeCreateOrConnectWithoutUniversityInput = {
@@ -715,6 +743,94 @@ export type ProgrammeScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Programme"> | Date | string
 }
 
+export type ProgrammeCreateWithoutCareersInput = {
+  id?: string
+  name: string
+  faculty?: string | null
+  duration?: number | null
+  nqfLevel?: number | null
+  apsMin?: number | null
+  subjectRequirements?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  applicationOpenDate?: Date | string | null
+  applicationCloseDate?: Date | string | null
+  status?: $Enums.ContentStatus
+  lastVerifiedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  university: Prisma.UniversityCreateNestedOneWithoutProgrammesInput
+  verifications?: Prisma.DataVerificationCreateNestedManyWithoutProgrammeInput
+}
+
+export type ProgrammeUncheckedCreateWithoutCareersInput = {
+  id?: string
+  universityId: string
+  name: string
+  faculty?: string | null
+  duration?: number | null
+  nqfLevel?: number | null
+  apsMin?: number | null
+  subjectRequirements?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  applicationOpenDate?: Date | string | null
+  applicationCloseDate?: Date | string | null
+  status?: $Enums.ContentStatus
+  lastVerifiedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  verifications?: Prisma.DataVerificationUncheckedCreateNestedManyWithoutProgrammeInput
+}
+
+export type ProgrammeCreateOrConnectWithoutCareersInput = {
+  where: Prisma.ProgrammeWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProgrammeCreateWithoutCareersInput, Prisma.ProgrammeUncheckedCreateWithoutCareersInput>
+}
+
+export type ProgrammeUpsertWithoutCareersInput = {
+  update: Prisma.XOR<Prisma.ProgrammeUpdateWithoutCareersInput, Prisma.ProgrammeUncheckedUpdateWithoutCareersInput>
+  create: Prisma.XOR<Prisma.ProgrammeCreateWithoutCareersInput, Prisma.ProgrammeUncheckedCreateWithoutCareersInput>
+  where?: Prisma.ProgrammeWhereInput
+}
+
+export type ProgrammeUpdateToOneWithWhereWithoutCareersInput = {
+  where?: Prisma.ProgrammeWhereInput
+  data: Prisma.XOR<Prisma.ProgrammeUpdateWithoutCareersInput, Prisma.ProgrammeUncheckedUpdateWithoutCareersInput>
+}
+
+export type ProgrammeUpdateWithoutCareersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  faculty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  duration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  nqfLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  apsMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  subjectRequirements?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  applicationOpenDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  applicationCloseDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
+  lastVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  university?: Prisma.UniversityUpdateOneRequiredWithoutProgrammesNestedInput
+  verifications?: Prisma.DataVerificationUpdateManyWithoutProgrammeNestedInput
+}
+
+export type ProgrammeUncheckedUpdateWithoutCareersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  universityId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  faculty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  duration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  nqfLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  apsMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  subjectRequirements?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  applicationOpenDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  applicationCloseDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
+  lastVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  verifications?: Prisma.DataVerificationUncheckedUpdateManyWithoutProgrammeNestedInput
+}
+
 export type ProgrammeCreateWithoutVerificationsInput = {
   id?: string
   name: string
@@ -730,6 +846,7 @@ export type ProgrammeCreateWithoutVerificationsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   university: Prisma.UniversityCreateNestedOneWithoutProgrammesInput
+  careers?: Prisma.CareerProgrammeCreateNestedManyWithoutProgrammeInput
 }
 
 export type ProgrammeUncheckedCreateWithoutVerificationsInput = {
@@ -747,6 +864,7 @@ export type ProgrammeUncheckedCreateWithoutVerificationsInput = {
   lastVerifiedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  careers?: Prisma.CareerProgrammeUncheckedCreateNestedManyWithoutProgrammeInput
 }
 
 export type ProgrammeCreateOrConnectWithoutVerificationsInput = {
@@ -780,6 +898,7 @@ export type ProgrammeUpdateWithoutVerificationsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   university?: Prisma.UniversityUpdateOneRequiredWithoutProgrammesNestedInput
+  careers?: Prisma.CareerProgrammeUpdateManyWithoutProgrammeNestedInput
 }
 
 export type ProgrammeUncheckedUpdateWithoutVerificationsInput = {
@@ -797,6 +916,7 @@ export type ProgrammeUncheckedUpdateWithoutVerificationsInput = {
   lastVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  careers?: Prisma.CareerProgrammeUncheckedUpdateManyWithoutProgrammeNestedInput
 }
 
 export type ProgrammeCreateManyUniversityInput = {
@@ -830,6 +950,7 @@ export type ProgrammeUpdateWithoutUniversityInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   verifications?: Prisma.DataVerificationUpdateManyWithoutProgrammeNestedInput
+  careers?: Prisma.CareerProgrammeUpdateManyWithoutProgrammeNestedInput
 }
 
 export type ProgrammeUncheckedUpdateWithoutUniversityInput = {
@@ -847,6 +968,7 @@ export type ProgrammeUncheckedUpdateWithoutUniversityInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   verifications?: Prisma.DataVerificationUncheckedUpdateManyWithoutProgrammeNestedInput
+  careers?: Prisma.CareerProgrammeUncheckedUpdateManyWithoutProgrammeNestedInput
 }
 
 export type ProgrammeUncheckedUpdateManyWithoutUniversityInput = {
@@ -872,10 +994,12 @@ export type ProgrammeUncheckedUpdateManyWithoutUniversityInput = {
 
 export type ProgrammeCountOutputType = {
   verifications: number
+  careers: number
 }
 
 export type ProgrammeCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   verifications?: boolean | ProgrammeCountOutputTypeCountVerificationsArgs
+  careers?: boolean | ProgrammeCountOutputTypeCountCareersArgs
 }
 
 /**
@@ -893,6 +1017,13 @@ export type ProgrammeCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Ex
  */
 export type ProgrammeCountOutputTypeCountVerificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.DataVerificationWhereInput
+}
+
+/**
+ * ProgrammeCountOutputType without action
+ */
+export type ProgrammeCountOutputTypeCountCareersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CareerProgrammeWhereInput
 }
 
 
@@ -913,6 +1044,7 @@ export type ProgrammeSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   updatedAt?: boolean
   university?: boolean | Prisma.UniversityDefaultArgs<ExtArgs>
   verifications?: boolean | Prisma.Programme$verificationsArgs<ExtArgs>
+  careers?: boolean | Prisma.Programme$careersArgs<ExtArgs>
   _count?: boolean | Prisma.ProgrammeCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["programme"]>
 
@@ -973,6 +1105,7 @@ export type ProgrammeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs 
 export type ProgrammeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   university?: boolean | Prisma.UniversityDefaultArgs<ExtArgs>
   verifications?: boolean | Prisma.Programme$verificationsArgs<ExtArgs>
+  careers?: boolean | Prisma.Programme$careersArgs<ExtArgs>
   _count?: boolean | Prisma.ProgrammeCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ProgrammeIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -987,6 +1120,7 @@ export type $ProgrammePayload<ExtArgs extends runtime.Types.Extensions.InternalA
   objects: {
     university: Prisma.$UniversityPayload<ExtArgs>
     verifications: Prisma.$DataVerificationPayload<ExtArgs>[]
+    careers: Prisma.$CareerProgrammePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1399,6 +1533,7 @@ export interface Prisma__ProgrammeClient<T, Null = never, ExtArgs extends runtim
   readonly [Symbol.toStringTag]: "PrismaPromise"
   university<T extends Prisma.UniversityDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UniversityDefaultArgs<ExtArgs>>): Prisma.Prisma__UniversityClient<runtime.Types.Result.GetResult<Prisma.$UniversityPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   verifications<T extends Prisma.Programme$verificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Programme$verificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DataVerificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  careers<T extends Prisma.Programme$careersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Programme$careersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CareerProgrammePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1864,6 +1999,30 @@ export type Programme$verificationsArgs<ExtArgs extends runtime.Types.Extensions
   take?: number
   skip?: number
   distinct?: Prisma.DataVerificationScalarFieldEnum | Prisma.DataVerificationScalarFieldEnum[]
+}
+
+/**
+ * Programme.careers
+ */
+export type Programme$careersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CareerProgramme
+   */
+  select?: Prisma.CareerProgrammeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CareerProgramme
+   */
+  omit?: Prisma.CareerProgrammeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CareerProgrammeInclude<ExtArgs> | null
+  where?: Prisma.CareerProgrammeWhereInput
+  orderBy?: Prisma.CareerProgrammeOrderByWithRelationInput | Prisma.CareerProgrammeOrderByWithRelationInput[]
+  cursor?: Prisma.CareerProgrammeWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CareerProgrammeScalarFieldEnum | Prisma.CareerProgrammeScalarFieldEnum[]
 }
 
 /**

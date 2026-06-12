@@ -265,6 +265,7 @@ model Career {
   careerMatches    LearnerCareerMatch[]
   generationJobs   GenerationJob[]      @relation("CareerGenerationJobs")
   pathways         Pathway[]
+  programmes       CareerProgramme[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -319,6 +320,7 @@ model Programme {
   lastVerifiedAt DateTime?
 
   verifications DataVerification[]
+  careers       CareerProgramme[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -327,6 +329,16 @@ model Programme {
   @@index([apsMin])
   @@index([status])
   @@index([applicationCloseDate])
+}
+
+model CareerProgramme {
+  careerId    String
+  programmeId String
+  career      Career    @relation(fields: [careerId], references: [id], onDelete: Cascade)
+  programme   Programme @relation(fields: [programmeId], references: [id], onDelete: Cascade)
+
+  @@id([careerId, programmeId])
+  @@index([programmeId])
 }
 
 // ─── TVET ─────────────────────────────────────────────────────────────────────

@@ -49,12 +49,13 @@ const moreNav = [
 ];
 
 function calcCompletion(user: any, profile: any): { pct: number; missing: string[] } {
+  const isGrade9 = parseInt(user?.grade ?? "0") === 9;
   const checks: [boolean, string][] = [
     [!!user?.firstName,                                                "First name"],
     [!!user?.grade,                                                    "Grade"],
     [!!user?.province,                                                 "Province"],
     [!!user?.school,                                                   "School"],
-    [Array.isArray(profile?.subjects) && profile.subjects.length > 0, "Subjects"],
+    [isGrade9 || (Array.isArray(profile?.subjects) && profile.subjects.length > 0), "Subjects"],
     [!!profile?.chosenCareerId || (profile?.careerMatches?.length > 0), "Career interest"],
   ];
   const done    = checks.filter(([ok]) => ok).length;
@@ -69,6 +70,7 @@ export function LearnerShell({ children }: { children: React.ReactNode }) {
   const [sidebarUser,    setSidebarUser]    = useState<any>(null);
   const [profile,        setProfile]        = useState<any>(null);
   const [moreOpen,       setMoreOpen]       = useState(false);
+  const [roadmapBadge,   setRoadmapBadge]   = useState(false);
 
   const fetchSidebarData = () =>
     Promise.all([
@@ -76,11 +78,25 @@ export function LearnerShell({ children }: { children: React.ReactNode }) {
       apiClient.get("/learner/profile").then((r) => r.data.data).catch(() => null),
     ]).then(([u, p]) => { setSidebarUser(u); setProfile(p); });
 
-  useEffect(() => { fetchSidebarData(); setMoreOpen(false); }, [pathname]);
+  useEffect(() => {
+    // Clear roadmap badge when visiting the roadmap page
+    if (pathname.startsWith("/learner/roadmap")) setRoadmapBadge(false);
+    fetchSidebarData();
+    setMoreOpen(false);
+  }, [pathname]);
 
   useEffect(() => {
     window.addEventListener("profile-updated", fetchSidebarData);
-    return () => window.removeEventListener("profile-updated", fetchSidebarData);
+    const onRoadmapUpdated = () => setRoadmapBadge(true);
+    window.addEventListener("roadmap-updated", onRoadmapUpdated);
+    // Pick up badge flag persisted in localStorage (e.g. from previous page)
+    if (typeof window !== "undefined" && localStorage.getItem("roadmapUpdated") === "1") {
+      setRoadmapBadge(true);
+    }
+    return () => {
+      window.removeEventListener("profile-updated", fetchSidebarData);
+      window.removeEventListener("roadmap-updated", onRoadmapUpdated);
+    };
   }, []);
 
   const firstName = user?.firstName ?? user?.displayName?.split(" ")[0] ?? "there";
@@ -143,7 +159,8 @@ export function LearnerShell({ children }: { children: React.ReactNode }) {
         {/* Nav links */}
         <nav style={{ flex: 1, padding: "8px 12px", display: "flex", flexDirection: "column", gap: 2 }}>
           {sidebarNav.map(({ href, label, icon: Icon }) => {
-            const active = isActive(href);
+            const active    = isActive(href);
+            const showBadge = roadmapBadge && href === "/learner/roadmap" && !active;
             return (
               <Link key={href} href={href} style={{ textDecoration: "none" }}>
                 <div style={{
@@ -154,7 +171,10 @@ export function LearnerShell({ children }: { children: React.ReactNode }) {
                   fontWeight: active ? 600 : 400, fontSize: "0.88rem",
                   transition: "background 0.15s",
                 }}>
-                  <Icon size={17} style={{ opacity: active ? 1 : 0.65 }} />
+                  <div style={{ position: "relative" }}>
+                    <Icon size={17} style={{ opacity: active ? 1 : 0.65 }} />
+                    {showBadge && <span style={{ position: "absolute", top: -3, right: -3, width: 7, height: 7, borderRadius: "50%", background: "#F97066", border: "1.5px solid #1E1875" }} />}
+                  </div>
                   {label}
                   {active && <span style={{ marginLeft: "auto", width: 6, height: 6, borderRadius: "50%", background: "white", opacity: 0.7 }} />}
                 </div>
@@ -251,7 +271,10 @@ export function LearnerShell({ children }: { children: React.ReactNode }) {
             gap: 3, padding: "10px 0",
             color: moreOpen ? T.primary : T.muted,
           }}>
-            {moreOpen ? <X size={21} strokeWidth={2.5} /> : <MoreHorizontal size={21} strokeWidth={1.8} />}
+            <div style={{ position: "relative" }}>
+              {moreOpen ? <X size={21} strokeWidth={2.5} /> : <MoreHorizontal size={21} strokeWidth={1.8} />}
+              {roadmapBadge && !moreOpen && <span style={{ position: "absolute", top: -2, right: -2, width: 7, height: 7, borderRadius: "50%", background: "#F97066", border: `1.5px solid ${T.card}` }} />}
+            </div>
             <span style={{ fontSize: "0.6rem", fontWeight: moreOpen ? 700 : 400 }}>More</span>
           </div>
         </button>
@@ -279,7 +302,8 @@ export function LearnerShell({ children }: { children: React.ReactNode }) {
             <p style={{ margin: "0 0 12px", fontSize: 11, fontWeight: 700, color: T.muted, textTransform: "uppercase", letterSpacing: "0.06em" }}>More</p>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
               {moreNav.map(({ href, label, icon: Icon }) => {
-                const active = isActive(href);
+                const active    = isActive(href);
+                const showBadge = roadmapBadge && href === "/learner/roadmap" && !active;
                 return (
                   <Link key={href} href={href} style={{ textDecoration: "none" }}>
                     <div style={{
@@ -288,8 +312,12 @@ export function LearnerShell({ children }: { children: React.ReactNode }) {
                       background: active ? T.secondary : "#F5F4FC",
                       color: active ? T.primary : T.fg,
                       fontWeight: active ? 700 : 500, fontSize: 14,
+                      position: "relative",
                     }}>
-                      <Icon size={18} color={active ? T.primary : T.muted} strokeWidth={active ? 2.5 : 1.8} />
+                      <div style={{ position: "relative" }}>
+                        <Icon size={18} color={active ? T.primary : T.muted} strokeWidth={active ? 2.5 : 1.8} />
+                        {showBadge && <span style={{ position: "absolute", top: -3, right: -3, width: 7, height: 7, borderRadius: "50%", background: "#F97066", border: "1.5px solid #F5F4FC" }} />}
+                      </div>
                       {label}
                     </div>
                   </Link>

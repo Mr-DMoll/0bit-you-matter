@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Clock, ExternalLink, Search, ChevronDown, ChevronUp, SlidersHorizontal } from "lucide-react";
 import apiClient from "@/api/client";
+import { InfoBanner } from "@/features/learner/components/InfoBanner";
 
 const T = {
   primary:  "#5B4FCF",
@@ -82,6 +83,14 @@ export function BursariesPage() {
 
   return (
     <div style={{ background: T.bg, minHeight: "100vh", padding: "28px 24px 48px", fontFamily: "inherit" }}>
+      <InfoBanner
+        id="bursaries"
+        icon="💰"
+        title="What is a bursary?"
+        body="A bursary is funding from a company or government to pay for your studies — usually in exchange for working for them after graduation. Unlike student loans, bursaries don't need to be repaid."
+        tip="Apply early — many bursaries close months before university applications open."
+      />
+
       {/* Header */}
       <div style={{ marginBottom: 24, display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
         <div>

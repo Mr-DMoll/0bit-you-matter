@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Search } from "lucide-react";
 import apiClient from "@/api/client";
+import { InfoBanner } from "@/features/learner/components/InfoBanner";
 
 const T = {
   primary:  "#5B4FCF",
@@ -96,6 +97,14 @@ export function ExploreCareersPage() {
 
   return (
     <div style={{ background: T.bg, minHeight: "100vh", padding: "28px 24px 48px", fontFamily: "inherit" }}>
+
+      <InfoBanner
+        id="explore-careers"
+        icon="🔍"
+        title="Explore all South African careers"
+        body="Browse every career in our database — filter by field of study or search by name. This is for discovery. Your personalised matches (ranked by fit) are under Career Matches."
+        tip="Click any career to see salary ranges, what the job is like, and how to get there."
+      />
 
       {/* Header */}
       <div style={{ marginBottom: 20 }}>

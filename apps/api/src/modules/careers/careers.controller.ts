@@ -132,6 +132,85 @@ export const deleteCareer = catchAsync(async (req: Request, res: Response) => {
   return res.status(HttpStatus.OK).json({ status: "success", message: "Career archived" });
 });
 
+// ── Career programmes (institutions offering this career) ──────────────────────
+
+export const getCareerProgrammes = catchAsync(async (req: Request, res: Response) => {
+  const career = await prisma.career.findUnique({ where: { slug: req.params.slug } });
+  if (!career) throw new AppError("Career not found", HttpStatus.NOT_FOUND);
+
+  const links = await prisma.careerProgramme.findMany({
+    where: { careerId: career.id },
+    include: {
+      programme: {
+        include: {
+          university: {
+            select: { id: true, name: true, abbreviation: true, province: true, website: true, logoUrl: true, type: true },
+          },
+        },
+      },
+    },
+  });
+
+  // Group by university for easier rendering
+  const byUniversity: Record<string, any> = {};
+  for (const link of links) {
+    const uni = link.programme.university;
+    if (!byUniversity[uni.id]) {
+      byUniversity[uni.id] = { ...uni, programmes: [] };
+    }
+    byUniversity[uni.id].programmes.push({
+      id:                  link.programme.id,
+      name:                link.programme.name,
+      faculty:             link.programme.faculty,
+      duration:            link.programme.duration,
+      nqfLevel:            link.programme.nqfLevel,
+      apsMin:              link.programme.apsMin,
+      subjectRequirements: link.programme.subjectRequirements,
+      applicationOpenDate: link.programme.applicationOpenDate,
+      applicationCloseDate:link.programme.applicationCloseDate,
+    });
+  }
+
+  return res.status(HttpStatus.OK).json({
+    status: "success",
+    data:   Object.values(byUniversity),
+  });
+});
+
+// ── Career bursaries (bursaries matching this career's field) ──────────────────
+
+export const getCareerBursaries = catchAsync(async (req: Request, res: Response) => {
+  const career = await prisma.career.findUnique({
+    where:   { slug: req.params.slug },
+    include: { cluster: { select: { name: true } } },
+  });
+  if (!career) throw new AppError("Career not found", HttpStatus.NOT_FOUND);
+
+  // Derive search terms from cluster name (e.g. "Finance, Economics & Accounting" → ["Finance","Economics","Accounting"])
+  const clusterWords = (career.cluster?.name ?? "")
+    .split(/[,&]/)
+    .map((w: string) => w.trim())
+    .filter((w: string) => w.length > 3);
+
+  if (!clusterWords.length) {
+    return res.status(HttpStatus.OK).json({ status: "success", data: [] });
+  }
+
+  // Find bursaries whose fieldsOfStudy overlap with any cluster word
+  const bursaries = await prisma.bursary.findMany({
+    where: {
+      status: { in: ["APPROVED", "VERIFIED"] },
+      OR: clusterWords.map((word: string) => ({
+        fieldsOfStudy: { has: word },
+      })),
+    },
+    orderBy: [{ closeDate: "asc" }, { name: "asc" }],
+    take: 6,
+  });
+
+  return res.status(HttpStatus.OK).json({ status: "success", data: bursaries });
+});
+
 // ── Coverage stats (admin/content manager) ────────────────────────────────────
 
 export const coverageStats = catchAsync(async (_req: Request, res: Response) => {

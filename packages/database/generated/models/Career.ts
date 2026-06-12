@@ -29,6 +29,7 @@ export type AggregateCareer = {
 export type CareerAvgAggregateOutputType = {
   earningsMin: number | null
   earningsMax: number | null
+  apsMin: number | null
   nqfLevelMin: number | null
   qualityScore: number | null
   viewCount: number | null
@@ -37,6 +38,7 @@ export type CareerAvgAggregateOutputType = {
 export type CareerSumAggregateOutputType = {
   earningsMin: number | null
   earningsMax: number | null
+  apsMin: number | null
   nqfLevelMin: number | null
   qualityScore: number | null
   viewCount: number | null
@@ -54,6 +56,7 @@ export type CareerMinAggregateOutputType = {
   earningsMax: number | null
   earningsCurrency: string | null
   earningsNote: string | null
+  apsMin: number | null
   nqfLevelMin: number | null
   saContext: string | null
   status: $Enums.ContentStatus | null
@@ -78,6 +81,7 @@ export type CareerMaxAggregateOutputType = {
   earningsMax: number | null
   earningsCurrency: string | null
   earningsNote: string | null
+  apsMin: number | null
   nqfLevelMin: number | null
   saContext: string | null
   status: $Enums.ContentStatus | null
@@ -103,6 +107,8 @@ export type CareerCountAggregateOutputType = {
   earningsMax: number
   earningsCurrency: number
   earningsNote: number
+  apsMin: number
+  subjectRequirements: number
   nqfLevelMin: number
   saContext: number
   status: number
@@ -120,6 +126,7 @@ export type CareerCountAggregateOutputType = {
 export type CareerAvgAggregateInputType = {
   earningsMin?: true
   earningsMax?: true
+  apsMin?: true
   nqfLevelMin?: true
   qualityScore?: true
   viewCount?: true
@@ -128,6 +135,7 @@ export type CareerAvgAggregateInputType = {
 export type CareerSumAggregateInputType = {
   earningsMin?: true
   earningsMax?: true
+  apsMin?: true
   nqfLevelMin?: true
   qualityScore?: true
   viewCount?: true
@@ -145,6 +153,7 @@ export type CareerMinAggregateInputType = {
   earningsMax?: true
   earningsCurrency?: true
   earningsNote?: true
+  apsMin?: true
   nqfLevelMin?: true
   saContext?: true
   status?: true
@@ -169,6 +178,7 @@ export type CareerMaxAggregateInputType = {
   earningsMax?: true
   earningsCurrency?: true
   earningsNote?: true
+  apsMin?: true
   nqfLevelMin?: true
   saContext?: true
   status?: true
@@ -194,6 +204,8 @@ export type CareerCountAggregateInputType = {
   earningsMax?: true
   earningsCurrency?: true
   earningsNote?: true
+  apsMin?: true
+  subjectRequirements?: true
   nqfLevelMin?: true
   saContext?: true
   status?: true
@@ -306,6 +318,8 @@ export type CareerGroupByOutputType = {
   earningsMax: number | null
   earningsCurrency: string
   earningsNote: string | null
+  apsMin: number | null
+  subjectRequirements: runtime.JsonValue | null
   nqfLevelMin: number | null
   saContext: string | null
   status: $Enums.ContentStatus
@@ -354,6 +368,8 @@ export type CareerWhereInput = {
   earningsMax?: Prisma.IntNullableFilter<"Career"> | number | null
   earningsCurrency?: Prisma.StringFilter<"Career"> | string
   earningsNote?: Prisma.StringNullableFilter<"Career"> | string | null
+  apsMin?: Prisma.IntNullableFilter<"Career"> | number | null
+  subjectRequirements?: Prisma.JsonNullableFilter<"Career">
   nqfLevelMin?: Prisma.IntNullableFilter<"Career"> | number | null
   saContext?: Prisma.StringNullableFilter<"Career"> | string | null
   status?: Prisma.EnumContentStatusFilter<"Career"> | $Enums.ContentStatus
@@ -372,6 +388,7 @@ export type CareerWhereInput = {
   careerMatches?: Prisma.LearnerCareerMatchListRelationFilter
   generationJobs?: Prisma.GenerationJobListRelationFilter
   pathways?: Prisma.PathwayListRelationFilter
+  programmes?: Prisma.CareerProgrammeListRelationFilter
 }
 
 export type CareerOrderByWithRelationInput = {
@@ -387,6 +404,8 @@ export type CareerOrderByWithRelationInput = {
   earningsMax?: Prisma.SortOrderInput | Prisma.SortOrder
   earningsCurrency?: Prisma.SortOrder
   earningsNote?: Prisma.SortOrderInput | Prisma.SortOrder
+  apsMin?: Prisma.SortOrderInput | Prisma.SortOrder
+  subjectRequirements?: Prisma.SortOrderInput | Prisma.SortOrder
   nqfLevelMin?: Prisma.SortOrderInput | Prisma.SortOrder
   saContext?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -405,6 +424,7 @@ export type CareerOrderByWithRelationInput = {
   careerMatches?: Prisma.LearnerCareerMatchOrderByRelationAggregateInput
   generationJobs?: Prisma.GenerationJobOrderByRelationAggregateInput
   pathways?: Prisma.PathwayOrderByRelationAggregateInput
+  programmes?: Prisma.CareerProgrammeOrderByRelationAggregateInput
 }
 
 export type CareerWhereUniqueInput = Prisma.AtLeast<{
@@ -423,6 +443,8 @@ export type CareerWhereUniqueInput = Prisma.AtLeast<{
   earningsMax?: Prisma.IntNullableFilter<"Career"> | number | null
   earningsCurrency?: Prisma.StringFilter<"Career"> | string
   earningsNote?: Prisma.StringNullableFilter<"Career"> | string | null
+  apsMin?: Prisma.IntNullableFilter<"Career"> | number | null
+  subjectRequirements?: Prisma.JsonNullableFilter<"Career">
   nqfLevelMin?: Prisma.IntNullableFilter<"Career"> | number | null
   saContext?: Prisma.StringNullableFilter<"Career"> | string | null
   status?: Prisma.EnumContentStatusFilter<"Career"> | $Enums.ContentStatus
@@ -441,6 +463,7 @@ export type CareerWhereUniqueInput = Prisma.AtLeast<{
   careerMatches?: Prisma.LearnerCareerMatchListRelationFilter
   generationJobs?: Prisma.GenerationJobListRelationFilter
   pathways?: Prisma.PathwayListRelationFilter
+  programmes?: Prisma.CareerProgrammeListRelationFilter
 }, "id" | "slug">
 
 export type CareerOrderByWithAggregationInput = {
@@ -456,6 +479,8 @@ export type CareerOrderByWithAggregationInput = {
   earningsMax?: Prisma.SortOrderInput | Prisma.SortOrder
   earningsCurrency?: Prisma.SortOrder
   earningsNote?: Prisma.SortOrderInput | Prisma.SortOrder
+  apsMin?: Prisma.SortOrderInput | Prisma.SortOrder
+  subjectRequirements?: Prisma.SortOrderInput | Prisma.SortOrder
   nqfLevelMin?: Prisma.SortOrderInput | Prisma.SortOrder
   saContext?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -489,6 +514,8 @@ export type CareerScalarWhereWithAggregatesInput = {
   earningsMax?: Prisma.IntNullableWithAggregatesFilter<"Career"> | number | null
   earningsCurrency?: Prisma.StringWithAggregatesFilter<"Career"> | string
   earningsNote?: Prisma.StringNullableWithAggregatesFilter<"Career"> | string | null
+  apsMin?: Prisma.IntNullableWithAggregatesFilter<"Career"> | number | null
+  subjectRequirements?: Prisma.JsonNullableWithAggregatesFilter<"Career">
   nqfLevelMin?: Prisma.IntNullableWithAggregatesFilter<"Career"> | number | null
   saContext?: Prisma.StringNullableWithAggregatesFilter<"Career"> | string | null
   status?: Prisma.EnumContentStatusWithAggregatesFilter<"Career"> | $Enums.ContentStatus
@@ -513,6 +540,8 @@ export type CareerCreateInput = {
   earningsMax?: number | null
   earningsCurrency?: string
   earningsNote?: string | null
+  apsMin?: number | null
+  subjectRequirements?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   nqfLevelMin?: number | null
   saContext?: string | null
   status?: $Enums.ContentStatus
@@ -531,6 +560,7 @@ export type CareerCreateInput = {
   careerMatches?: Prisma.LearnerCareerMatchCreateNestedManyWithoutCareerInput
   generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutOutputCareerInput
   pathways?: Prisma.PathwayCreateNestedManyWithoutCareerInput
+  programmes?: Prisma.CareerProgrammeCreateNestedManyWithoutCareerInput
 }
 
 export type CareerUncheckedCreateInput = {
@@ -546,6 +576,8 @@ export type CareerUncheckedCreateInput = {
   earningsMax?: number | null
   earningsCurrency?: string
   earningsNote?: string | null
+  apsMin?: number | null
+  subjectRequirements?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   nqfLevelMin?: number | null
   saContext?: string | null
   status?: $Enums.ContentStatus
@@ -563,6 +595,7 @@ export type CareerUncheckedCreateInput = {
   careerMatches?: Prisma.LearnerCareerMatchUncheckedCreateNestedManyWithoutCareerInput
   generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutOutputCareerInput
   pathways?: Prisma.PathwayUncheckedCreateNestedManyWithoutCareerInput
+  programmes?: Prisma.CareerProgrammeUncheckedCreateNestedManyWithoutCareerInput
 }
 
 export type CareerUpdateInput = {
@@ -577,6 +610,8 @@ export type CareerUpdateInput = {
   earningsMax?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   earningsCurrency?: Prisma.StringFieldUpdateOperationsInput | string
   earningsNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  apsMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  subjectRequirements?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   nqfLevelMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   saContext?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
@@ -595,6 +630,7 @@ export type CareerUpdateInput = {
   careerMatches?: Prisma.LearnerCareerMatchUpdateManyWithoutCareerNestedInput
   generationJobs?: Prisma.GenerationJobUpdateManyWithoutOutputCareerNestedInput
   pathways?: Prisma.PathwayUpdateManyWithoutCareerNestedInput
+  programmes?: Prisma.CareerProgrammeUpdateManyWithoutCareerNestedInput
 }
 
 export type CareerUncheckedUpdateInput = {
@@ -610,6 +646,8 @@ export type CareerUncheckedUpdateInput = {
   earningsMax?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   earningsCurrency?: Prisma.StringFieldUpdateOperationsInput | string
   earningsNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  apsMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  subjectRequirements?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   nqfLevelMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   saContext?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
@@ -627,6 +665,7 @@ export type CareerUncheckedUpdateInput = {
   careerMatches?: Prisma.LearnerCareerMatchUncheckedUpdateManyWithoutCareerNestedInput
   generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutOutputCareerNestedInput
   pathways?: Prisma.PathwayUncheckedUpdateManyWithoutCareerNestedInput
+  programmes?: Prisma.CareerProgrammeUncheckedUpdateManyWithoutCareerNestedInput
 }
 
 export type CareerCreateManyInput = {
@@ -642,6 +681,8 @@ export type CareerCreateManyInput = {
   earningsMax?: number | null
   earningsCurrency?: string
   earningsNote?: string | null
+  apsMin?: number | null
+  subjectRequirements?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   nqfLevelMin?: number | null
   saContext?: string | null
   status?: $Enums.ContentStatus
@@ -666,6 +707,8 @@ export type CareerUpdateManyMutationInput = {
   earningsMax?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   earningsCurrency?: Prisma.StringFieldUpdateOperationsInput | string
   earningsNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  apsMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  subjectRequirements?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   nqfLevelMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   saContext?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
@@ -691,6 +734,8 @@ export type CareerUncheckedUpdateManyInput = {
   earningsMax?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   earningsCurrency?: Prisma.StringFieldUpdateOperationsInput | string
   earningsNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  apsMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  subjectRequirements?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   nqfLevelMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   saContext?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
@@ -734,6 +779,8 @@ export type CareerCountOrderByAggregateInput = {
   earningsMax?: Prisma.SortOrder
   earningsCurrency?: Prisma.SortOrder
   earningsNote?: Prisma.SortOrder
+  apsMin?: Prisma.SortOrder
+  subjectRequirements?: Prisma.SortOrder
   nqfLevelMin?: Prisma.SortOrder
   saContext?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -749,6 +796,7 @@ export type CareerCountOrderByAggregateInput = {
 export type CareerAvgOrderByAggregateInput = {
   earningsMin?: Prisma.SortOrder
   earningsMax?: Prisma.SortOrder
+  apsMin?: Prisma.SortOrder
   nqfLevelMin?: Prisma.SortOrder
   qualityScore?: Prisma.SortOrder
   viewCount?: Prisma.SortOrder
@@ -766,6 +814,7 @@ export type CareerMaxOrderByAggregateInput = {
   earningsMax?: Prisma.SortOrder
   earningsCurrency?: Prisma.SortOrder
   earningsNote?: Prisma.SortOrder
+  apsMin?: Prisma.SortOrder
   nqfLevelMin?: Prisma.SortOrder
   saContext?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -790,6 +839,7 @@ export type CareerMinOrderByAggregateInput = {
   earningsMax?: Prisma.SortOrder
   earningsCurrency?: Prisma.SortOrder
   earningsNote?: Prisma.SortOrder
+  apsMin?: Prisma.SortOrder
   nqfLevelMin?: Prisma.SortOrder
   saContext?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -805,6 +855,7 @@ export type CareerMinOrderByAggregateInput = {
 export type CareerSumOrderByAggregateInput = {
   earningsMin?: Prisma.SortOrder
   earningsMax?: Prisma.SortOrder
+  apsMin?: Prisma.SortOrder
   nqfLevelMin?: Prisma.SortOrder
   qualityScore?: Prisma.SortOrder
   viewCount?: Prisma.SortOrder
@@ -889,6 +940,20 @@ export type IntFieldUpdateOperationsInput = {
   decrement?: number
   multiply?: number
   divide?: number
+}
+
+export type CareerCreateNestedOneWithoutProgrammesInput = {
+  create?: Prisma.XOR<Prisma.CareerCreateWithoutProgrammesInput, Prisma.CareerUncheckedCreateWithoutProgrammesInput>
+  connectOrCreate?: Prisma.CareerCreateOrConnectWithoutProgrammesInput
+  connect?: Prisma.CareerWhereUniqueInput
+}
+
+export type CareerUpdateOneRequiredWithoutProgrammesNestedInput = {
+  create?: Prisma.XOR<Prisma.CareerCreateWithoutProgrammesInput, Prisma.CareerUncheckedCreateWithoutProgrammesInput>
+  connectOrCreate?: Prisma.CareerCreateOrConnectWithoutProgrammesInput
+  upsert?: Prisma.CareerUpsertWithoutProgrammesInput
+  connect?: Prisma.CareerWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CareerUpdateToOneWithWhereWithoutProgrammesInput, Prisma.CareerUpdateWithoutProgrammesInput>, Prisma.CareerUncheckedUpdateWithoutProgrammesInput>
 }
 
 export type CareerCreateNestedOneWithoutPathwaysInput = {
@@ -1007,6 +1072,8 @@ export type CareerCreateWithoutClusterInput = {
   earningsMax?: number | null
   earningsCurrency?: string
   earningsNote?: string | null
+  apsMin?: number | null
+  subjectRequirements?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   nqfLevelMin?: number | null
   saContext?: string | null
   status?: $Enums.ContentStatus
@@ -1024,6 +1091,7 @@ export type CareerCreateWithoutClusterInput = {
   careerMatches?: Prisma.LearnerCareerMatchCreateNestedManyWithoutCareerInput
   generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutOutputCareerInput
   pathways?: Prisma.PathwayCreateNestedManyWithoutCareerInput
+  programmes?: Prisma.CareerProgrammeCreateNestedManyWithoutCareerInput
 }
 
 export type CareerUncheckedCreateWithoutClusterInput = {
@@ -1038,6 +1106,8 @@ export type CareerUncheckedCreateWithoutClusterInput = {
   earningsMax?: number | null
   earningsCurrency?: string
   earningsNote?: string | null
+  apsMin?: number | null
+  subjectRequirements?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   nqfLevelMin?: number | null
   saContext?: string | null
   status?: $Enums.ContentStatus
@@ -1055,6 +1125,7 @@ export type CareerUncheckedCreateWithoutClusterInput = {
   careerMatches?: Prisma.LearnerCareerMatchUncheckedCreateNestedManyWithoutCareerInput
   generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutOutputCareerInput
   pathways?: Prisma.PathwayUncheckedCreateNestedManyWithoutCareerInput
+  programmes?: Prisma.CareerProgrammeUncheckedCreateNestedManyWithoutCareerInput
 }
 
 export type CareerCreateOrConnectWithoutClusterInput = {
@@ -1099,6 +1170,8 @@ export type CareerScalarWhereInput = {
   earningsMax?: Prisma.IntNullableFilter<"Career"> | number | null
   earningsCurrency?: Prisma.StringFilter<"Career"> | string
   earningsNote?: Prisma.StringNullableFilter<"Career"> | string | null
+  apsMin?: Prisma.IntNullableFilter<"Career"> | number | null
+  subjectRequirements?: Prisma.JsonNullableFilter<"Career">
   nqfLevelMin?: Prisma.IntNullableFilter<"Career"> | number | null
   saContext?: Prisma.StringNullableFilter<"Career"> | string | null
   status?: Prisma.EnumContentStatusFilter<"Career"> | $Enums.ContentStatus
@@ -1111,7 +1184,7 @@ export type CareerScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Career"> | Date | string
 }
 
-export type CareerCreateWithoutPathwaysInput = {
+export type CareerCreateWithoutProgrammesInput = {
   id?: string
   title: string
   slug: string
@@ -1123,6 +1196,8 @@ export type CareerCreateWithoutPathwaysInput = {
   earningsMax?: number | null
   earningsCurrency?: string
   earningsNote?: string | null
+  apsMin?: number | null
+  subjectRequirements?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   nqfLevelMin?: number | null
   saContext?: string | null
   status?: $Enums.ContentStatus
@@ -1140,9 +1215,10 @@ export type CareerCreateWithoutPathwaysInput = {
   roadmaps?: Prisma.LearnerRoadmapCreateNestedManyWithoutCareerInput
   careerMatches?: Prisma.LearnerCareerMatchCreateNestedManyWithoutCareerInput
   generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutOutputCareerInput
+  pathways?: Prisma.PathwayCreateNestedManyWithoutCareerInput
 }
 
-export type CareerUncheckedCreateWithoutPathwaysInput = {
+export type CareerUncheckedCreateWithoutProgrammesInput = {
   id?: string
   title: string
   slug: string
@@ -1155,6 +1231,8 @@ export type CareerUncheckedCreateWithoutPathwaysInput = {
   earningsMax?: number | null
   earningsCurrency?: string
   earningsNote?: string | null
+  apsMin?: number | null
+  subjectRequirements?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   nqfLevelMin?: number | null
   saContext?: string | null
   status?: $Enums.ContentStatus
@@ -1171,6 +1249,159 @@ export type CareerUncheckedCreateWithoutPathwaysInput = {
   roadmaps?: Prisma.LearnerRoadmapUncheckedCreateNestedManyWithoutCareerInput
   careerMatches?: Prisma.LearnerCareerMatchUncheckedCreateNestedManyWithoutCareerInput
   generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutOutputCareerInput
+  pathways?: Prisma.PathwayUncheckedCreateNestedManyWithoutCareerInput
+}
+
+export type CareerCreateOrConnectWithoutProgrammesInput = {
+  where: Prisma.CareerWhereUniqueInput
+  create: Prisma.XOR<Prisma.CareerCreateWithoutProgrammesInput, Prisma.CareerUncheckedCreateWithoutProgrammesInput>
+}
+
+export type CareerUpsertWithoutProgrammesInput = {
+  update: Prisma.XOR<Prisma.CareerUpdateWithoutProgrammesInput, Prisma.CareerUncheckedUpdateWithoutProgrammesInput>
+  create: Prisma.XOR<Prisma.CareerCreateWithoutProgrammesInput, Prisma.CareerUncheckedCreateWithoutProgrammesInput>
+  where?: Prisma.CareerWhereInput
+}
+
+export type CareerUpdateToOneWithWhereWithoutProgrammesInput = {
+  where?: Prisma.CareerWhereInput
+  data: Prisma.XOR<Prisma.CareerUpdateWithoutProgrammesInput, Prisma.CareerUncheckedUpdateWithoutProgrammesInput>
+}
+
+export type CareerUpdateWithoutProgrammesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  riasecCodes?: Prisma.CareerUpdateriasecCodesInput | string[]
+  overview?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dayInTheLife?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  howToGetThere?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  earningsMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  earningsMax?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  earningsCurrency?: Prisma.StringFieldUpdateOperationsInput | string
+  earningsNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  apsMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  subjectRequirements?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  nqfLevelMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  saContext?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
+  qualityScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  viewCount?: Prisma.IntFieldUpdateOperationsInput | number
+  generatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastVerifiedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cluster?: Prisma.CareerClusterUpdateOneRequiredWithoutCareersNestedInput
+  reviews?: Prisma.ContentReviewUpdateManyWithoutCareerNestedInput
+  verifications?: Prisma.DataVerificationUpdateManyWithoutCareerNestedInput
+  savedByLearners?: Prisma.LearnerSavedCareerUpdateManyWithoutCareerNestedInput
+  roadmaps?: Prisma.LearnerRoadmapUpdateManyWithoutCareerNestedInput
+  careerMatches?: Prisma.LearnerCareerMatchUpdateManyWithoutCareerNestedInput
+  generationJobs?: Prisma.GenerationJobUpdateManyWithoutOutputCareerNestedInput
+  pathways?: Prisma.PathwayUpdateManyWithoutCareerNestedInput
+}
+
+export type CareerUncheckedUpdateWithoutProgrammesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  clusterId?: Prisma.StringFieldUpdateOperationsInput | string
+  riasecCodes?: Prisma.CareerUpdateriasecCodesInput | string[]
+  overview?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dayInTheLife?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  howToGetThere?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  earningsMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  earningsMax?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  earningsCurrency?: Prisma.StringFieldUpdateOperationsInput | string
+  earningsNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  apsMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  subjectRequirements?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  nqfLevelMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  saContext?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
+  qualityScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  viewCount?: Prisma.IntFieldUpdateOperationsInput | number
+  generatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastVerifiedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reviews?: Prisma.ContentReviewUncheckedUpdateManyWithoutCareerNestedInput
+  verifications?: Prisma.DataVerificationUncheckedUpdateManyWithoutCareerNestedInput
+  savedByLearners?: Prisma.LearnerSavedCareerUncheckedUpdateManyWithoutCareerNestedInput
+  roadmaps?: Prisma.LearnerRoadmapUncheckedUpdateManyWithoutCareerNestedInput
+  careerMatches?: Prisma.LearnerCareerMatchUncheckedUpdateManyWithoutCareerNestedInput
+  generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutOutputCareerNestedInput
+  pathways?: Prisma.PathwayUncheckedUpdateManyWithoutCareerNestedInput
+}
+
+export type CareerCreateWithoutPathwaysInput = {
+  id?: string
+  title: string
+  slug: string
+  riasecCodes?: Prisma.CareerCreateriasecCodesInput | string[]
+  overview?: string | null
+  dayInTheLife?: string | null
+  howToGetThere?: string | null
+  earningsMin?: number | null
+  earningsMax?: number | null
+  earningsCurrency?: string
+  earningsNote?: string | null
+  apsMin?: number | null
+  subjectRequirements?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  nqfLevelMin?: number | null
+  saContext?: string | null
+  status?: $Enums.ContentStatus
+  qualityScore?: number | null
+  viewCount?: number
+  generatedById?: string | null
+  lastVerifiedAt?: Date | string | null
+  lastVerifiedBy?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  cluster: Prisma.CareerClusterCreateNestedOneWithoutCareersInput
+  reviews?: Prisma.ContentReviewCreateNestedManyWithoutCareerInput
+  verifications?: Prisma.DataVerificationCreateNestedManyWithoutCareerInput
+  savedByLearners?: Prisma.LearnerSavedCareerCreateNestedManyWithoutCareerInput
+  roadmaps?: Prisma.LearnerRoadmapCreateNestedManyWithoutCareerInput
+  careerMatches?: Prisma.LearnerCareerMatchCreateNestedManyWithoutCareerInput
+  generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutOutputCareerInput
+  programmes?: Prisma.CareerProgrammeCreateNestedManyWithoutCareerInput
+}
+
+export type CareerUncheckedCreateWithoutPathwaysInput = {
+  id?: string
+  title: string
+  slug: string
+  clusterId: string
+  riasecCodes?: Prisma.CareerCreateriasecCodesInput | string[]
+  overview?: string | null
+  dayInTheLife?: string | null
+  howToGetThere?: string | null
+  earningsMin?: number | null
+  earningsMax?: number | null
+  earningsCurrency?: string
+  earningsNote?: string | null
+  apsMin?: number | null
+  subjectRequirements?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  nqfLevelMin?: number | null
+  saContext?: string | null
+  status?: $Enums.ContentStatus
+  qualityScore?: number | null
+  viewCount?: number
+  generatedById?: string | null
+  lastVerifiedAt?: Date | string | null
+  lastVerifiedBy?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  reviews?: Prisma.ContentReviewUncheckedCreateNestedManyWithoutCareerInput
+  verifications?: Prisma.DataVerificationUncheckedCreateNestedManyWithoutCareerInput
+  savedByLearners?: Prisma.LearnerSavedCareerUncheckedCreateNestedManyWithoutCareerInput
+  roadmaps?: Prisma.LearnerRoadmapUncheckedCreateNestedManyWithoutCareerInput
+  careerMatches?: Prisma.LearnerCareerMatchUncheckedCreateNestedManyWithoutCareerInput
+  generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutOutputCareerInput
+  programmes?: Prisma.CareerProgrammeUncheckedCreateNestedManyWithoutCareerInput
 }
 
 export type CareerCreateOrConnectWithoutPathwaysInput = {
@@ -1201,6 +1432,8 @@ export type CareerUpdateWithoutPathwaysInput = {
   earningsMax?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   earningsCurrency?: Prisma.StringFieldUpdateOperationsInput | string
   earningsNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  apsMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  subjectRequirements?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   nqfLevelMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   saContext?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
@@ -1218,6 +1451,7 @@ export type CareerUpdateWithoutPathwaysInput = {
   roadmaps?: Prisma.LearnerRoadmapUpdateManyWithoutCareerNestedInput
   careerMatches?: Prisma.LearnerCareerMatchUpdateManyWithoutCareerNestedInput
   generationJobs?: Prisma.GenerationJobUpdateManyWithoutOutputCareerNestedInput
+  programmes?: Prisma.CareerProgrammeUpdateManyWithoutCareerNestedInput
 }
 
 export type CareerUncheckedUpdateWithoutPathwaysInput = {
@@ -1233,6 +1467,8 @@ export type CareerUncheckedUpdateWithoutPathwaysInput = {
   earningsMax?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   earningsCurrency?: Prisma.StringFieldUpdateOperationsInput | string
   earningsNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  apsMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  subjectRequirements?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   nqfLevelMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   saContext?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
@@ -1249,6 +1485,7 @@ export type CareerUncheckedUpdateWithoutPathwaysInput = {
   roadmaps?: Prisma.LearnerRoadmapUncheckedUpdateManyWithoutCareerNestedInput
   careerMatches?: Prisma.LearnerCareerMatchUncheckedUpdateManyWithoutCareerNestedInput
   generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutOutputCareerNestedInput
+  programmes?: Prisma.CareerProgrammeUncheckedUpdateManyWithoutCareerNestedInput
 }
 
 export type CareerCreateWithoutCareerMatchesInput = {
@@ -1263,6 +1500,8 @@ export type CareerCreateWithoutCareerMatchesInput = {
   earningsMax?: number | null
   earningsCurrency?: string
   earningsNote?: string | null
+  apsMin?: number | null
+  subjectRequirements?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   nqfLevelMin?: number | null
   saContext?: string | null
   status?: $Enums.ContentStatus
@@ -1280,6 +1519,7 @@ export type CareerCreateWithoutCareerMatchesInput = {
   roadmaps?: Prisma.LearnerRoadmapCreateNestedManyWithoutCareerInput
   generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutOutputCareerInput
   pathways?: Prisma.PathwayCreateNestedManyWithoutCareerInput
+  programmes?: Prisma.CareerProgrammeCreateNestedManyWithoutCareerInput
 }
 
 export type CareerUncheckedCreateWithoutCareerMatchesInput = {
@@ -1295,6 +1535,8 @@ export type CareerUncheckedCreateWithoutCareerMatchesInput = {
   earningsMax?: number | null
   earningsCurrency?: string
   earningsNote?: string | null
+  apsMin?: number | null
+  subjectRequirements?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   nqfLevelMin?: number | null
   saContext?: string | null
   status?: $Enums.ContentStatus
@@ -1311,6 +1553,7 @@ export type CareerUncheckedCreateWithoutCareerMatchesInput = {
   roadmaps?: Prisma.LearnerRoadmapUncheckedCreateNestedManyWithoutCareerInput
   generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutOutputCareerInput
   pathways?: Prisma.PathwayUncheckedCreateNestedManyWithoutCareerInput
+  programmes?: Prisma.CareerProgrammeUncheckedCreateNestedManyWithoutCareerInput
 }
 
 export type CareerCreateOrConnectWithoutCareerMatchesInput = {
@@ -1341,6 +1584,8 @@ export type CareerUpdateWithoutCareerMatchesInput = {
   earningsMax?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   earningsCurrency?: Prisma.StringFieldUpdateOperationsInput | string
   earningsNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  apsMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  subjectRequirements?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   nqfLevelMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   saContext?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
@@ -1358,6 +1603,7 @@ export type CareerUpdateWithoutCareerMatchesInput = {
   roadmaps?: Prisma.LearnerRoadmapUpdateManyWithoutCareerNestedInput
   generationJobs?: Prisma.GenerationJobUpdateManyWithoutOutputCareerNestedInput
   pathways?: Prisma.PathwayUpdateManyWithoutCareerNestedInput
+  programmes?: Prisma.CareerProgrammeUpdateManyWithoutCareerNestedInput
 }
 
 export type CareerUncheckedUpdateWithoutCareerMatchesInput = {
@@ -1373,6 +1619,8 @@ export type CareerUncheckedUpdateWithoutCareerMatchesInput = {
   earningsMax?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   earningsCurrency?: Prisma.StringFieldUpdateOperationsInput | string
   earningsNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  apsMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  subjectRequirements?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   nqfLevelMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   saContext?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
@@ -1389,6 +1637,7 @@ export type CareerUncheckedUpdateWithoutCareerMatchesInput = {
   roadmaps?: Prisma.LearnerRoadmapUncheckedUpdateManyWithoutCareerNestedInput
   generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutOutputCareerNestedInput
   pathways?: Prisma.PathwayUncheckedUpdateManyWithoutCareerNestedInput
+  programmes?: Prisma.CareerProgrammeUncheckedUpdateManyWithoutCareerNestedInput
 }
 
 export type CareerCreateWithoutSavedByLearnersInput = {
@@ -1403,6 +1652,8 @@ export type CareerCreateWithoutSavedByLearnersInput = {
   earningsMax?: number | null
   earningsCurrency?: string
   earningsNote?: string | null
+  apsMin?: number | null
+  subjectRequirements?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   nqfLevelMin?: number | null
   saContext?: string | null
   status?: $Enums.ContentStatus
@@ -1420,6 +1671,7 @@ export type CareerCreateWithoutSavedByLearnersInput = {
   careerMatches?: Prisma.LearnerCareerMatchCreateNestedManyWithoutCareerInput
   generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutOutputCareerInput
   pathways?: Prisma.PathwayCreateNestedManyWithoutCareerInput
+  programmes?: Prisma.CareerProgrammeCreateNestedManyWithoutCareerInput
 }
 
 export type CareerUncheckedCreateWithoutSavedByLearnersInput = {
@@ -1435,6 +1687,8 @@ export type CareerUncheckedCreateWithoutSavedByLearnersInput = {
   earningsMax?: number | null
   earningsCurrency?: string
   earningsNote?: string | null
+  apsMin?: number | null
+  subjectRequirements?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   nqfLevelMin?: number | null
   saContext?: string | null
   status?: $Enums.ContentStatus
@@ -1451,6 +1705,7 @@ export type CareerUncheckedCreateWithoutSavedByLearnersInput = {
   careerMatches?: Prisma.LearnerCareerMatchUncheckedCreateNestedManyWithoutCareerInput
   generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutOutputCareerInput
   pathways?: Prisma.PathwayUncheckedCreateNestedManyWithoutCareerInput
+  programmes?: Prisma.CareerProgrammeUncheckedCreateNestedManyWithoutCareerInput
 }
 
 export type CareerCreateOrConnectWithoutSavedByLearnersInput = {
@@ -1481,6 +1736,8 @@ export type CareerUpdateWithoutSavedByLearnersInput = {
   earningsMax?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   earningsCurrency?: Prisma.StringFieldUpdateOperationsInput | string
   earningsNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  apsMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  subjectRequirements?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   nqfLevelMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   saContext?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
@@ -1498,6 +1755,7 @@ export type CareerUpdateWithoutSavedByLearnersInput = {
   careerMatches?: Prisma.LearnerCareerMatchUpdateManyWithoutCareerNestedInput
   generationJobs?: Prisma.GenerationJobUpdateManyWithoutOutputCareerNestedInput
   pathways?: Prisma.PathwayUpdateManyWithoutCareerNestedInput
+  programmes?: Prisma.CareerProgrammeUpdateManyWithoutCareerNestedInput
 }
 
 export type CareerUncheckedUpdateWithoutSavedByLearnersInput = {
@@ -1513,6 +1771,8 @@ export type CareerUncheckedUpdateWithoutSavedByLearnersInput = {
   earningsMax?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   earningsCurrency?: Prisma.StringFieldUpdateOperationsInput | string
   earningsNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  apsMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  subjectRequirements?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   nqfLevelMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   saContext?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
@@ -1529,6 +1789,7 @@ export type CareerUncheckedUpdateWithoutSavedByLearnersInput = {
   careerMatches?: Prisma.LearnerCareerMatchUncheckedUpdateManyWithoutCareerNestedInput
   generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutOutputCareerNestedInput
   pathways?: Prisma.PathwayUncheckedUpdateManyWithoutCareerNestedInput
+  programmes?: Prisma.CareerProgrammeUncheckedUpdateManyWithoutCareerNestedInput
 }
 
 export type CareerCreateWithoutRoadmapsInput = {
@@ -1543,6 +1804,8 @@ export type CareerCreateWithoutRoadmapsInput = {
   earningsMax?: number | null
   earningsCurrency?: string
   earningsNote?: string | null
+  apsMin?: number | null
+  subjectRequirements?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   nqfLevelMin?: number | null
   saContext?: string | null
   status?: $Enums.ContentStatus
@@ -1560,6 +1823,7 @@ export type CareerCreateWithoutRoadmapsInput = {
   careerMatches?: Prisma.LearnerCareerMatchCreateNestedManyWithoutCareerInput
   generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutOutputCareerInput
   pathways?: Prisma.PathwayCreateNestedManyWithoutCareerInput
+  programmes?: Prisma.CareerProgrammeCreateNestedManyWithoutCareerInput
 }
 
 export type CareerUncheckedCreateWithoutRoadmapsInput = {
@@ -1575,6 +1839,8 @@ export type CareerUncheckedCreateWithoutRoadmapsInput = {
   earningsMax?: number | null
   earningsCurrency?: string
   earningsNote?: string | null
+  apsMin?: number | null
+  subjectRequirements?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   nqfLevelMin?: number | null
   saContext?: string | null
   status?: $Enums.ContentStatus
@@ -1591,6 +1857,7 @@ export type CareerUncheckedCreateWithoutRoadmapsInput = {
   careerMatches?: Prisma.LearnerCareerMatchUncheckedCreateNestedManyWithoutCareerInput
   generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutOutputCareerInput
   pathways?: Prisma.PathwayUncheckedCreateNestedManyWithoutCareerInput
+  programmes?: Prisma.CareerProgrammeUncheckedCreateNestedManyWithoutCareerInput
 }
 
 export type CareerCreateOrConnectWithoutRoadmapsInput = {
@@ -1621,6 +1888,8 @@ export type CareerUpdateWithoutRoadmapsInput = {
   earningsMax?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   earningsCurrency?: Prisma.StringFieldUpdateOperationsInput | string
   earningsNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  apsMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  subjectRequirements?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   nqfLevelMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   saContext?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
@@ -1638,6 +1907,7 @@ export type CareerUpdateWithoutRoadmapsInput = {
   careerMatches?: Prisma.LearnerCareerMatchUpdateManyWithoutCareerNestedInput
   generationJobs?: Prisma.GenerationJobUpdateManyWithoutOutputCareerNestedInput
   pathways?: Prisma.PathwayUpdateManyWithoutCareerNestedInput
+  programmes?: Prisma.CareerProgrammeUpdateManyWithoutCareerNestedInput
 }
 
 export type CareerUncheckedUpdateWithoutRoadmapsInput = {
@@ -1653,6 +1923,8 @@ export type CareerUncheckedUpdateWithoutRoadmapsInput = {
   earningsMax?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   earningsCurrency?: Prisma.StringFieldUpdateOperationsInput | string
   earningsNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  apsMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  subjectRequirements?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   nqfLevelMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   saContext?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
@@ -1669,6 +1941,7 @@ export type CareerUncheckedUpdateWithoutRoadmapsInput = {
   careerMatches?: Prisma.LearnerCareerMatchUncheckedUpdateManyWithoutCareerNestedInput
   generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutOutputCareerNestedInput
   pathways?: Prisma.PathwayUncheckedUpdateManyWithoutCareerNestedInput
+  programmes?: Prisma.CareerProgrammeUncheckedUpdateManyWithoutCareerNestedInput
 }
 
 export type CareerCreateWithoutReviewsInput = {
@@ -1683,6 +1956,8 @@ export type CareerCreateWithoutReviewsInput = {
   earningsMax?: number | null
   earningsCurrency?: string
   earningsNote?: string | null
+  apsMin?: number | null
+  subjectRequirements?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   nqfLevelMin?: number | null
   saContext?: string | null
   status?: $Enums.ContentStatus
@@ -1700,6 +1975,7 @@ export type CareerCreateWithoutReviewsInput = {
   careerMatches?: Prisma.LearnerCareerMatchCreateNestedManyWithoutCareerInput
   generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutOutputCareerInput
   pathways?: Prisma.PathwayCreateNestedManyWithoutCareerInput
+  programmes?: Prisma.CareerProgrammeCreateNestedManyWithoutCareerInput
 }
 
 export type CareerUncheckedCreateWithoutReviewsInput = {
@@ -1715,6 +1991,8 @@ export type CareerUncheckedCreateWithoutReviewsInput = {
   earningsMax?: number | null
   earningsCurrency?: string
   earningsNote?: string | null
+  apsMin?: number | null
+  subjectRequirements?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   nqfLevelMin?: number | null
   saContext?: string | null
   status?: $Enums.ContentStatus
@@ -1731,6 +2009,7 @@ export type CareerUncheckedCreateWithoutReviewsInput = {
   careerMatches?: Prisma.LearnerCareerMatchUncheckedCreateNestedManyWithoutCareerInput
   generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutOutputCareerInput
   pathways?: Prisma.PathwayUncheckedCreateNestedManyWithoutCareerInput
+  programmes?: Prisma.CareerProgrammeUncheckedCreateNestedManyWithoutCareerInput
 }
 
 export type CareerCreateOrConnectWithoutReviewsInput = {
@@ -1761,6 +2040,8 @@ export type CareerUpdateWithoutReviewsInput = {
   earningsMax?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   earningsCurrency?: Prisma.StringFieldUpdateOperationsInput | string
   earningsNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  apsMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  subjectRequirements?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   nqfLevelMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   saContext?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
@@ -1778,6 +2059,7 @@ export type CareerUpdateWithoutReviewsInput = {
   careerMatches?: Prisma.LearnerCareerMatchUpdateManyWithoutCareerNestedInput
   generationJobs?: Prisma.GenerationJobUpdateManyWithoutOutputCareerNestedInput
   pathways?: Prisma.PathwayUpdateManyWithoutCareerNestedInput
+  programmes?: Prisma.CareerProgrammeUpdateManyWithoutCareerNestedInput
 }
 
 export type CareerUncheckedUpdateWithoutReviewsInput = {
@@ -1793,6 +2075,8 @@ export type CareerUncheckedUpdateWithoutReviewsInput = {
   earningsMax?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   earningsCurrency?: Prisma.StringFieldUpdateOperationsInput | string
   earningsNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  apsMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  subjectRequirements?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   nqfLevelMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   saContext?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
@@ -1809,6 +2093,7 @@ export type CareerUncheckedUpdateWithoutReviewsInput = {
   careerMatches?: Prisma.LearnerCareerMatchUncheckedUpdateManyWithoutCareerNestedInput
   generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutOutputCareerNestedInput
   pathways?: Prisma.PathwayUncheckedUpdateManyWithoutCareerNestedInput
+  programmes?: Prisma.CareerProgrammeUncheckedUpdateManyWithoutCareerNestedInput
 }
 
 export type CareerCreateWithoutVerificationsInput = {
@@ -1823,6 +2108,8 @@ export type CareerCreateWithoutVerificationsInput = {
   earningsMax?: number | null
   earningsCurrency?: string
   earningsNote?: string | null
+  apsMin?: number | null
+  subjectRequirements?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   nqfLevelMin?: number | null
   saContext?: string | null
   status?: $Enums.ContentStatus
@@ -1840,6 +2127,7 @@ export type CareerCreateWithoutVerificationsInput = {
   careerMatches?: Prisma.LearnerCareerMatchCreateNestedManyWithoutCareerInput
   generationJobs?: Prisma.GenerationJobCreateNestedManyWithoutOutputCareerInput
   pathways?: Prisma.PathwayCreateNestedManyWithoutCareerInput
+  programmes?: Prisma.CareerProgrammeCreateNestedManyWithoutCareerInput
 }
 
 export type CareerUncheckedCreateWithoutVerificationsInput = {
@@ -1855,6 +2143,8 @@ export type CareerUncheckedCreateWithoutVerificationsInput = {
   earningsMax?: number | null
   earningsCurrency?: string
   earningsNote?: string | null
+  apsMin?: number | null
+  subjectRequirements?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   nqfLevelMin?: number | null
   saContext?: string | null
   status?: $Enums.ContentStatus
@@ -1871,6 +2161,7 @@ export type CareerUncheckedCreateWithoutVerificationsInput = {
   careerMatches?: Prisma.LearnerCareerMatchUncheckedCreateNestedManyWithoutCareerInput
   generationJobs?: Prisma.GenerationJobUncheckedCreateNestedManyWithoutOutputCareerInput
   pathways?: Prisma.PathwayUncheckedCreateNestedManyWithoutCareerInput
+  programmes?: Prisma.CareerProgrammeUncheckedCreateNestedManyWithoutCareerInput
 }
 
 export type CareerCreateOrConnectWithoutVerificationsInput = {
@@ -1901,6 +2192,8 @@ export type CareerUpdateWithoutVerificationsInput = {
   earningsMax?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   earningsCurrency?: Prisma.StringFieldUpdateOperationsInput | string
   earningsNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  apsMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  subjectRequirements?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   nqfLevelMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   saContext?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
@@ -1918,6 +2211,7 @@ export type CareerUpdateWithoutVerificationsInput = {
   careerMatches?: Prisma.LearnerCareerMatchUpdateManyWithoutCareerNestedInput
   generationJobs?: Prisma.GenerationJobUpdateManyWithoutOutputCareerNestedInput
   pathways?: Prisma.PathwayUpdateManyWithoutCareerNestedInput
+  programmes?: Prisma.CareerProgrammeUpdateManyWithoutCareerNestedInput
 }
 
 export type CareerUncheckedUpdateWithoutVerificationsInput = {
@@ -1933,6 +2227,8 @@ export type CareerUncheckedUpdateWithoutVerificationsInput = {
   earningsMax?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   earningsCurrency?: Prisma.StringFieldUpdateOperationsInput | string
   earningsNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  apsMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  subjectRequirements?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   nqfLevelMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   saContext?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
@@ -1949,6 +2245,7 @@ export type CareerUncheckedUpdateWithoutVerificationsInput = {
   careerMatches?: Prisma.LearnerCareerMatchUncheckedUpdateManyWithoutCareerNestedInput
   generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutOutputCareerNestedInput
   pathways?: Prisma.PathwayUncheckedUpdateManyWithoutCareerNestedInput
+  programmes?: Prisma.CareerProgrammeUncheckedUpdateManyWithoutCareerNestedInput
 }
 
 export type CareerCreateWithoutGenerationJobsInput = {
@@ -1963,6 +2260,8 @@ export type CareerCreateWithoutGenerationJobsInput = {
   earningsMax?: number | null
   earningsCurrency?: string
   earningsNote?: string | null
+  apsMin?: number | null
+  subjectRequirements?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   nqfLevelMin?: number | null
   saContext?: string | null
   status?: $Enums.ContentStatus
@@ -1980,6 +2279,7 @@ export type CareerCreateWithoutGenerationJobsInput = {
   roadmaps?: Prisma.LearnerRoadmapCreateNestedManyWithoutCareerInput
   careerMatches?: Prisma.LearnerCareerMatchCreateNestedManyWithoutCareerInput
   pathways?: Prisma.PathwayCreateNestedManyWithoutCareerInput
+  programmes?: Prisma.CareerProgrammeCreateNestedManyWithoutCareerInput
 }
 
 export type CareerUncheckedCreateWithoutGenerationJobsInput = {
@@ -1995,6 +2295,8 @@ export type CareerUncheckedCreateWithoutGenerationJobsInput = {
   earningsMax?: number | null
   earningsCurrency?: string
   earningsNote?: string | null
+  apsMin?: number | null
+  subjectRequirements?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   nqfLevelMin?: number | null
   saContext?: string | null
   status?: $Enums.ContentStatus
@@ -2011,6 +2313,7 @@ export type CareerUncheckedCreateWithoutGenerationJobsInput = {
   roadmaps?: Prisma.LearnerRoadmapUncheckedCreateNestedManyWithoutCareerInput
   careerMatches?: Prisma.LearnerCareerMatchUncheckedCreateNestedManyWithoutCareerInput
   pathways?: Prisma.PathwayUncheckedCreateNestedManyWithoutCareerInput
+  programmes?: Prisma.CareerProgrammeUncheckedCreateNestedManyWithoutCareerInput
 }
 
 export type CareerCreateOrConnectWithoutGenerationJobsInput = {
@@ -2041,6 +2344,8 @@ export type CareerUpdateWithoutGenerationJobsInput = {
   earningsMax?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   earningsCurrency?: Prisma.StringFieldUpdateOperationsInput | string
   earningsNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  apsMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  subjectRequirements?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   nqfLevelMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   saContext?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
@@ -2058,6 +2363,7 @@ export type CareerUpdateWithoutGenerationJobsInput = {
   roadmaps?: Prisma.LearnerRoadmapUpdateManyWithoutCareerNestedInput
   careerMatches?: Prisma.LearnerCareerMatchUpdateManyWithoutCareerNestedInput
   pathways?: Prisma.PathwayUpdateManyWithoutCareerNestedInput
+  programmes?: Prisma.CareerProgrammeUpdateManyWithoutCareerNestedInput
 }
 
 export type CareerUncheckedUpdateWithoutGenerationJobsInput = {
@@ -2073,6 +2379,8 @@ export type CareerUncheckedUpdateWithoutGenerationJobsInput = {
   earningsMax?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   earningsCurrency?: Prisma.StringFieldUpdateOperationsInput | string
   earningsNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  apsMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  subjectRequirements?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   nqfLevelMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   saContext?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
@@ -2089,6 +2397,7 @@ export type CareerUncheckedUpdateWithoutGenerationJobsInput = {
   roadmaps?: Prisma.LearnerRoadmapUncheckedUpdateManyWithoutCareerNestedInput
   careerMatches?: Prisma.LearnerCareerMatchUncheckedUpdateManyWithoutCareerNestedInput
   pathways?: Prisma.PathwayUncheckedUpdateManyWithoutCareerNestedInput
+  programmes?: Prisma.CareerProgrammeUncheckedUpdateManyWithoutCareerNestedInput
 }
 
 export type CareerCreateManyClusterInput = {
@@ -2103,6 +2412,8 @@ export type CareerCreateManyClusterInput = {
   earningsMax?: number | null
   earningsCurrency?: string
   earningsNote?: string | null
+  apsMin?: number | null
+  subjectRequirements?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   nqfLevelMin?: number | null
   saContext?: string | null
   status?: $Enums.ContentStatus
@@ -2127,6 +2438,8 @@ export type CareerUpdateWithoutClusterInput = {
   earningsMax?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   earningsCurrency?: Prisma.StringFieldUpdateOperationsInput | string
   earningsNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  apsMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  subjectRequirements?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   nqfLevelMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   saContext?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
@@ -2144,6 +2457,7 @@ export type CareerUpdateWithoutClusterInput = {
   careerMatches?: Prisma.LearnerCareerMatchUpdateManyWithoutCareerNestedInput
   generationJobs?: Prisma.GenerationJobUpdateManyWithoutOutputCareerNestedInput
   pathways?: Prisma.PathwayUpdateManyWithoutCareerNestedInput
+  programmes?: Prisma.CareerProgrammeUpdateManyWithoutCareerNestedInput
 }
 
 export type CareerUncheckedUpdateWithoutClusterInput = {
@@ -2158,6 +2472,8 @@ export type CareerUncheckedUpdateWithoutClusterInput = {
   earningsMax?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   earningsCurrency?: Prisma.StringFieldUpdateOperationsInput | string
   earningsNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  apsMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  subjectRequirements?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   nqfLevelMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   saContext?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
@@ -2175,6 +2491,7 @@ export type CareerUncheckedUpdateWithoutClusterInput = {
   careerMatches?: Prisma.LearnerCareerMatchUncheckedUpdateManyWithoutCareerNestedInput
   generationJobs?: Prisma.GenerationJobUncheckedUpdateManyWithoutOutputCareerNestedInput
   pathways?: Prisma.PathwayUncheckedUpdateManyWithoutCareerNestedInput
+  programmes?: Prisma.CareerProgrammeUncheckedUpdateManyWithoutCareerNestedInput
 }
 
 export type CareerUncheckedUpdateManyWithoutClusterInput = {
@@ -2189,6 +2506,8 @@ export type CareerUncheckedUpdateManyWithoutClusterInput = {
   earningsMax?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   earningsCurrency?: Prisma.StringFieldUpdateOperationsInput | string
   earningsNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  apsMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  subjectRequirements?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   nqfLevelMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   saContext?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
@@ -2214,6 +2533,7 @@ export type CareerCountOutputType = {
   careerMatches: number
   generationJobs: number
   pathways: number
+  programmes: number
 }
 
 export type CareerCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2224,6 +2544,7 @@ export type CareerCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions
   careerMatches?: boolean | CareerCountOutputTypeCountCareerMatchesArgs
   generationJobs?: boolean | CareerCountOutputTypeCountGenerationJobsArgs
   pathways?: boolean | CareerCountOutputTypeCountPathwaysArgs
+  programmes?: boolean | CareerCountOutputTypeCountProgrammesArgs
 }
 
 /**
@@ -2285,6 +2606,13 @@ export type CareerCountOutputTypeCountPathwaysArgs<ExtArgs extends runtime.Types
   where?: Prisma.PathwayWhereInput
 }
 
+/**
+ * CareerCountOutputType without action
+ */
+export type CareerCountOutputTypeCountProgrammesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CareerProgrammeWhereInput
+}
+
 
 export type CareerSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2299,6 +2627,8 @@ export type CareerSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   earningsMax?: boolean
   earningsCurrency?: boolean
   earningsNote?: boolean
+  apsMin?: boolean
+  subjectRequirements?: boolean
   nqfLevelMin?: boolean
   saContext?: boolean
   status?: boolean
@@ -2317,6 +2647,7 @@ export type CareerSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   careerMatches?: boolean | Prisma.Career$careerMatchesArgs<ExtArgs>
   generationJobs?: boolean | Prisma.Career$generationJobsArgs<ExtArgs>
   pathways?: boolean | Prisma.Career$pathwaysArgs<ExtArgs>
+  programmes?: boolean | Prisma.Career$programmesArgs<ExtArgs>
   _count?: boolean | Prisma.CareerCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["career"]>
 
@@ -2333,6 +2664,8 @@ export type CareerSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   earningsMax?: boolean
   earningsCurrency?: boolean
   earningsNote?: boolean
+  apsMin?: boolean
+  subjectRequirements?: boolean
   nqfLevelMin?: boolean
   saContext?: boolean
   status?: boolean
@@ -2359,6 +2692,8 @@ export type CareerSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   earningsMax?: boolean
   earningsCurrency?: boolean
   earningsNote?: boolean
+  apsMin?: boolean
+  subjectRequirements?: boolean
   nqfLevelMin?: boolean
   saContext?: boolean
   status?: boolean
@@ -2385,6 +2720,8 @@ export type CareerSelectScalar = {
   earningsMax?: boolean
   earningsCurrency?: boolean
   earningsNote?: boolean
+  apsMin?: boolean
+  subjectRequirements?: boolean
   nqfLevelMin?: boolean
   saContext?: boolean
   status?: boolean
@@ -2397,7 +2734,7 @@ export type CareerSelectScalar = {
   updatedAt?: boolean
 }
 
-export type CareerOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "slug" | "clusterId" | "riasecCodes" | "overview" | "dayInTheLife" | "howToGetThere" | "earningsMin" | "earningsMax" | "earningsCurrency" | "earningsNote" | "nqfLevelMin" | "saContext" | "status" | "qualityScore" | "viewCount" | "generatedById" | "lastVerifiedAt" | "lastVerifiedBy" | "createdAt" | "updatedAt", ExtArgs["result"]["career"]>
+export type CareerOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "slug" | "clusterId" | "riasecCodes" | "overview" | "dayInTheLife" | "howToGetThere" | "earningsMin" | "earningsMax" | "earningsCurrency" | "earningsNote" | "apsMin" | "subjectRequirements" | "nqfLevelMin" | "saContext" | "status" | "qualityScore" | "viewCount" | "generatedById" | "lastVerifiedAt" | "lastVerifiedBy" | "createdAt" | "updatedAt", ExtArgs["result"]["career"]>
 export type CareerInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   cluster?: boolean | Prisma.CareerClusterDefaultArgs<ExtArgs>
   reviews?: boolean | Prisma.Career$reviewsArgs<ExtArgs>
@@ -2407,6 +2744,7 @@ export type CareerInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   careerMatches?: boolean | Prisma.Career$careerMatchesArgs<ExtArgs>
   generationJobs?: boolean | Prisma.Career$generationJobsArgs<ExtArgs>
   pathways?: boolean | Prisma.Career$pathwaysArgs<ExtArgs>
+  programmes?: boolean | Prisma.Career$programmesArgs<ExtArgs>
   _count?: boolean | Prisma.CareerCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CareerIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2427,6 +2765,7 @@ export type $CareerPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     careerMatches: Prisma.$LearnerCareerMatchPayload<ExtArgs>[]
     generationJobs: Prisma.$GenerationJobPayload<ExtArgs>[]
     pathways: Prisma.$PathwayPayload<ExtArgs>[]
+    programmes: Prisma.$CareerProgrammePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2441,6 +2780,8 @@ export type $CareerPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     earningsMax: number | null
     earningsCurrency: string
     earningsNote: string | null
+    apsMin: number | null
+    subjectRequirements: runtime.JsonValue | null
     nqfLevelMin: number | null
     saContext: string | null
     status: $Enums.ContentStatus
@@ -2853,6 +3194,7 @@ export interface Prisma__CareerClient<T, Null = never, ExtArgs extends runtime.T
   careerMatches<T extends Prisma.Career$careerMatchesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Career$careerMatchesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LearnerCareerMatchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   generationJobs<T extends Prisma.Career$generationJobsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Career$generationJobsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GenerationJobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   pathways<T extends Prisma.Career$pathwaysArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Career$pathwaysArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PathwayPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  programmes<T extends Prisma.Career$programmesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Career$programmesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CareerProgrammePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2894,6 +3236,8 @@ export interface CareerFieldRefs {
   readonly earningsMax: Prisma.FieldRef<"Career", 'Int'>
   readonly earningsCurrency: Prisma.FieldRef<"Career", 'String'>
   readonly earningsNote: Prisma.FieldRef<"Career", 'String'>
+  readonly apsMin: Prisma.FieldRef<"Career", 'Int'>
+  readonly subjectRequirements: Prisma.FieldRef<"Career", 'Json'>
   readonly nqfLevelMin: Prisma.FieldRef<"Career", 'Int'>
   readonly saContext: Prisma.FieldRef<"Career", 'String'>
   readonly status: Prisma.FieldRef<"Career", 'ContentStatus'>
@@ -3470,6 +3814,30 @@ export type Career$pathwaysArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   distinct?: Prisma.PathwayScalarFieldEnum | Prisma.PathwayScalarFieldEnum[]
+}
+
+/**
+ * Career.programmes
+ */
+export type Career$programmesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CareerProgramme
+   */
+  select?: Prisma.CareerProgrammeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CareerProgramme
+   */
+  omit?: Prisma.CareerProgrammeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CareerProgrammeInclude<ExtArgs> | null
+  where?: Prisma.CareerProgrammeWhereInput
+  orderBy?: Prisma.CareerProgrammeOrderByWithRelationInput | Prisma.CareerProgrammeOrderByWithRelationInput[]
+  cursor?: Prisma.CareerProgrammeWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CareerProgrammeScalarFieldEnum | Prisma.CareerProgrammeScalarFieldEnum[]
 }
 
 /**

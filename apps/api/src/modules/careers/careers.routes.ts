@@ -2,7 +2,7 @@ import { Router } from "express";
 import {
   listClusters, createCluster,
   listCareers, getCareer, createCareer, updateCareer, deleteCareer,
-  coverageStats,
+  coverageStats, getCareerProgrammes, getCareerBursaries,
 } from "./careers.controller.js";
 import { protect }   from "../../middleware/auth.middleware.js";
 import { authorize } from "../../middleware/role.middleware.js";
@@ -15,9 +15,11 @@ const staff   = [Role.SUPER_ADMIN, Role.ADMIN, Role.MANAGER, Role.CONTENT_MANAGE
 const editors = [Role.SUPER_ADMIN, Role.ADMIN, Role.CONTENT_MANAGER, Role.REVIEWER];
 
 // Public — learners browse careers (no auth required for read)
-router.get("/clusters",       listClusters);
-router.get("/",               listCareers);
-router.get("/:slug",          getCareer);
+router.get("/clusters",              listClusters);
+router.get("/",                      listCareers);
+router.get("/:slug",                 getCareer);
+router.get("/:slug/programmes",      getCareerProgrammes);
+router.get("/:slug/bursaries",       getCareerBursaries);
 
 // Staff/editor routes
 router.post("/clusters",      protect, authorize(editors),  createCluster);

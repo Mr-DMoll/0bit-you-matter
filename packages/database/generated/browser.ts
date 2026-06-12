@@ -58,6 +58,11 @@ export type University = Prisma.UniversityModel
  */
 export type Programme = Prisma.ProgrammeModel
 /**
+ * Model CareerProgramme
+ * 
+ */
+export type CareerProgramme = Prisma.CareerProgrammeModel
+/**
  * Model TvetCollege
  * 
  */

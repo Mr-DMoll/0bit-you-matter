@@ -59,6 +59,7 @@ export const ModelName = {
   Career: 'Career',
   University: 'University',
   Programme: 'Programme',
+  CareerProgramme: 'CareerProgramme',
   TvetCollege: 'TvetCollege',
   TvetProgramme: 'TvetProgramme',
   Pathway: 'Pathway',
@@ -193,6 +194,8 @@ export const CareerScalarFieldEnum = {
   earningsMax: 'earningsMax',
   earningsCurrency: 'earningsCurrency',
   earningsNote: 'earningsNote',
+  apsMin: 'apsMin',
+  subjectRequirements: 'subjectRequirements',
   nqfLevelMin: 'nqfLevelMin',
   saContext: 'saContext',
   status: 'status',
@@ -243,6 +246,14 @@ export const ProgrammeScalarFieldEnum = {
 } as const
 
 export type ProgrammeScalarFieldEnum = (typeof ProgrammeScalarFieldEnum)[keyof typeof ProgrammeScalarFieldEnum]
+
+
+export const CareerProgrammeScalarFieldEnum = {
+  careerId: 'careerId',
+  programmeId: 'programmeId'
+} as const
+
+export type CareerProgrammeScalarFieldEnum = (typeof CareerProgrammeScalarFieldEnum)[keyof typeof CareerProgrammeScalarFieldEnum]
 
 
 export const TvetCollegeScalarFieldEnum = {

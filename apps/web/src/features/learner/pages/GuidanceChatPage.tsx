@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
+import { useSearchParams } from "next/navigation";
 import { Send, ThumbsUp, ThumbsDown, ArrowDown } from "lucide-react";
 import apiClient from "@/api/client";
 
@@ -204,6 +205,9 @@ interface Message {
 
 // ── Component ─────────────────────────────────────────────────────────────────
 export function GuidanceChatPage() {
+  const searchParams  = useSearchParams();
+  const autoPrompt    = searchParams.get("prompt");
+
   const [messages,  setMessages]  = useState<Message[]>([]);
   const [input,     setInput]     = useState("");
   const [streaming, setStreaming] = useState(false);
@@ -229,6 +233,8 @@ export function GuidanceChatPage() {
     setAtBottom(distFromBottom < 80);
   }, []);
 
+  const autoPromptFiredRef = useRef(false);
+
   // Load user + history on mount — jump instantly to bottom after load
   useEffect(() => {
     Promise.all([
@@ -237,8 +243,12 @@ export function GuidanceChatPage() {
     ]).then(([u, hist]) => {
       setUser(u);
       setMessages(Array.isArray(hist) ? hist : []);
-      // After history loads, jump to bottom without animation
       setTimeout(() => scrollToBottom("instant" as ScrollBehavior), 50);
+      // Auto-send ?prompt= query param once after load
+      if (autoPrompt && !autoPromptFiredRef.current) {
+        autoPromptFiredRef.current = true;
+        setTimeout(() => sendMessage(autoPrompt), 300);
+      }
     }).finally(() => setLoading(false));
   }, []);
 
@@ -389,15 +399,33 @@ export function GuidanceChatPage() {
     <div className="chat-wrapper" style={{ background: T.bg, height: "100svh", display: "flex", flexDirection: "column", fontFamily: "inherit" }}>
 
       {/* Header */}
-      <div style={{ padding: "14px 24px", borderBottom: `1px solid ${T.border}`, background: T.card, flexShrink: 0 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+      <div style={{ borderBottom: `1px solid ${T.border}`, background: T.card, flexShrink: 0 }}>
+        <div style={{ padding: "14px 24px", display: "flex", alignItems: "center", gap: 12 }}>
           <div style={{ width: 36, height: 36, borderRadius: "50%", background: T.primary, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 800, flexShrink: 0 }}>
             YM
           </div>
           <div>
             <p style={{ margin: 0, fontSize: 15, fontWeight: 700, color: T.fg }}>Career Guide</p>
-            <p style={{ margin: 0, fontSize: 12, color: T.teal, fontWeight: 600 }}>● Online</p>
+            <p style={{ margin: 0, fontSize: 12, color: T.teal, fontWeight: 600 }}>● Online — ask me anything</p>
           </div>
+        </div>
+        {/* Always-visible capability strip */}
+        <div style={{ padding: "8px 24px 10px", borderTop: `1px solid ${T.border}`, background: T.secondary, display: "flex", gap: 16, overflowX: "auto", scrollbarWidth: "none" }}>
+          {[
+            { icon: "🎓", text: "Which career suits me?" },
+            { icon: "📚", text: "What subjects do I need?" },
+            { icon: "💰", text: "How do I get a bursary?" },
+            { icon: "🏫", text: "Which university should I apply to?" },
+            { icon: "📋", text: "What is my APS score?" },
+          ].map(({ icon, text }) => (
+            <button
+              key={text}
+              onClick={() => sendMessage(text)}
+              style={{ display: "flex", alignItems: "center", gap: 6, padding: "5px 12px", borderRadius: 99, background: T.card, border: `1px solid ${T.border}`, fontSize: 12, color: T.fg, cursor: "pointer", whiteSpace: "nowrap", flexShrink: 0 }}
+            >
+              <span>{icon}</span> {text}
+            </button>
+          ))}
         </div>
       </div>
 

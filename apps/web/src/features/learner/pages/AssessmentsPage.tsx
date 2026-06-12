@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import apiClient from "@/api/client";
+import { InfoBanner } from "@/features/learner/components/InfoBanner";
 
 const T = {
   primary:   "#5B4FCF",
@@ -83,6 +84,14 @@ export function AssessmentsPage() {
 
   return (
     <div style={{ background: T.bg, minHeight: "100vh", padding: "28px 24px 48px", fontFamily: "inherit" }}>
+
+      <InfoBanner
+        id="assessments"
+        icon="🧠"
+        title="What are these assessments for?"
+        body="Each assessment reveals a different side of you — your interests, strengths, personality, and values. Together they build your RIASEC profile, which powers your personalised career matches."
+        tip="Start with the Interest Assessment — it unlocks your career matches immediately."
+      />
 
       {/* Header */}
       <div style={{ marginBottom: 28 }}>

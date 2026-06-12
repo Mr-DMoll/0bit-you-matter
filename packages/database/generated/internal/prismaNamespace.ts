@@ -392,6 +392,7 @@ export const ModelName = {
   Career: 'Career',
   University: 'University',
   Programme: 'Programme',
+  CareerProgramme: 'CareerProgramme',
   TvetCollege: 'TvetCollege',
   TvetProgramme: 'TvetProgramme',
   Pathway: 'Pathway',
@@ -424,7 +425,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "auditLog" | "notification" | "systemSetting" | "careerCluster" | "career" | "university" | "programme" | "tvetCollege" | "tvetProgramme" | "pathway" | "bursary" | "assessmentQuestion" | "learnerAssessmentSession" | "learnerAnswer" | "learnerProfile" | "learnerCareerMatch" | "learnerSavedCareer" | "learnerRoadmap" | "contentReview" | "dataVerification" | "promptTemplate" | "generationJob" | "guidanceMessage" | "source"
+    modelProps: "user" | "auditLog" | "notification" | "systemSetting" | "careerCluster" | "career" | "university" | "programme" | "careerProgramme" | "tvetCollege" | "tvetProgramme" | "pathway" | "bursary" | "assessmentQuestion" | "learnerAssessmentSession" | "learnerAnswer" | "learnerProfile" | "learnerCareerMatch" | "learnerSavedCareer" | "learnerRoadmap" | "contentReview" | "dataVerification" | "promptTemplate" | "generationJob" | "guidanceMessage" | "source"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1017,6 +1018,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.ProgrammeCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.ProgrammeCountAggregateOutputType> | number
+        }
+      }
+    }
+    CareerProgramme: {
+      payload: Prisma.$CareerProgrammePayload<ExtArgs>
+      fields: Prisma.CareerProgrammeFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CareerProgrammeFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CareerProgrammePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CareerProgrammeFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CareerProgrammePayload>
+        }
+        findFirst: {
+          args: Prisma.CareerProgrammeFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CareerProgrammePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CareerProgrammeFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CareerProgrammePayload>
+        }
+        findMany: {
+          args: Prisma.CareerProgrammeFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CareerProgrammePayload>[]
+        }
+        create: {
+          args: Prisma.CareerProgrammeCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CareerProgrammePayload>
+        }
+        createMany: {
+          args: Prisma.CareerProgrammeCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CareerProgrammeCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CareerProgrammePayload>[]
+        }
+        delete: {
+          args: Prisma.CareerProgrammeDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CareerProgrammePayload>
+        }
+        update: {
+          args: Prisma.CareerProgrammeUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CareerProgrammePayload>
+        }
+        deleteMany: {
+          args: Prisma.CareerProgrammeDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CareerProgrammeUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CareerProgrammeUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CareerProgrammePayload>[]
+        }
+        upsert: {
+          args: Prisma.CareerProgrammeUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CareerProgrammePayload>
+        }
+        aggregate: {
+          args: Prisma.CareerProgrammeAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCareerProgramme>
+        }
+        groupBy: {
+          args: Prisma.CareerProgrammeGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CareerProgrammeGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CareerProgrammeCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CareerProgrammeCountAggregateOutputType> | number
         }
       }
     }
@@ -2416,6 +2491,8 @@ export const CareerScalarFieldEnum = {
   earningsMax: 'earningsMax',
   earningsCurrency: 'earningsCurrency',
   earningsNote: 'earningsNote',
+  apsMin: 'apsMin',
+  subjectRequirements: 'subjectRequirements',
   nqfLevelMin: 'nqfLevelMin',
   saContext: 'saContext',
   status: 'status',
@@ -2466,6 +2543,14 @@ export const ProgrammeScalarFieldEnum = {
 } as const
 
 export type ProgrammeScalarFieldEnum = (typeof ProgrammeScalarFieldEnum)[keyof typeof ProgrammeScalarFieldEnum]
+
+
+export const CareerProgrammeScalarFieldEnum = {
+  careerId: 'careerId',
+  programmeId: 'programmeId'
+} as const
+
+export type CareerProgrammeScalarFieldEnum = (typeof CareerProgrammeScalarFieldEnum)[keyof typeof CareerProgrammeScalarFieldEnum]
 
 
 export const TvetCollegeScalarFieldEnum = {
@@ -3135,6 +3220,7 @@ export type GlobalOmitConfig = {
   career?: Prisma.CareerOmit
   university?: Prisma.UniversityOmit
   programme?: Prisma.ProgrammeOmit
+  careerProgramme?: Prisma.CareerProgrammeOmit
   tvetCollege?: Prisma.TvetCollegeOmit
   tvetProgramme?: Prisma.TvetProgrammeOmit
   pathway?: Prisma.PathwayOmit

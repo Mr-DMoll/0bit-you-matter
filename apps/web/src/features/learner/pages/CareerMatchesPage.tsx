@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import apiClient from "@/api/client";
+import { InfoBanner } from "@/features/learner/components/InfoBanner";
 
 const T = {
   primary:  "#5B4FCF",
@@ -112,6 +113,14 @@ export function CareerMatchesPage() {
   return (
     <div className="matches-wrap" style={{ background: T.bg, minHeight: "100vh", padding: "28px 24px 48px", fontFamily: "inherit" }}>
 
+      <InfoBanner
+        id="career-matches"
+        icon="🎯"
+        title="How are these matches calculated?"
+        body="Your matches are ranked by how well each career aligns with your RIASEC personality type and the subjects you're taking. The percentage shows how strong the fit is — not a guarantee, just a guide."
+        tip="Save careers that interest you and they'll appear on your roadmap for easy access."
+      />
+
       {/* Header */}
       <div style={{ marginBottom: 28 }}>
         <h1 style={{ margin: "0 0 4px", fontSize: 24, fontWeight: 700, color: T.fg }}>Your Career Matches</h1>
@@ -190,94 +199,177 @@ export function CareerMatchesPage() {
           </button>
         </div>
       ) : (
-        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-          {matches.map((m: any, i: number) => {
-            const career   = m.career;
-            const pct      = Math.round(m.matchPercentage);
-            const isSaved  = saved.has(career.id);
-            const isSaving = savingId === career.id;
-            const pctColor = pct >= 80 ? T.teal : pct >= 60 ? T.primary : T.muted;
+        <>
+          {/* Desktop: single-column list */}
+          <div className="matches-list" style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+            {matches.map((m: any, i: number) => {
+              const career   = m.career;
+              const pct      = Math.round(m.matchPercentage);
+              const isSaved  = saved.has(career.id);
+              const isSaving = savingId === career.id;
+              const pctColor = pct >= 80 ? T.teal : pct >= 60 ? T.primary : T.muted;
 
-            return (
-              <div
-                key={m.id ?? career.id}
-                style={{
-                  background: T.card, borderRadius: 16, padding: "18px 22px",
-                  border: `1px solid ${i === 0 ? T.primary + "40" : T.border}`,
-                  display: "flex", alignItems: "center", gap: 18,
-                  boxShadow: i === 0 ? `0 2px 12px ${T.primary}14` : "none",
-                }}
-              >
-                {/* Rank */}
-                <div style={{
-                  width: 38, height: 38, borderRadius: "50%", flexShrink: 0,
-                  background: i === 0 ? T.primary : T.secondary,
-                  color: i === 0 ? "#fff" : T.primary,
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: 15, fontWeight: 800,
-                }}>
-                  {i + 1}
-                </div>
-
-                {/* Info */}
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ display: "flex", alignItems: "baseline", gap: 8, flexWrap: "wrap", marginBottom: 4 }}>
-                    <h3 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: T.fg }}>{career.title}</h3>
-                    {career.cluster?.name && (
-                      <span style={{ fontSize: 11, color: T.muted, fontWeight: 500 }}>{career.cluster.name}</span>
-                    )}
+              return (
+                <div
+                  key={m.id ?? career.id}
+                  style={{
+                    background: T.card, borderRadius: 16, padding: "18px 22px",
+                    border: `1px solid ${i === 0 ? T.primary + "40" : T.border}`,
+                    display: "flex", alignItems: "center", gap: 18,
+                    boxShadow: i === 0 ? `0 2px 12px ${T.primary}14` : "none",
+                  }}
+                >
+                  {/* Rank */}
+                  <div style={{
+                    width: 38, height: 38, borderRadius: "50%", flexShrink: 0,
+                    background: i === 0 ? T.primary : T.secondary,
+                    color: i === 0 ? "#fff" : T.primary,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    fontSize: 15, fontWeight: 800,
+                  }}>
+                    {i + 1}
                   </div>
-                  <div style={{ display: "flex", gap: 6, flexWrap: "wrap", alignItems: "center" }}>
-                    {(career.riasecCodes ?? []).map((c: string) => (
-                      <span key={c} style={{ fontSize: 11, fontWeight: 700, padding: "2px 8px", borderRadius: 99, background: (RIASEC_COLOR[c] ?? T.primary) + "18", color: RIASEC_COLOR[c] ?? T.primary }}>
-                        {c}
-                      </span>
-                    ))}
+
+                  {/* Info */}
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ display: "flex", alignItems: "baseline", gap: 8, marginBottom: 4, flexWrap: "wrap" }}>
+                      <h3 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: T.fg }}>{career.title}</h3>
+                    </div>
+                    <p style={{ margin: "0 0 6px", fontSize: 11, color: T.muted, fontWeight: 500 }}>{career.cluster?.name}</p>
+                    <div style={{ display: "flex", gap: 6, flexWrap: "wrap", alignItems: "center" }}>
+                      {(career.riasecCodes ?? []).map((c: string) => (
+                        <span key={c} style={{ fontSize: 11, fontWeight: 700, padding: "2px 8px", borderRadius: 99, background: (RIASEC_COLOR[c] ?? T.primary) + "18", color: RIASEC_COLOR[c] ?? T.primary }}>
+                          {c}
+                        </span>
+                      ))}
+                      {career.earningsMin && (
+                        <span style={{ fontSize: 11, color: T.muted }}>
+                          R{Math.round(career.earningsMin / 1000)}k–R{Math.round((career.earningsMax ?? career.earningsMin) / 1000)}k /yr
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Match % */}
+                  <div style={{ textAlign: "center", flexShrink: 0, minWidth: 52 }}>
+                    <p style={{ margin: "0 0 2px", fontSize: 22, fontWeight: 800, color: pctColor }}>{pct}%</p>
+                    <p style={{ margin: 0, fontSize: 10, color: T.muted, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.04em" }}>match</p>
+                  </div>
+
+                  {/* Actions */}
+                  <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
+                    <button
+                      onClick={() => handleSave(career.id)}
+                      disabled={isSaving}
+                      title={isSaved ? "Unsave" : "Save career"}
+                      style={{
+                        width: 36, height: 36, borderRadius: "50%", border: `1.5px solid ${isSaved ? T.teal : T.border}`,
+                        background: isSaved ? T.teal + "14" : "transparent",
+                        color: isSaved ? T.teal : T.muted,
+                        fontSize: 16, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
+                      }}
+                    >
+                      {isSaved ? "♥" : "♡"}
+                    </button>
+                    <button
+                      onClick={() => router.push(`/learner/careers/${career.slug}`)}
+                      style={{
+                        padding: "8px 16px", borderRadius: 10,
+                        background: T.primary, color: "#fff",
+                        border: "none", fontSize: 13, fontWeight: 700, cursor: "pointer",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      Explore →
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Mobile: 2-column compact grid */}
+          <div className="matches-grid" style={{ display: "none", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+            {matches.map((m: any, i: number) => {
+              const career   = m.career;
+              const pct      = Math.round(m.matchPercentage);
+              const isSaved  = saved.has(career.id);
+              const isSaving = savingId === career.id;
+              const pctColor = pct >= 80 ? T.teal : pct >= 60 ? T.primary : T.muted;
+
+              return (
+                <div
+                  key={m.id ?? career.id}
+                  style={{
+                    background: T.card, borderRadius: 14,
+                    border: `1px solid ${i === 0 ? T.primary + "40" : T.border}`,
+                    boxShadow: i === 0 ? `0 2px 8px ${T.primary}12` : "none",
+                    display: "flex", flexDirection: "column", overflow: "hidden",
+                  }}
+                >
+                  {/* Top bar: rank + match % */}
+                  <div style={{
+                    display: "flex", alignItems: "center", justifyContent: "space-between",
+                    padding: "10px 12px 0",
+                  }}>
+                    <div style={{
+                      width: 26, height: 26, borderRadius: "50%",
+                      background: i === 0 ? T.primary : T.secondary,
+                      color: i === 0 ? "#fff" : T.primary,
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      fontSize: 12, fontWeight: 800, flexShrink: 0,
+                    }}>
+                      {i + 1}
+                    </div>
+                    <span style={{ fontSize: 18, fontWeight: 800, color: pctColor }}>{pct}%</span>
+                  </div>
+
+                  {/* Career title + cluster */}
+                  <div style={{ padding: "8px 12px", flex: 1 }}>
+                    <p style={{ margin: "0 0 2px", fontSize: 13, fontWeight: 700, color: T.fg, lineHeight: 1.3 }}>
+                      {career.title}
+                    </p>
+                    <p style={{ margin: "0 0 6px", fontSize: 11, color: T.muted, lineHeight: 1.3 }}>
+                      {career.cluster?.name}
+                    </p>
                     {career.earningsMin && (
-                      <span style={{ fontSize: 11, color: T.muted, marginLeft: 4 }}>
-                        R{Math.round(career.earningsMin / 1000)}k – R{Math.round((career.earningsMax ?? career.earningsMin) / 1000)}k /yr
-                      </span>
+                      <p style={{ margin: 0, fontSize: 10, color: T.muted }}>
+                        R{Math.round(career.earningsMin / 1000)}k–R{Math.round((career.earningsMax ?? career.earningsMin) / 1000)}k /yr
+                      </p>
                     )}
                   </div>
-                </div>
 
-                {/* Match % */}
-                <div style={{ textAlign: "center", flexShrink: 0 }}>
-                  <p style={{ margin: "0 0 2px", fontSize: 22, fontWeight: 800, color: pctColor }}>{pct}%</p>
-                  <p style={{ margin: 0, fontSize: 10, color: T.muted, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.04em" }}>match</p>
+                  {/* Actions */}
+                  <div style={{ display: "flex", borderTop: `1px solid ${T.border}` }}>
+                    <button
+                      onClick={() => handleSave(career.id)}
+                      disabled={isSaving}
+                      style={{
+                        flex: "0 0 44px", padding: "10px 0",
+                        background: isSaved ? T.teal + "12" : "transparent",
+                        border: "none", borderRight: `1px solid ${T.border}`,
+                        color: isSaved ? T.teal : T.muted,
+                        fontSize: 15, cursor: "pointer",
+                      }}
+                    >
+                      {isSaved ? "♥" : "♡"}
+                    </button>
+                    <button
+                      onClick={() => router.push(`/learner/careers/${career.slug}`)}
+                      style={{
+                        flex: 1, padding: "10px 0",
+                        background: "transparent", border: "none",
+                        color: T.primary, fontSize: 12, fontWeight: 700, cursor: "pointer",
+                      }}
+                    >
+                      Explore →
+                    </button>
+                  </div>
                 </div>
-
-                {/* Actions */}
-                <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
-                  <button
-                    onClick={() => handleSave(career.id)}
-                    disabled={isSaving}
-                    title={isSaved ? "Unsave" : "Save career"}
-                    style={{
-                      width: 36, height: 36, borderRadius: "50%", border: `1.5px solid ${isSaved ? T.teal : T.border}`,
-                      background: isSaved ? T.teal + "14" : "transparent",
-                      color: isSaved ? T.teal : T.muted,
-                      fontSize: 16, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
-                    }}
-                  >
-                    {isSaved ? "♥" : "♡"}
-                  </button>
-                  <button
-                    onClick={() => router.push(`/learner/careers/${career.slug}`)}
-                    style={{
-                      padding: "8px 16px", borderRadius: 10,
-                      background: T.primary, color: "#fff",
-                      border: "none", fontSize: 13, fontWeight: 700, cursor: "pointer",
-                      whiteSpace: "nowrap",
-                    }}
-                  >
-                    Explore →
-                  </button>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+        </>
       )}
 
       {/* Recalculate button */}
@@ -298,8 +390,10 @@ export function CareerMatchesPage() {
         </div>
       )}
     <style>{`
-      @media (max-width: 400px) {
-        .matches-wrap { padding: 16px 16px 48px !important; }
+      @media (max-width: 768px) {
+        .matches-wrap { padding: 16px 16px 80px !important; }
+        .matches-list { display: none !important; }
+        .matches-grid { display: grid !important; }
       }
     `}</style>
     </div>
