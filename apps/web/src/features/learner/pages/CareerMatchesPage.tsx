@@ -110,7 +110,7 @@ export function CareerMatchesPage() {
   }
 
   return (
-    <div style={{ background: T.bg, minHeight: "100vh", padding: "28px 24px 48px", fontFamily: "inherit" }}>
+    <div className="matches-wrap" style={{ background: T.bg, minHeight: "100vh", padding: "28px 24px 48px", fontFamily: "inherit" }}>
 
       {/* Header */}
       <div style={{ marginBottom: 28 }}>
@@ -145,7 +145,8 @@ export function CareerMatchesPage() {
 
           {/* RIASEC score bars */}
           {Object.keys(riasecScores).length > 0 && (
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(6,1fr)", gap: 8 }}>
+            <div style={{ overflowX: "auto", margin: "0 -4px" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(6,1fr)", gap: 8, minWidth: 300 }}>
               {["R","I","A","S","E","C"].map((code) => {
                 const score = riasecScores[code] ?? 0;
                 const max   = Math.max(...Object.values(riasecScores as Record<string,number>));
@@ -163,6 +164,7 @@ export function CareerMatchesPage() {
                   </div>
                 );
               })}
+            </div>
             </div>
           )}
 
@@ -295,6 +297,11 @@ export function CareerMatchesPage() {
           </button>
         </div>
       )}
+    <style>{`
+      @media (max-width: 400px) {
+        .matches-wrap { padding: 16px 16px 48px !important; }
+      }
+    `}</style>
     </div>
   );
 }

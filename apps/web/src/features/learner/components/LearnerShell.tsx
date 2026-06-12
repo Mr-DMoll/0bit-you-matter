@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 import apiClient from "@/api/client";
 import {
   Home, ClipboardList, Compass, Map, GraduationCap,
-  Award, MessageCircle, User, LogOut,
+  Award, MessageCircle, User, LogOut, MoreHorizontal, X,
 } from "lucide-react";
 
 // ── Learner theme tokens ───────────────────────────────────────────────────
@@ -35,11 +35,17 @@ const sidebarNav = [
 ];
 
 const bottomNav = [
-  { href: "/learner",             label: "Home",     icon: Home },
-  { href: "/learner/explore",     label: "Explore",  icon: Compass },
-  { href: "/learner/assessments", label: "Assess",   icon: ClipboardList },
-  { href: "/learner/bursaries",   label: "Bursaries",icon: Award },
-  { href: "/learner/profile",     label: "Me",       icon: User },
+  { href: "/learner",             label: "Home",    icon: Home },
+  { href: "/learner/explore",     label: "Explore", icon: Compass },
+  { href: "/learner/assessments", label: "Assess",  icon: ClipboardList },
+  { href: "/learner/profile",     label: "Me",      icon: User },
+];
+
+const moreNav = [
+  { href: "/learner/roadmap",      label: "My Roadmap",   icon: Map },
+  { href: "/learner/universities", label: "Universities", icon: GraduationCap },
+  { href: "/learner/bursaries",    label: "Bursaries",    icon: Award },
+  { href: "/learner/chat",         label: "Career Guide", icon: MessageCircle },
 ];
 
 function calcCompletion(user: any, profile: any): { pct: number; missing: string[] } {
@@ -62,6 +68,7 @@ export function LearnerShell({ children }: { children: React.ReactNode }) {
 
   const [sidebarUser,    setSidebarUser]    = useState<any>(null);
   const [profile,        setProfile]        = useState<any>(null);
+  const [moreOpen,       setMoreOpen]       = useState(false);
 
   const fetchSidebarData = () =>
     Promise.all([
@@ -69,7 +76,7 @@ export function LearnerShell({ children }: { children: React.ReactNode }) {
       apiClient.get("/learner/profile").then((r) => r.data.data).catch(() => null),
     ]).then(([u, p]) => { setSidebarUser(u); setProfile(p); });
 
-  useEffect(() => { fetchSidebarData(); }, [pathname]);
+  useEffect(() => { fetchSidebarData(); setMoreOpen(false); }, [pathname]);
 
   useEffect(() => {
     window.addEventListener("profile-updated", fetchSidebarData);
@@ -216,7 +223,8 @@ export function LearnerShell({ children }: { children: React.ReactNode }) {
       <nav className="ym-bottomnav" style={{
         position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 50,
         background: T.card, borderTop: `1px solid ${T.border}`,
-        display: "flex", paddingBottom: "max(8px, env(safe-area-inset-bottom))",
+        display: "flex",
+        paddingBottom: "env(safe-area-inset-bottom, 0px)",
       }}>
         {bottomNav.map(({ href, label, icon: Icon }) => {
           const active = isActive(href);
@@ -233,16 +241,78 @@ export function LearnerShell({ children }: { children: React.ReactNode }) {
             </Link>
           );
         })}
+        {/* More button */}
+        <button
+          onClick={() => setMoreOpen(o => !o)}
+          style={{ flex: 1, background: "none", border: "none", cursor: "pointer", padding: 0 }}
+        >
+          <div style={{
+            display: "flex", flexDirection: "column", alignItems: "center",
+            gap: 3, padding: "10px 0",
+            color: moreOpen ? T.primary : T.muted,
+          }}>
+            {moreOpen ? <X size={21} strokeWidth={2.5} /> : <MoreHorizontal size={21} strokeWidth={1.8} />}
+            <span style={{ fontSize: "0.6rem", fontWeight: moreOpen ? 700 : 400 }}>More</span>
+          </div>
+        </button>
       </nav>
+
+      {/* ── More sheet ──────────────────────────────────────────────────── */}
+      {moreOpen && (
+        <>
+          {/* Backdrop */}
+          <div
+            onClick={() => setMoreOpen(false)}
+            className="ym-more-backdrop"
+            style={{ position: "fixed", inset: 0, zIndex: 48, background: "rgba(0,0,0,0.35)" }}
+          />
+          {/* Sheet */}
+          <div className="ym-more-sheet" style={{
+            position: "fixed", left: 0, right: 0, zIndex: 49,
+            bottom: "calc(72px + env(safe-area-inset-bottom, 0px))",
+            background: T.card,
+            borderTop: `1px solid ${T.border}`,
+            borderRadius: "20px 20px 0 0",
+            padding: "16px 16px 8px",
+            boxShadow: "0 -4px 24px rgba(0,0,0,0.12)",
+          }}>
+            <p style={{ margin: "0 0 12px", fontSize: 11, fontWeight: 700, color: T.muted, textTransform: "uppercase", letterSpacing: "0.06em" }}>More</p>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+              {moreNav.map(({ href, label, icon: Icon }) => {
+                const active = isActive(href);
+                return (
+                  <Link key={href} href={href} style={{ textDecoration: "none" }}>
+                    <div style={{
+                      display: "flex", alignItems: "center", gap: 12,
+                      padding: "12px 14px", borderRadius: 14,
+                      background: active ? T.secondary : "#F5F4FC",
+                      color: active ? T.primary : T.fg,
+                      fontWeight: active ? 700 : 500, fontSize: 14,
+                    }}>
+                      <Icon size={18} color={active ? T.primary : T.muted} strokeWidth={active ? 2.5 : 1.8} />
+                      {label}
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        </>
+      )}
 
       <style>{`
         @media (min-width: 1024px) {
           .ym-bottomnav { display: none !important; }
+          .ym-more-backdrop { display: none !important; }
+          .ym-more-sheet { display: none !important; }
           .ym-main { padding-bottom: 0 !important; }
         }
         @media (max-width: 1023px) {
           .ym-sidebar { display: none !important; }
-          .ym-main { padding-bottom: 72px; }
+          .ym-main { padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
+        }
+        @media (max-width: 400px) {
+          .ym-main { font-size: 14px; }
         }
       `}</style>
     </div>

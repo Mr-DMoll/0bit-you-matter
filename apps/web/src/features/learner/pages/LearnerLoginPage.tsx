@@ -109,7 +109,7 @@ function LearnerLoginInner() {
       <div style={{ flex: 1, display: "flex", flexDirection: "column", background: "#FAFAF9", overflow: "hidden" }}>
 
         {/* Top bar: logo + back */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-start", padding: "20px 32px", flexShrink: 0 }}>
+        <div className="ym-login-topbar" style={{ display: "flex", alignItems: "center", justifyContent: "flex-start", padding: "20px 32px", flexShrink: 0 }}>
           <a href="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
             <div style={{ width: 32, height: 32, borderRadius: 10, background: "#5B4FCF", display: "flex", alignItems: "center", justifyContent: "center" }}>
               <Zap size={16} color="white" />
@@ -119,7 +119,7 @@ function LearnerLoginInner() {
         </div>
 
         {/* Centred form */}
-        <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "0 32px 48px" }}>
+        <div className="ym-login-panel" style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "0 32px 48px" }}>
           <div style={{ width: "100%", maxWidth: 340 }}>
 
             {/* Heading */}
@@ -176,6 +176,10 @@ function LearnerLoginInner() {
       <style>{`
         @media (min-width: 1024px) {
           .ym-hero { display: flex !important; }
+        }
+        @media (max-width: 400px) {
+          .ym-login-panel { padding: 0 20px 32px !important; }
+          .ym-login-topbar { padding: 16px 20px !important; }
         }
       `}</style>
     </div>

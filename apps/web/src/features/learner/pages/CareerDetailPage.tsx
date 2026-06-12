@@ -143,7 +143,7 @@ export function CareerDetailPage({ slug }: { slug: string }) {
 
           {/* Earnings */}
           {(career.earningsMin || career.earningsMax) && (
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+            <div className="salary-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
               {[
                 { label: "Starting salary", value: career.earningsMin ? `R${Number(career.earningsMin).toLocaleString("en-ZA")} /yr` : "—" },
                 { label: "Experienced salary", value: career.earningsMax ? `R${Number(career.earningsMax).toLocaleString("en-ZA")} /yr` : "—" },
@@ -187,6 +187,11 @@ export function CareerDetailPage({ slug }: { slug: string }) {
 
         </div>
       </div>
+      <style>{`
+        @media (max-width: 480px) {
+          .salary-grid { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
     </div>
   );
 }

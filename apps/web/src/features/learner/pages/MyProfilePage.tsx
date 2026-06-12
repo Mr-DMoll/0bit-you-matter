@@ -466,7 +466,7 @@ export function MyProfilePage() {
       )}
 
       {/* Profile hero */}
-      <div style={{
+      <div className="profile-hero" style={{
         background: T.card, borderRadius: 16, padding: 24,
         border: `1px solid ${T.border}`, marginBottom: 20,
         display: "flex", alignItems: "center", gap: 20,
@@ -734,6 +734,9 @@ export function MyProfilePage() {
 
       <style>{`
         @keyframes spin { to { transform: rotate(360deg); } }
+        @media (max-width: 480px) {
+          .profile-hero { flex-direction: column !important; align-items: flex-start !important; }
+        }
       `}</style>
     </div>
   );

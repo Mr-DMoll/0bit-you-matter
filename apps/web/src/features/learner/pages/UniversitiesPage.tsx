@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Search, MapPin, ExternalLink, BookOpen, Loader2 } from "lucide-react";
+import { Search, MapPin, ExternalLink, Loader2 } from "lucide-react";
 import apiClient from "@/api/client";
 
 const T = {
@@ -31,7 +31,6 @@ interface Institution {
   website:      string | null;
   logoUrl:      string | null;
   status:       string;
-  _count:       { programmes: number };
 }
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
@@ -281,27 +280,21 @@ function UniCard({ uni }: { uni: Institution }) {
         <MapPin size={13} /><span>{uni.province}</span>
       </div>
 
-      <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12, color: T.muted }}>
-        <BookOpen size={13} />
-        <span>
-          {uni.type === "university_of_technology" ? "Diplomas & BTech" : "Degrees & qualifications"}
-          {uni._count.programmes > 0 && (
-            <span style={{ marginLeft: 4, color: T.primary, fontWeight: 600 }}>
-              · {uni._count.programmes} programme{uni._count.programmes !== 1 ? "s" : ""}
-            </span>
-          )}
-        </span>
-      </div>
-
-      <div style={{ display: "flex", gap: 8, marginTop: "auto" }}>
-        <button style={{ flex: 1, background: "none", color: T.primary, border: `1.5px solid ${T.primary}`, borderRadius: 8, padding: "8px 0", fontWeight: 600, fontSize: 13, cursor: "pointer" }}>
-          View Details
-        </button>
-        {uni.website && (
-          <a href={uni.website} target="_blank" rel="noopener noreferrer"
-            style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 36, borderRadius: 8, border: `1.5px solid ${T.border}`, color: T.muted, textDecoration: "none", flexShrink: 0 }}>
-            <ExternalLink size={14} />
+      <div style={{ marginTop: "auto" }}>
+        {uni.website ? (
+          <a
+            href={uni.website} target="_blank" rel="noopener noreferrer"
+            style={{
+              display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
+              width: "100%", padding: "9px 0", borderRadius: 8,
+              background: T.primary, color: "#fff",
+              fontWeight: 600, fontSize: 13, textDecoration: "none",
+            }}
+          >
+            Visit Website <ExternalLink size={13} />
           </a>
+        ) : (
+          <div style={{ fontSize: 12, color: T.muted, textAlign: "center", padding: "6px 0" }}>No website available</div>
         )}
       </div>
     </div>
@@ -343,27 +336,21 @@ function CollegeCard({ college, tab }: { college: Institution; tab: string }) {
         <MapPin size={13} /><span>{college.province}</span>
       </div>
 
-      <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12, color: T.muted }}>
-        <BookOpen size={13} />
-        <span>
-          {tab === "TVET Colleges" ? "N4–N6 & NCV programmes" : "Diplomas & Certificates"}
-          {college._count.programmes > 0 && (
-            <span style={{ marginLeft: 4, color: T.primary, fontWeight: 600 }}>
-              · {college._count.programmes} programme{college._count.programmes !== 1 ? "s" : ""}
-            </span>
-          )}
-        </span>
-      </div>
-
-      <div style={{ display: "flex", gap: 8, marginTop: "auto" }}>
-        <button style={{ flex: 1, background: "none", color: T.primary, border: `1.5px solid ${T.primary}`, borderRadius: 8, padding: "8px 0", fontWeight: 600, fontSize: 13, cursor: "pointer" }}>
-          View Details
-        </button>
-        {college.website && (
-          <a href={college.website} target="_blank" rel="noopener noreferrer"
-            style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 36, borderRadius: 8, border: `1.5px solid ${T.border}`, color: T.muted, textDecoration: "none", flexShrink: 0 }}>
-            <ExternalLink size={14} />
+      <div style={{ marginTop: "auto" }}>
+        {college.website ? (
+          <a
+            href={college.website} target="_blank" rel="noopener noreferrer"
+            style={{
+              display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
+              width: "100%", padding: "9px 0", borderRadius: 8,
+              background: color, color: "#fff",
+              fontWeight: 600, fontSize: 13, textDecoration: "none",
+            }}
+          >
+            Visit Website <ExternalLink size={13} />
           </a>
+        ) : (
+          <div style={{ fontSize: 12, color: T.muted, textAlign: "center", padding: "6px 0" }}>No website available</div>
         )}
       </div>
     </div>

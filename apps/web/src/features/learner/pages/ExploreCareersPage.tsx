@@ -135,7 +135,7 @@ export function ExploreCareersPage() {
 
       {/* Cluster filter chips — only when 2+ clusters exist */}
       {showClusterFilter && (
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 24 }}>
+        <div className="cluster-chips" style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 24 }}>
           <button
             onClick={() => { setClusterId(""); setPage(1); }}
             style={{
@@ -299,6 +299,17 @@ export function ExploreCareersPage() {
         @media (max-width: 900px) { .careers-grid { grid-template-columns: 1fr 1fr !important; } }
         @media (max-width: 560px) { .careers-grid { grid-template-columns: 1fr !important; } }
         .careers-grid > div:hover { cursor: pointer; }
+        @media (max-width: 768px) {
+          .cluster-chips {
+            flex-wrap: nowrap !important;
+            overflow-x: auto !important;
+            padding-bottom: 6px !important;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+          }
+          .cluster-chips::-webkit-scrollbar { display: none; }
+          .cluster-chips button { flex-shrink: 0 !important; white-space: nowrap !important; }
+        }
       `}</style>
     </div>
   );

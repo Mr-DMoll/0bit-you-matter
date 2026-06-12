@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Clock, ExternalLink, Search } from "lucide-react";
+import { Clock, ExternalLink, Search, ChevronDown, ChevronUp, SlidersHorizontal } from "lucide-react";
 import apiClient from "@/api/client";
 
 const T = {
@@ -51,9 +51,10 @@ function googleSearch(b: any) {
 }
 
 export function BursariesPage() {
-  const [bursaries,     setBursaries]     = useState<any[]>([]);
-  const [loading,       setLoading]       = useState(true);
+  const [bursaries,      setBursaries]      = useState<any[]>([]);
+  const [loading,        setLoading]        = useState(true);
   const [selectedFields, setSelectedFields] = useState<string[]>([]);
+  const [filterOpen,     setFilterOpen]     = useState(false);
 
   useEffect(() => {
     apiClient.get("/bursaries")
@@ -111,33 +112,57 @@ export function BursariesPage() {
 
           {/* Sidebar — only rendered when 2+ fields exist */}
           {showFieldFilter && (
-            <div style={{ background: T.card, borderRadius: 14, padding: 18, border: `1px solid ${T.border}`, alignSelf: "start", position: "sticky", top: 20 }}>
-              <h4 style={{ margin: "0 0 14px", fontSize: 14, fontWeight: 700, color: T.fg }}>Filter by field</h4>
-              {allFields.map((f) => {
-                const fc = fieldStyle(f, allFields);
-                return (
-                  <label key={f} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10, cursor: "pointer" }}>
-                    <input
-                      type="checkbox"
-                      checked={selectedFields.includes(f)}
-                      onChange={() => toggleField(f)}
-                      style={{ accentColor: T.primary, width: 15, height: 15 }}
-                    />
-                    <span style={{ fontSize: 13, fontWeight: 500, color: T.fg }}>{f}</span>
-                    <span style={{ marginLeft: "auto", fontSize: 11, fontWeight: 700, padding: "2px 8px", borderRadius: 99, background: fc.bg, color: fc.color }}>
-                      {bursaries.filter((b) => Array.isArray(b.fieldsOfStudy) && b.fieldsOfStudy.includes(f)).length}
-                    </span>
-                  </label>
-                );
-              })}
-              {selectedFields.length > 0 && (
-                <button
-                  onClick={() => setSelectedFields([])}
-                  style={{ marginTop: 8, width: "100%", padding: "7px", background: "transparent", border: `1px solid ${T.border}`, borderRadius: 8, fontSize: 12, color: T.muted, cursor: "pointer", fontWeight: 600 }}
-                >
-                  Clear filters
-                </button>
-              )}
+            <div className="bursary-filter-panel" style={{ background: T.card, borderRadius: 14, border: `1px solid ${T.border}`, alignSelf: "start", position: "sticky", top: 20, overflow: "hidden" }}>
+              {/* Toggle header (always visible) */}
+              <button
+                className="bursary-filter-toggle"
+                onClick={() => setFilterOpen(o => !o)}
+                style={{ display: "none", width: "100%", background: "none", border: "none", cursor: "pointer", padding: "14px 16px", textAlign: "left" }}
+              >
+                <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <SlidersHorizontal size={15} color={T.primary} />
+                  <span style={{ fontSize: 14, fontWeight: 700, color: T.fg }}>
+                    Filter by field
+                    {selectedFields.length > 0 && (
+                      <span style={{ marginLeft: 8, fontSize: 11, fontWeight: 700, background: T.primary, color: "#fff", borderRadius: 99, padding: "2px 8px" }}>
+                        {selectedFields.length}
+                      </span>
+                    )}
+                  </span>
+                  <span style={{ marginLeft: "auto" }}>
+                    {filterOpen ? <ChevronUp size={16} color={T.muted} /> : <ChevronDown size={16} color={T.muted} />}
+                  </span>
+                </span>
+              </button>
+              {/* Filter body */}
+              <div className="bursary-filter-body" style={{ padding: 18 }}>
+                <h4 className="bursary-filter-heading" style={{ margin: "0 0 14px", fontSize: 14, fontWeight: 700, color: T.fg }}>Filter by field</h4>
+                {allFields.map((f) => {
+                  const fc = fieldStyle(f, allFields);
+                  return (
+                    <label key={f} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10, cursor: "pointer" }}>
+                      <input
+                        type="checkbox"
+                        checked={selectedFields.includes(f)}
+                        onChange={() => toggleField(f)}
+                        style={{ accentColor: T.primary, width: 15, height: 15 }}
+                      />
+                      <span style={{ fontSize: 13, fontWeight: 500, color: T.fg }}>{f}</span>
+                      <span style={{ marginLeft: "auto", fontSize: 11, fontWeight: 700, padding: "2px 8px", borderRadius: 99, background: fc.bg, color: fc.color }}>
+                        {bursaries.filter((b) => Array.isArray(b.fieldsOfStudy) && b.fieldsOfStudy.includes(f)).length}
+                      </span>
+                    </label>
+                  );
+                })}
+                {selectedFields.length > 0 && (
+                  <button
+                    onClick={() => setSelectedFields([])}
+                    style={{ marginTop: 8, width: "100%", padding: "7px", background: "transparent", border: `1px solid ${T.border}`, borderRadius: 8, fontSize: 12, color: T.muted, cursor: "pointer", fontWeight: 600 }}
+                  >
+                    Clear filters
+                  </button>
+                )}
+              </div>
             </div>
           )}
 
@@ -242,8 +267,12 @@ export function BursariesPage() {
 
       <style>{`
         @media (max-width: 768px) {
-          .bursaries-layout { grid-template-columns: 1fr !important; }
-          .bursary-cards    { grid-template-columns: 1fr !important; }
+          .bursaries-layout        { grid-template-columns: 1fr !important; }
+          .bursary-cards           { grid-template-columns: 1fr !important; }
+          .bursary-filter-panel    { position: static !important; }
+          .bursary-filter-toggle   { display: flex !important; }
+          .bursary-filter-heading  { display: none !important; }
+          .bursary-filter-body     { padding: ${filterOpen ? "0 16px 14px" : "0"} !important; display: ${filterOpen ? "block" : "none"} !important; }
         }
       `}</style>
     </div>

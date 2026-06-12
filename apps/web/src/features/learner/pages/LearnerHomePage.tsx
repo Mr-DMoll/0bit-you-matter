@@ -152,7 +152,7 @@ export function LearnerHomePage() {
   );
 
   return (
-    <div style={{ background: T.bg, minHeight: "100vh", padding: "24px 24px 48px", fontFamily: "inherit" }}>
+    <div className="home-wrap" style={{ background: T.bg, minHeight: "100vh", padding: "24px 24px 48px", fontFamily: "inherit" }}>
 
       {/* Top bar — date + greeting only, no bell/avatar */}
       <div style={{ marginBottom: 28 }}>
@@ -282,6 +282,9 @@ export function LearnerHomePage() {
         @media (max-width: 768px) {
           .home-top-grid { grid-template-columns: 1fr !important; }
           .home-bottom-grid { grid-template-columns: 1fr !important; }
+        }
+        @media (max-width: 400px) {
+          .home-wrap { padding: 16px 16px 48px !important; }
         }
       `}</style>
     </div>

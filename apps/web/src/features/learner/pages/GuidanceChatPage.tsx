@@ -386,7 +386,7 @@ export function GuidanceChatPage() {
   );
 
   return (
-    <div style={{ background: T.bg, height: "100svh", display: "flex", flexDirection: "column", fontFamily: "inherit" }}>
+    <div className="chat-wrapper" style={{ background: T.bg, height: "100svh", display: "flex", flexDirection: "column", fontFamily: "inherit" }}>
 
       {/* Header */}
       <div style={{ padding: "14px 24px", borderBottom: `1px solid ${T.border}`, background: T.card, flexShrink: 0 }}>
@@ -405,6 +405,7 @@ export function GuidanceChatPage() {
       <div
         ref={scrollRef}
         onScroll={handleScroll}
+        className="chat-scroll"
         style={{ flex: 1, overflowY: "auto", padding: "20px 24px", display: "flex", flexDirection: "column", gap: 16, position: "relative" }}
       >
 
@@ -439,8 +440,8 @@ export function GuidanceChatPage() {
         {messages.map((msg) => {
           const isUser = msg.role === "user";
           return (
-            <div key={msg.id} style={{ display: "flex", flexDirection: "column", alignItems: isUser ? "flex-end" : "flex-start", gap: 4 }}>
-              <div style={{ display: "flex", alignItems: "flex-end", gap: 8, maxWidth: "76%", alignSelf: isUser ? "flex-end" : "flex-start" }}>
+            <div key={msg.id} className="chat-msg-row" style={{ display: "flex", flexDirection: "column", alignItems: isUser ? "flex-end" : "flex-start", gap: 4 }}>
+              <div className={isUser ? "chat-bubble-user" : "chat-bubble-ai"} style={{ display: "flex", alignItems: "flex-end", gap: 8, maxWidth: "76%", alignSelf: isUser ? "flex-end" : "flex-start" }}>
 
                 {!isUser && (
                   <div style={{ width: 30, height: 30, borderRadius: "50%", background: T.primary, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 800, flexShrink: 0 }}>
@@ -536,8 +537,8 @@ export function GuidanceChatPage() {
       )}
 
       {/* Input */}
-      <div style={{ padding: "12px 24px 20px", background: T.card, borderTop: `1px solid ${T.border}`, flexShrink: 0 }}>
-        <p style={{ margin: "0 0 6px", fontSize: 11, color: T.muted }}>Enter to send · Shift+Enter for new line</p>
+      <div className="chat-input-bar" style={{ padding: "12px 24px 20px", background: T.card, borderTop: `1px solid ${T.border}`, flexShrink: 0 }}>
+        <p className="chat-hint" style={{ margin: "0 0 6px", fontSize: 11, color: T.muted }}>Enter to send · Shift+Enter for new line</p>
         <div style={{ display: "flex", gap: 10, alignItems: "flex-end" }}>
           <textarea
             ref={textareaRef}
@@ -581,7 +582,17 @@ export function GuidanceChatPage() {
         </div>
       </div>
 
-      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+      <style>{`
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @media (max-width: 1023px) {
+          .chat-wrapper  { height: calc(100svh - 72px) !important; }
+          .chat-input-bar { padding-bottom: max(16px, env(safe-area-inset-bottom)) !important; }
+          .chat-hint     { display: none !important; }
+          .chat-scroll   { padding: 16px 12px !important; }
+          .chat-bubble-ai  { max-width: 92% !important; }
+          .chat-bubble-user { max-width: 88% !important; }
+        }
+      `}</style>
     </div>
   );
 }
